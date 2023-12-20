@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/09.Wiki/03.Training Plans/Modern dynamics and control systems.md",
+                "file": "Notes/09.Wiki/Links.md",
                 "mode": "source",
                 "source": false
               }
@@ -87,7 +87,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/09.Wiki/03.Training Plans/Modern dynamics and control systems.md",
+                "file": "Notes/09.Wiki/Links.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/09.Wiki/03.Training Plans/Modern dynamics and control systems.md",
+                "file": "Notes/09.Wiki/Links.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -127,7 +127,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/09.Wiki/03.Training Plans/Modern dynamics and control systems.md"
+                "file": "Notes/09.Wiki/Links.md"
               }
             }
           },
@@ -180,6 +180,7 @@
   },
   "active": "2752a516b3b8d29f",
   "lastOpenFiles": [
+    "Notes/09.Wiki/03.Training Plans/Modern dynamics and control systems.md",
     "_attachments/03_Learning/tsfs12/Lecture_notes/lecture_07_model_predictive_control_for_autonomous_vehicles.pdf",
     "Notes/09.Wiki/02.Tools/Conda - python.md",
     "Notes/09.Wiki/05.Chatgpt/NMPC Kinematic Model Casadi.md",
@@ -216,7 +217,6 @@
     "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/python/RL_Highway/models/pre-trained/stats.json",
     "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/python/RL_Highway/models/pre-trained/last_model.tar",
     "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/python/RL_Highway/models/pre-trained",
-    "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/matlab/RL/Functions/state_in_sink.m",
     "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/python/RL_Highway/figs/q_nn.png",
     "_attachments/03_Learning/tsfs12/Handin_Exercises/HI1-Discrete_path_planning/Maps/linkoping.png",
     "_attachments/03_Learning/MPC-and-MHE-implementation-in-MATLAB-using-Casadi/workshop_github/Python_Implementation/animation1701422953.6506076.gif",

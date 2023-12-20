@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-Sfml_PhysiX",
+      "appliesTo": "Sfml_PhysiX/",
+      "type": "launch"
+    }
+  ]
+}

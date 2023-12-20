@@ -1,0 +1,5 @@
+D:/03_PHD/_github/Phd--POMDP/05_practice/03_C++/SFML-Tut1/out/build/x64-debug/CMakeFiles/edit_cache.dir
+D:/03_PHD/_github/Phd--POMDP/05_practice/03_C++/SFML-Tut1/out/build/x64-debug/CMakeFiles/rebuild_cache.dir
+D:/03_PHD/_github/Phd--POMDP/05_practice/03_C++/SFML-Tut1/out/build/x64-debug/Sfml_PhysiX/CMakeFiles/Sfml_PhysiX.dir
+D:/03_PHD/_github/Phd--POMDP/05_practice/03_C++/SFML-Tut1/out/build/x64-debug/Sfml_PhysiX/CMakeFiles/edit_cache.dir
+D:/03_PHD/_github/Phd--POMDP/05_practice/03_C++/SFML-Tut1/out/build/x64-debug/Sfml_PhysiX/CMakeFiles/rebuild_cache.dir

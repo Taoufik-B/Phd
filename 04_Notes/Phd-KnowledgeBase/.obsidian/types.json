@@ -1,0 +1,13 @@
+{
+  "types": {
+    "aliases": "aliases",
+    "cssclasses": "multitext",
+    "tags": "tags",
+    "keywords": "multitext",
+    "ID": "number",
+    "Date Reviewed": "datetime",
+    "Relevance": "text",
+    "thoughts": "text",
+    "submission": "date"
+  }
+}

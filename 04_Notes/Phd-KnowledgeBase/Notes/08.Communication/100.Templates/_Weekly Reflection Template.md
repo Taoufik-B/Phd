@@ -1,0 +1,72 @@
+Weekly Reflection Template
+
+Date Range: [Start Date] - [End Date]
+
+  
+
+**1. Highlights of the Week:**
+
+- _What were the main accomplishments or breakthroughs this week?_
+    
+    - ==[Highlight 1]==
+    - ==[Highlight 2]==
+    - ==[Highlight 3]==
+  
+
+**2. Challenges Faced:**
+
+- _What obstacles or difficulties did I encounter? How did I address them?_
+    
+    - ==[Challenge 1]==
+    - ==[Challenge 2]==
+    - ==[Challenge 3]==
+  
+
+**3. Learnings & Insights:**
+
+- _What new knowledge or insights did I gain? What surprised me?_
+    
+    - ==[Learning/Insight 1]==
+    - ==[Learning/Insight 2]==
+    - ==[Learning/Insight 3]==
+  
+
+**4. Personal Growth:**
+
+- _In what areas did I feel I grew? What strengths did I notice? Where could I have done better?
+    
+    - ==[Growth Aspect 1]==
+    - ==[Growth Aspect 2]==
+  
+
+**5. Feedback & Input Received:**
+
+- _What feedback did I receive from peers, mentors, or during research this week? How can I use it constructively?_
+    
+    - ==[Feedback 1]==
+    - ==[Feedback 2]==
+  
+
+**6. Intentions for Next Week:**
+
+- _What are my primary goals and focus areas for the upcoming week?_
+    
+    - ==[Intention/Goal 1]==
+    - ==[Intention/Goal 2]==
+    - ==[Intention/Goal 3]==
+  
+
+**7. Personal Notes & Thoughts:**
+
+- _Open space for any additional notes, thoughts, or feelings from the week._
+    
+    - ==[Note/Thought 1]==
+    - ==[Note/Thought 2]==
+  
+
+**8. Resources or Tools Discovered:**
+
+- _Did I come across any tools, articles, or resources that I found particularly useful or want to revisit?_
+    
+    - ==[Resource 1]==
+    - ==[Resource 2]==

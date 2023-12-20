@@ -1,0 +1,76 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "Sfml_PhysiX",
+					"jsonFile" : "directory-Sfml_PhysiX-Debug-c5b8f4b844b9df6b8305.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "Sfml_PhysiX",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "SFML-Tut1",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "Sfml_PhysiX::@d00ed8f964da3f9e7bc3",
+					"jsonFile" : "target-Sfml_PhysiX-Debug-8bb7470324a066bc9ada.json",
+					"name" : "Sfml_PhysiX",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/taoufik/projects/Phd--POMDP/05_practice/03_C++/SFML-Tut1/out/build/linux-debug",
+		"source" : "/home/taoufik/projects/Phd--POMDP/05_practice/03_C++/SFML-Tut1"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

@@ -1,0 +1,12 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "Sfml_PhysiX.exe (Sfml_PhysiX\\Sfml_PhysiX.exe)",
+      "name": "Sfml_PhysiX.exe (Sfml_PhysiX\\Sfml_PhysiX.exe)"
+    }
+  ]
+}

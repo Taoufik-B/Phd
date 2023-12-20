@@ -1,0 +1,231 @@
+{
+  "main": {
+    "id": "5f696668fcdee9c9",
+    "type": "split",
+    "children": [
+      {
+        "id": "b961585d3ca4a870",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2752a516b3b8d29f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Notes/09.Wiki/02.Tools/Conda - python.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ],
+        "stacked": true
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "95ddd0ae84c006e2",
+    "type": "split",
+    "children": [
+      {
+        "id": "31ffeb4cb4983a82",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "be073ecc41b17795",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "a7b5a4e7bc7ca64f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "tag:#engineers",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "2523ba22edb8f0a4",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "right": {
+    "id": "f3ff7b58f3b226a9",
+    "type": "split",
+    "children": [
+      {
+        "id": "5fa61c2d3a22b1f9",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0480c35f44b0a3b8",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Notes/09.Wiki/02.Tools/Conda - python.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "5b77d667da082f2f",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Notes/09.Wiki/02.Tools/Conda - python.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "8a7c4148f0d0635d",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "0dc65f66eb757687",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Notes/09.Wiki/02.Tools/Conda - python.md"
+              }
+            }
+          },
+          {
+            "id": "dbf2fa212c47ad65",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {}
+            }
+          },
+          {
+            "id": "7cfe82bb7271c6d5",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {}
+            }
+          },
+          {
+            "id": "89e35acac27d94ac",
+            "type": "leaf",
+            "state": {
+              "type": "copilot-chat-view",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 325.5,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false,
+      "copilot:Copilot Chat": false,
+      "obsidian-importer:Open Importer": false,
+      "obsidian-excalidraw-plugin:Create new drawing": false,
+      "templater-obsidian:Templater": false
+    }
+  },
+  "active": "2752a516b3b8d29f",
+  "lastOpenFiles": [
+    "Notes/09.Wiki/05.Chatgpt/NMPC Kinematic Model Casadi.md",
+    "Notes/00.Archive/Test note.md",
+    "Notes/09.Wiki/02.Tools/Conda - python.md",
+    "Notes/01.Project Overview/Accounts.md",
+    "_attachments/03_Learning/mpc-rl/mpcrl23-bib.pdf",
+    "_attachments/03_Learning/mpc-rl/Unconfirmed 515930.crdownload",
+    "Notes/09.Wiki/02.Tools/Carla Api build.md",
+    "Notes/09.Wiki/02.Tools/Carla.md",
+    "Notes/09.Wiki/Links.md",
+    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Phd_summary_Submission_Example_Workshop.md",
+    "Notes/08.Communication/02.Reports/03.Posters and Workshops/LINK.md",
+    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Navigating AI.md",
+    "Notes/08.Communication/01.Events/Intelligence Artificielle Multimodale, Apprentissage Automatique et Applicationsles 6-7 décembre 2023.md",
+    "Notes/01.Project Overview/_02.Status/_Overall status.md",
+    "Notes/01.Project Overview/_01.tasksCalendar/Tasks_calendar.md",
+    "Notes/01.Project Overview/_00.Taskido/Tasks_timleine.md",
+    "Notes/08.Communication/01.Events/2nd International Conference on Frontiers in Academic Research ICFAR 2023.md",
+    "Notes/08.Communication/_Home.md",
+    "Notes/00.Archive/2023-11-18.md",
+    "Notes/00.Archive/Tasks Plugin - Review and check your Statuses 2023-12-02 22-57-35.md",
+    "Notes/09.Wiki/01.Definitions/Lyapunov function.md",
+    "Notes/09.Wiki/01.Definitions/IPOPT.md",
+    "Notes/09.Wiki/01.Definitions/System identification.md",
+    "Notes/08.Communication/04.Logs/02.Weekly/23CW49.md",
+    "Notes/10.Courses/02.Control_Dynamics/Learn MPC.md",
+    "Notes/09.Wiki/01.Definitions/Observability.md",
+    "Notes/10.Courses/02.Control_Dynamics/Learn MPC.Methods.md",
+    "Notes/10.Courses/02.Control_Dynamics/Learn MPC.Solvers.md",
+    "Notes/02.Literature Analysis/00.Analysis",
+    "Untitled.canvas",
+    "_attachments/04_Diags/Thesis_Proposal.drawio",
+    "_attachments/04_Diags",
+    "Notes/00.Archive",
+    "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/python/RL_Highway/models/pre-trained/stats.json",
+    "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/python/RL_Highway/models/pre-trained/last_model.tar",
+    "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/python/RL_Highway/models/pre-trained",
+    "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/matlab/RL/Functions/state_in_sink.m",
+    "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/python/RL_Highway/figs/q_nn.png",
+    "_attachments/03_Learning/tsfs12/Handin_Exercises/HI1-Discrete_path_planning/Maps/linkoping.png",
+    "_attachments/03_Learning/MPC-and-MHE-implementation-in-MATLAB-using-Casadi/workshop_github/Python_Implementation/animation1701422953.6506076.gif",
+    "_attachments/03_Learning/MPC-and-MHE-implementation-in-MATLAB-using-Casadi/workshop_github/Python_Implementation/animation1701419467.3149962.gif",
+    "_attachments/_screenshots/Pasted image 20231126085254.png",
+    "_attachments/_screenshots/Pasted image 20231126085202.png",
+    "_attachments/_screenshots/Pasted image 20231126085049.png",
+    "_attachments/_screenshots/Pasted image 20231126084624.png",
+    "_attachments/_screenshots/Pasted image 20231126084345.png",
+    "_attachments/_screenshots/Pasted image 20231126084250.png"
+  ]
+}

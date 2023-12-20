@@ -1,0 +1,4 @@
+- [https://researchguides.uoregon.edu/Mendeley/desktop](https://researchguides.uoregon.edu/Mendeley/desktop)
+- [https://library-guides.ucl.ac.uk/mendeley-desktop/exporting-from-online-resources](https://library-guides.ucl.ac.uk/mendeley-desktop/exporting-from-online-resources)
+- [https://libguides.ucmerced.edu/mendeley/organizing](https://libguides.ucmerced.edu/mendeley/organizing)
+- [https://guides.lib.berkeley.edu/mendeley/organize](https://guides.lib.berkeley.edu/mendeley/organize)

@@ -1,0 +1,10 @@
+{
+  "accentColor": "",
+  "theme": "system",
+  "baseFontSize": 20,
+  "enabledCssSnippets": [
+    "snippet",
+    "S - Checkboxes"
+  ],
+  "cssTheme": "Minimal"
+}

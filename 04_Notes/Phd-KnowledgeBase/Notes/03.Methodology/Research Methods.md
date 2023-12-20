@@ -1,0 +1,1 @@
+- ==Detailed descriptions of the methods you'll be using.==

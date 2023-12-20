@@ -1,0 +1,1 @@
+- [ ] Review the least square methods part 2 ([LINK](https://www.coursera.org/learn/state-estimation-localization-self-driving-cars/supplement/NeMMR/lesson-1-supplementary-reading-the-squared-error-criterion-and-the-method-of))

@@ -1,0 +1,5 @@
+|   |   |   |   |   |   |   |
+|---|---|---|---|---|---|---|
+|Week|Lesson|Supplementary reading|Link|File Link|Reading notes Link|Status|
+|6|2,3|Snider, J. M., "Automatic Steering Methods for Autonomous Automobile Path Tracking", Robotics Institute, Carnegie Mellon University, Pittsburg (February 2009).<br><br>  <br>> From <[https://www.coursera.org/learn/intro-self-driving-cars/supplement/JgI8q/lesson-2-supplementary-reading-geometric-lateral-control-pure-pursuit](https://www.coursera.org/learn/intro-self-driving-cars/supplement/JgI8q/lesson-2-supplementary-reading-geometric-lateral-control-pure-pursuit)>|[URL](https://www.ri.cmu.edu/pub_files/2009/2/Automatic_Steering_Methods_for_Autonomous_Automobile_Path_Tracking.pdf)|[LINK](file:///D:\03_PHD\_github\Phd--POMDP\05_practice\02_Coursera\01_Intro_Autonomous_Driving\W6L2\Tjbr4CDxEem9_wqPhE1wLA_4e4bfa0020f111e990ff73ab14e458cc_Automatic_Steering_Methods_for_Autonomous_Automobile_Path_Tracking.pdf)||- [x] Open<br><br>- [ ] Ongoing<br><br>- [ ] Done|
+||||||||

@@ -1,0 +1,1 @@
+- ==Clearly stated hypotheses and anticipated outcomes.==

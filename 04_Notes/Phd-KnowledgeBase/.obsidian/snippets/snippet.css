@@ -1,0 +1,9 @@
+.cm-tag-important {
+  background-color: rgba(234, 231, 235, 0.25);
+  color: rgb(3, 23, 40);
+  font-weight: bold;
+}
+
+.cm-hashtag-begin.cm-tag-important::before {
+  content: "❗";
+}

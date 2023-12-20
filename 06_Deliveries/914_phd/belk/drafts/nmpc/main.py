@@ -1,7 +1,7 @@
 # main.py
 import carla
 from nmpc_controller import NMPCController
-from carla_utils import initialize_vehicle, apply_control_to_vehicle, get_vehicle_state, update_camera_view
+from carla_utils import *
 from trajectory import ReferenceTrajectory
 
 def main():
@@ -17,12 +17,15 @@ def main():
     ref_trajectory = ReferenceTrajectory()
 
     try:
-        for step in range(100):  # Number of simulation steps
+        # for step in range(1000):  # Number of simulation steps
+        while True:
+            step=0
             current_state = get_vehicle_state(vehicle)
             ref_point = ref_trajectory.get_ref_point(step)
-            control = nmpc.compute_control(current_state, ref_point)
-            print(control)
-            apply_control_to_vehicle(vehicle, control)
+            # control = nmpc.compute_control(current_state, ref_point)
+            # print(control)
+            # apply_control_to_vehicle(vehicle, control)
+            apply_target_speed(vehicle, speed=20)
             update_camera_view(vehicle, spectator)
     finally:
         print("Simulation ended")

@@ -64,7 +64,7 @@ def apply_control_to_vehicle(vehicle, control):
     vehicle.apply_control(carla_control)
 
 def apply_target_speed(vehicle, speed=0):
-    vehicle.setcarla.Vector3D(2,2,0))
+    vehicle.set_target_velocity(carla.Vector3D(2,2,0))
 
 
 def update_camera_view(vehicle, spectator):

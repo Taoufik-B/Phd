@@ -63,6 +63,9 @@ def apply_control_to_vehicle(vehicle, control):
     carla_control.brake = control.get('brake', 0.0)
     vehicle.apply_control(carla_control)
 
+def apply_target_speed(speed=0):
+    command
+
 
 def update_camera_view(vehicle, spectator):
     ego_t = vehicle.get_transform()

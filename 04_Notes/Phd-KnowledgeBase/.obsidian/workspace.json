@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/09.Wiki/02.Tools/Conda - python.md",
+                "file": "Notes/09.Wiki/03.Training Plans/Modern dynamics and control systems.md",
                 "mode": "source",
                 "source": false
               }
@@ -87,7 +87,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/09.Wiki/02.Tools/Conda - python.md",
+                "file": "Notes/09.Wiki/03.Training Plans/Modern dynamics and control systems.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/09.Wiki/02.Tools/Conda - python.md",
+                "file": "Notes/09.Wiki/03.Training Plans/Modern dynamics and control systems.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -127,7 +127,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/09.Wiki/02.Tools/Conda - python.md"
+                "file": "Notes/09.Wiki/03.Training Plans/Modern dynamics and control systems.md"
               }
             }
           },
@@ -180,9 +180,10 @@
   },
   "active": "2752a516b3b8d29f",
   "lastOpenFiles": [
+    "_attachments/03_Learning/tsfs12/Lecture_notes/lecture_07_model_predictive_control_for_autonomous_vehicles.pdf",
+    "Notes/09.Wiki/02.Tools/Conda - python.md",
     "Notes/09.Wiki/05.Chatgpt/NMPC Kinematic Model Casadi.md",
     "Notes/00.Archive/Test note.md",
-    "Notes/09.Wiki/02.Tools/Conda - python.md",
     "Notes/01.Project Overview/Accounts.md",
     "_attachments/03_Learning/mpc-rl/mpcrl23-bib.pdf",
     "_attachments/03_Learning/mpc-rl/Unconfirmed 515930.crdownload",
@@ -207,7 +208,6 @@
     "Notes/10.Courses/02.Control_Dynamics/Learn MPC.md",
     "Notes/09.Wiki/01.Definitions/Observability.md",
     "Notes/10.Courses/02.Control_Dynamics/Learn MPC.Methods.md",
-    "Notes/10.Courses/02.Control_Dynamics/Learn MPC.Solvers.md",
     "Notes/02.Literature Analysis/00.Analysis",
     "Untitled.canvas",
     "_attachments/04_Diags/Thesis_Proposal.drawio",

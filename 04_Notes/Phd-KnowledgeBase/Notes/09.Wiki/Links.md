@@ -1,3 +1,7 @@
+2023-12-21
+https://github.com/matssteinweg/Multi-Purpose-MPC/
+https://uni-tuebingen.de/fakultaeten/mathematisch-naturwissenschaftliche-fakultaet/fachbereiche/informatik/lehrstuehle/autonomous-vision/lectures/self-driving-cars/
+
 2023-12-10
 - https://motion.cs.illinois.edu/RoboticSystems/
 - 

@@ -58,9 +58,9 @@ class NMPCController:
 
         # Objective function and constraints
         # Cost weights
-        Q = np.diag([1.0, 1.0, 0.5])  # State cost
+        self.Q = np.diag([1.0, 1.0, 0.5])  # State cost
         # R = np.diag([0.1, 0.1])       # Control cost
-        R = [0.1]      # Control cost
+        self.R = [0.1]      # Control cost
 
         # Define the objective function
         obj = 0
@@ -110,7 +110,7 @@ class NMPCController:
             'lbx' : state_min*(self.N+1)+control_min*self.N,
             'ubx' : state_max*(self.N+1)+control_max*self.N,
             'lbg' : constraints_b*(self.N+1),
-            'ubg' : constraints_b[0,0,0]*(self.N+1),
+            'ubg' : constraints_b*(self.N+1),
             'p': ca.DM.zeros((n_states+n_states,1)),
             'x0': ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
         }
@@ -132,13 +132,14 @@ class NMPCController:
         current_state_vector = ca.DM([current_state['x'], current_state['y'], current_state['theta']])
 
         # Formulate the problem parameters
-        params = ca.vertcat(
+        self.args['p'] = ca.vertcat(
             current_state_vector,
             ca.reshape(ref_trajectory, -1, 1)
         )
 
         # Solve the NMPC optimization problem
-        sol = self.solver(lbg=0, ubg=0, p=params)
+        sol = self.solver(**self.args)
+        print(sol)
         u_opt = ca.reshape(sol['x'].full(), self.N, 1)
 
         print(u_opt)

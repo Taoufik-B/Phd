@@ -100,6 +100,19 @@ class NMPCController:
             'print_time':0,
         }
         self.solver = ca.nlpsol('solver', 'ipopt', self.nlp, opts)
+        control_min = [-1]
+        state_min = [0,0,0]
+        control_min = [-1]
+        state_max = [0,0,0]
+        self.args = {
+            'lbx' : state_min*(self.N+1)+control_min*self.N,
+            'ubx' : [x_ub, y_ub, theta_ub]*(self.N+1)+[v_max, omega_max]*self.N,
+            'lbg' : [0,0,0]*(self.N+1)+[-ca.inf]*(self.N+1),
+            'ubg' : [0,0,0]*(self.N+1)+[0.0]*(self.N+1),
+            'p': ca.DM.zeros((n_states+self.N*n_ref+n_states,1)),
+            'x0': ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
+        }
+
 
 
     def compute_control(self, current_state, ref_trajectory):

@@ -3,7 +3,7 @@ import carla
 from nmpc_controller import NMPCController
 from carla_utils import *
 from trajectory import ReferenceTrajectory
-import logging
+import logging, time
 
 
 
@@ -26,12 +26,7 @@ def simulate():
     pass
 
 def is_done():
-    if world.is_done():
-                logging.info("Goal Reached")
-                # if _thread.exit()
-                time.sleep(2)
-                logging.info("Program Exit")
-                break
+    pass
 
 
 def main():
@@ -55,6 +50,14 @@ def main():
     try:
         # for step in range(1000):  # Number of simulation steps
         while True:
+            run_step()
+            if is_done():
+                logging.info("Goal Reached")
+                # if _thread.exit()
+                time.sleep(2)
+                logging.info("Program Exit")
+                break
+                 
             step=0
             current_state = get_vehicle_state(vehicle)
             ref_point = ref_trajectory.get_ref_point(step)

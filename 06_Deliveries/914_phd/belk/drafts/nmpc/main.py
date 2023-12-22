@@ -9,8 +9,11 @@ import logging, time
 class Simulation:
     def __init__(self) -> None:
 
-        
+        self.done = False
         self.world=None
+        self.spectator = None
+        self.ego_vehicle = None
+
         pass
 
     def _init_world(self, sync = True):
@@ -26,10 +29,18 @@ class Simulation:
                     settings.rendering = True
             self.world.apply_settings(settings)
 
+    def _update_camera_bird_view(self):
+        ego_t = self.ego_vehicle.get_transform()
+        spect_location = ego_t.location + carla.Location(z=45)
+        spect_rotation = carla.Rotation(yaw=ego_t.rotation.yaw, pitch = -85)
+        spect_t = carla.Transform(spect_location, spect_rotation)
+        spectator.set_transform(spect_t) 
+
     def setup(self):
         pass
 
     def run_step(self):
+        self._update_camera_bird_view()
         return self.done
 
     def teardown(self):
@@ -45,6 +56,9 @@ def main():
     # logging.info('listening to server %s:%s', args.host, args.port)
 
     ###################
+    #Prepare the simulation
+    simulation = Simulation()
+    simulation.setup()
 
     # Initialize CARLA and NMPC
     world = init_world()
@@ -58,8 +72,8 @@ def main():
     try:
         # for step in range(1000):  # Number of simulation steps
         while True:
-            run_step()
-            if is_done():
+            done = simulation.run_step()
+            if done:
                 logging.info("Goal Reached")
                 time.sleep(2)
                 logging.info("Program Exit")

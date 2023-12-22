@@ -3,7 +3,7 @@ import casadi as ca
 import numpy as np
 
 class NMPCController:
-    def __init__(self, L=2.8, dt=0.05, N=5):
+    def __init__(self, L=2.8, dt=0.05, N=30):
         """
         Initialize the NMPC controller.
 
@@ -101,7 +101,7 @@ class NMPCController:
         }
         self.solver = ca.nlpsol('solver', 'ipopt', self.nlp, opts)
         
-        self.x0 =ca.DM([55,130,180])
+        self.x0 =ca.DM([55,130,-ca.pi])
         self.u0 = ca.DM.zeros((n_controls, self.N))
         self.X0 = ca.DM([self.x0.full()[:,0]]*(self.N+1))
         

@@ -3,7 +3,7 @@ import casadi as ca
 import numpy as np
 
 class NMPCController:
-    def __init__(self, L=2.8, dt=0.05, N=20):
+    def __init__(self, L=2.8, dt=0.05, N=5):
         """
         Initialize the NMPC controller.
 
@@ -120,4 +120,4 @@ class NMPCController:
         print(throttle_value, steer_value, brake_value)
 
         # Return the control commands (as a dictionary)
-        return {'throttle': throttle_value, 'steer': steer_value, 'brake': brake_value}
+        return {'throttle': 0.8, 'steer': steer_value, 'brake': brake_value}

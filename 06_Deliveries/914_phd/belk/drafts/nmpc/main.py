@@ -74,8 +74,9 @@ class Simulation:
     def run_step(self):
         self._update_camera_bird_view()
         current_state = get_vehicle_state(self.ego_vehicle)
-        # control = self.controller.compute_control(current_state, current_state)
-        # apply_control_to_vehicle(control)
+        target_state  = [56, 140, -180]
+        control = self.controller.compute_control(current_state, target_state)
+        apply_control_to_vehicle(self.ego_vehicle, control)
         print(current_state)
         self.iteration -= 1
         self.done = self.iteration == 0

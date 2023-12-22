@@ -13,6 +13,7 @@ class Simulation:
         self.spectator = None
         self.ego_vehicle = None
         self.setting = None
+        self.actor_list = []
         self._init_world()
 
     def _init_world(self, sync = True):
@@ -21,6 +22,7 @@ class Simulation:
         self.world = client.get_world()
 
         if sync:
+            self.settings = self.world.get_settings()
             settings = self.world.get_settings()
             if not settings.synchronous_mode:
                     settings.synchronous_mode = True
@@ -35,7 +37,25 @@ class Simulation:
         spect_location = ego_t.location + carla.Location(z=45)
         spect_rotation = carla.Rotation(yaw=ego_t.rotation.yaw, pitch = -85)
         spect_t = carla.Transform(spect_location, spect_rotation)
-        self.spectator.set_transform(spect_t) 
+        self.spectator.set_transform(spect_t)
+
+    def _vehicle_spawn(self, filter = "vehicle.*", role="hero"):
+        blueprint_library = self.world.get_blueprint_library()
+        bp_vehicle = blueprint_library.filter(filter).find('vehicle.audi.etron')
+        bp_vehicle.set_attribute('role_name', role)
+        # set color
+        bp_vehicle.set_attribute('color', '48, 80, 114')
+
+        while self.ego_vehicle is None:
+            if not self.map.get_spawn_points():
+                print('There are no spawn points available in your map/town.')
+                print('Please add some Vehicle Spawn Point to your UE4 scene.')
+                sys.exit(1)
+            spawn_points = self.map.get_spawn_points()
+            spawn_point = spawn_points[23]
+            self.ego_vehicle = self.world.try_spawn_actor(bp_vehicle, spawn_point)
+            if self.ego_vehicle:
+                self.actor_list.append(self.ego_vehicle)
 
     def setup(self):
         pass
@@ -45,10 +65,10 @@ class Simulation:
         return self.done
 
     def teardown(self):
-        if self.original_settings:
-            self.original_settings.rendering = False
-            self.world.apply_settings(self.original_settings)
-            self.original_settings = None
+        if self.settings:
+            self.rendering = False
+            self.world.apply_settings(self.settings)
+            self.settings = None
         for actor in self.actor_list:
             actor.destroy()
 

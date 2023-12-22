@@ -14,7 +14,7 @@ class Simulation:
         self.setting = None
         self.actor_list = []
         self.controller = None
-        self.
+        self.iteration = 1000
         self._init_world()
 
     def _init_world(self, sync = True):
@@ -74,8 +74,10 @@ class Simulation:
     def run_step(self):
         self._update_camera_bird_view()
         current_state = get_vehicle_state(self.ego_vehicle)
-        control = self.controller.compute_control(current_state, reference_point)
-        apply_control_to_vehicle(control)
+        # control = self.controller.compute_control(current_state, current_state)
+        # apply_control_to_vehicle(control)
+        self.iteration -= 1
+        self.done = self.iteration == 0
         self.world.tick()
 
         return self.done
@@ -111,11 +113,11 @@ def main():
 
     try:
         # for step in range(1000):  # Number of simulation steps
+        logging.info("Simulation Start")
         while True:
             simulation.run_step()
             if simulation.done:
                 logging.info("Goal Reached")
-                time.sleep(2)
                 logging.info("Program Exit")
                 break
                  

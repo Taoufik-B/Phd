@@ -51,10 +51,10 @@ class NMPCController:
         # Prediction horizon
         U = ca.SX.sym('U', n_controls, self.N)  # Control matrix (2 controls: v, delta)
         # U = ca.SX.sym('U', 1, self.N)  # Control matrix (2 controls: v, delta)
-        P = ca.SX.sym('P', 3 + 3)  # Parameters (current state + reference trajectory)
+        P = ca.SX.sym('P', n_states+n_states)  # Parameters (current state + reference trajectory)
 
         # Matrix of the states over the optimization problem
-        X = ca.SX.sym('X', 3, self.N+1)
+        X = ca.SX.sym('X', n_states, self.N+1)
 
         # Objective function and constraints
         # Cost weights
@@ -76,10 +76,10 @@ class NMPCController:
             # Compute constraints
             g = ca.vertcat(g, st_next - st_next_euler)
             # Compute the objective function
-            # state_error = X[:,k] - P[3:6]
-            state_error = X[:,k] - P[n_ref*k+3:n_ref*k+3+3]
-            # con = U[:,k]
-            con = U[:,k] - P[n_ref*k+3+3:n_ref*k+3+3+2]
+            state_error = X[:,k] - P[3:6]
+            # state_error = X[:,k] - P[n_ref*k+3:n_ref*k+3+3]
+            con = U[:,k]
+            # con = U[:,k] - P[n_ref*k+3+3:n_ref*k+3+3+2]
             obj += state_error.T@self.Q@state_error# State cost
             obj += con.T@self.R@con # Control cost
 

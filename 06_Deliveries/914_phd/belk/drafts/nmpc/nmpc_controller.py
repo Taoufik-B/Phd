@@ -120,4 +120,4 @@ class NMPCController:
         print(throttle_value, steer_value, brake_value)
 
         # Return the control commands (as a dictionary)
-        return {'throttle': 0.8, 'steer': steer_value, 'brake': brake_value}
+        return {'throttle': 0.8, 'steer': 0, 'brake': 0}

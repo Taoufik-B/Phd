@@ -6,27 +6,35 @@ from trajectory import ReferenceTrajectory
 import logging, time
 
 
+class Simulation:
+    def __init__(self) -> None:
 
-def init_world(sync = True):
-    client = carla.Client('localhost', 2000)
-    client.set_timeout(10.0)
-    world = client.get_world()
+        
+        self.world=None
+        pass
 
-    if sync:
-        settings = world.get_settings()
-        if not settings.synchronous_mode:
-                settings.synchronous_mode = True
-                settings.fixed_delta_seconds = 0.05
-                settings.rendering = True
-        world.apply_settings(settings)
+    def _init_world(self, sync = True):
+        client = carla.Client('localhost', 2000)
+        client.set_timeout(10.0)
+        self.world = client.get_world()
 
-    return world
+        if sync:
+            settings = self.world.get_settings()
+            if not settings.synchronous_mode:
+                    settings.synchronous_mode = True
+                    settings.fixed_delta_seconds = 0.05
+                    settings.rendering = True
+            self.world.apply_settings(settings)
 
-def simulate():
-    pass
+    def setup(self):
+        pass
 
-def is_done():
-    pass
+    def run_step(self):
+        return self.done
+
+    def teardown(self):
+        pass
+
 
 
 def main():
@@ -34,7 +42,7 @@ def main():
     log_level = logging.DEBUG
     logging.basicConfig(format='%(asctime)s %(levelname)-8s: %(message)s', level=log_level, datefmt='%Y-%m-%d %H:%M:%S')
 
-    logging.info('listening to server %s:%s', args.host, args.port)
+    # logging.info('listening to server %s:%s', args.host, args.port)
 
     ###################
 
@@ -53,7 +61,6 @@ def main():
             run_step()
             if is_done():
                 logging.info("Goal Reached")
-                # if _thread.exit()
                 time.sleep(2)
                 logging.info("Program Exit")
                 break

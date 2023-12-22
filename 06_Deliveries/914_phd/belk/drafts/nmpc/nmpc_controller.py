@@ -100,6 +100,11 @@ class NMPCController:
             'print_time':0,
         }
         self.solver = ca.nlpsol('solver', 'ipopt', self.nlp, opts)
+        
+        self.x0 =ca.DM([55,130,180])
+        self.u0 = ca.DM.zeros((n_controls, self.N))
+        self.X0 = ca.DM([self.x0.full()[:,0]]*(self.N+1))
+        
         control_min = [-1]
         state_min = [-ca.inf,-ca.inf,-ca.pi]
         control_max = [1]
@@ -140,7 +145,7 @@ class NMPCController:
         # Solve the NMPC optimization problem
         sol = self.solver(**self.args)
         print(sol)
-        u_opt = ca.reshape(sol['x'].full(), self.N, 1)
+        # u_opt = ca.reshape(sol['x'].full(), self.N, 1)
 
         print(u_opt)
 

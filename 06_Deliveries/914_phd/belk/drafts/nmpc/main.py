@@ -4,11 +4,27 @@ from nmpc_controller import NMPCController
 from carla_utils import *
 from trajectory import ReferenceTrajectory
 
-def main():
-    # Initialize CARLA and NMPC
+
+
+def init_world(sync = True):
     client = carla.Client('localhost', 2000)
     client.set_timeout(10.0)
     world = client.get_world()
+
+    if sync:
+        settings = world.get_settings()
+        if not settings.synchronous_mode:
+                settings.synchronous_mode = True
+                settings.fixed_delta_seconds = 0.05
+                settings.rendering = True
+        world.apply_settings(settings)
+
+    return world
+
+
+def main():
+    # Initialize CARLA and NMPC
+    world = init_world()
     vehicle = initialize_vehicle(world)
 
     spectator = world.get_spectator()

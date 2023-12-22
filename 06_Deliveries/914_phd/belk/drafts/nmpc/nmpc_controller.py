@@ -16,6 +16,8 @@ class NMPCController:
         self.dt = dt
         self.N = N
 
+        self.v = 0
+
         # Define the NMPC problem
         self._setup_nmpc()
 
@@ -27,7 +29,7 @@ class NMPCController:
         y = ca.SX.sym('y')
         theta = ca.SX.sym('theta')
         # v = ca.SX.sym('v')
-        v = 0
+        
         delta = ca.SX.sym('delta')
 
         # State vector and control inputs
@@ -41,9 +43,9 @@ class NMPCController:
         n_ref = n_states + n_controls
 
         # State update equations (kinematic bicycle model)
-        rhs = ca.vertcat(v * ca.cos(theta*0.01745)
-                         , v * ca.sin(theta*0.01745)
-                         , v/self.L * ca.tan(delta*ca.pi)
+        rhs = ca.vertcat(self.v * ca.cos(theta*0.01745)
+                         , self.v * ca.sin(theta*0.01745)
+                         , self.v/self.L * ca.tan(delta*ca.pi)
                          )
         self.f = ca.Function('f', [states, controls], [rhs])
 
@@ -151,6 +153,7 @@ class NMPCController:
 
         print(u_opt[0,0])
         print(self.X0[0,:])
+        print("self.v : ", self.v)
 
         # Extract the first set of control actions
         # throttle_value = float(max(u_opt[0, 0], 0))

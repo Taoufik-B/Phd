@@ -27,7 +27,7 @@ class NMPCController:
         y = ca.SX.sym('y')
         theta = ca.SX.sym('theta')
         # v = ca.SX.sym('v')
-        v = 10
+        v = 0
         delta = ca.SX.sym('delta')
 
         # State vector and control inputs

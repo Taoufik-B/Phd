@@ -78,6 +78,8 @@ class Simulation:
         control = self.controller.compute_control(current_state, target_state)
         apply_control_to_vehicle(self.ego_vehicle, control)
         print(current_state)
+        current_speed=get_speed()
+        print(current_speed)
         self.iteration -= 1
         self.done = self.iteration == 0
         self.world.tick()

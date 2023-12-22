@@ -33,7 +33,7 @@ class NMPCController:
         # State vector and control inputs
         states = ca.vertcat(x, y, theta)
         # controls = ca.vertcat(v, delta)
-        controls = ca.vertcat(delta)
+        controls = delta
 
         # State update equations (kinematic bicycle model)
         rhs = ca.vertcat(v * ca.cos(theta)
@@ -41,12 +41,13 @@ class NMPCController:
                          , v/self.L * ca.tan(delta)
                          )
         self.f = ca.Function('f', [states, controls], [rhs])
+        print(rhs)
 
         # Objective function and constraints
         # Cost weights
         Q = np.diag([1.0, 1.0, 0.5])  # State cost
         # R = np.diag([0.1, 0.1])       # Control cost
-        R = np.diag([0.1])       # Control cost
+        R = [0.1]      # Control cost
 
         # Prediction horizon
         U = ca.SX.sym('U', 2, self.N)  # Control matrix (2 controls: v, delta)

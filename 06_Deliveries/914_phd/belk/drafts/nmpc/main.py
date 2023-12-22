@@ -14,6 +14,7 @@ class Simulation:
         self.setting = None
         self.actor_list = []
         self.controller = None
+        self.
         self._init_world()
 
     def _init_world(self, sync = True):
@@ -111,8 +112,8 @@ def main():
     try:
         # for step in range(1000):  # Number of simulation steps
         while True:
-            done = simulation.run_step()
-            if done:
+            simulation.run_step()
+            if simulation.done:
                 logging.info("Goal Reached")
                 time.sleep(2)
                 logging.info("Program Exit")

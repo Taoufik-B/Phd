@@ -85,9 +85,22 @@ class NMPCController:
         # Define constraints (if any)
         g = []
 
+        # Setting Optimization variables
+        Opt_Vars = ca.vertcat(X.reshape((-1,1)),U.reshape((-1,1)))
+
         # Define the NMPC optimization problem
-        opts = {'ipopt.print_level': 0, 'print_time': 0}
-        self.nlp = {'f': obj, 'x': ca.reshape(U, -1, 1), 'g': ca.vertcat(*g), 'p': P}
+        # self.nlp = {'f': obj, 'x': ca.reshape(U, -1, 1), 'g': ca.vertcat(*g), 'p': P}
+        self.nlp = {'f': obj, 'x': Opt_Vars, 'g': g, 'p': P}
+        opts = {
+            'ipopt': # interior point optimizer
+            {
+                'max_iter':100,
+                'print_level':0,
+                'acceptable_tol':1e-8,
+                'acceptable_obj_change_tol':1e-6
+            },
+            'print_time':0,
+        }
         self.solver = ca.nlpsol('solver', 'ipopt', self.nlp, opts)
 
 

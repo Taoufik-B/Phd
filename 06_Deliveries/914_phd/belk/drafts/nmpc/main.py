@@ -3,8 +3,7 @@ import carla
 from nmpc_controller import NMPCController
 from carla_utils import *
 from trajectory import ReferenceTrajectory
-import logging, time
-
+import logging, time, sys
 
 class Simulation:
     def __init__(self) -> None:
@@ -39,7 +38,7 @@ class Simulation:
         spect_t = carla.Transform(spect_location, spect_rotation)
         self.spectator.set_transform(spect_t)
 
-    def _vehicle_spawn(self, filter = "vehicle.*", role="hero"):
+    def _spawn_vehicle(self, filter = "vehicle.*", role="hero"):
         blueprint_library = self.world.get_blueprint_library()
         bp_vehicle = blueprint_library.filter(filter).find('vehicle.audi.etron')
         bp_vehicle.set_attribute('role_name', role)
@@ -58,10 +57,13 @@ class Simulation:
                 self.actor_list.append(self.ego_vehicle)
 
     def setup(self):
+        self._spawn_vehicle()
         pass
 
     def run_step(self):
         self._update_camera_bird_view()
+        self.world.tick()
+
         return self.done
 
     def teardown(self):
@@ -87,10 +89,6 @@ def main():
     simulation.setup()
 
     # Initialize CARLA and NMPC
-    world = init_world()
-    vehicle = initialize_vehicle(world)
-
-    spectator = world.get_spectator()
 
     nmpc = NMPCController()
     ref_trajectory = ReferenceTrajectory()

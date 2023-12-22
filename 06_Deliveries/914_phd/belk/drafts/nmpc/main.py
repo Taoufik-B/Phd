@@ -3,6 +3,7 @@ import carla
 from nmpc_controller import NMPCController
 from carla_utils import *
 from trajectory import ReferenceTrajectory
+import logging
 
 
 
@@ -21,8 +22,27 @@ def init_world(sync = True):
 
     return world
 
+def simulate():
+    pass
+
+def is_done():
+    if world.is_done():
+                logging.info("Goal Reached")
+                # if _thread.exit()
+                time.sleep(2)
+                logging.info("Program Exit")
+                break
+
 
 def main():
+    ###########
+    log_level = logging.DEBUG
+    logging.basicConfig(format='%(asctime)s %(levelname)-8s: %(message)s', level=log_level, datefmt='%Y-%m-%d %H:%M:%S')
+
+    logging.info('listening to server %s:%s', args.host, args.port)
+
+    ###################
+
     # Initialize CARLA and NMPC
     world = init_world()
     vehicle = initialize_vehicle(world)
@@ -43,6 +63,10 @@ def main():
             # apply_control_to_vehicle(vehicle, control)
             apply_target_speed(vehicle, speed=20)
             update_camera_view(vehicle, spectator)
+    except KeyboardInterrupt:
+        print('\nCancelled by user. Bye!')
+    except Exception as e:
+        print(f'Exception occured due to {e}')
     finally:
         print("Simulation ended")
         vehicle.destroy()

@@ -8,13 +8,12 @@ import logging, time
 
 class Simulation:
     def __init__(self) -> None:
-
         self.done = False
         self.world=None
         self.spectator = None
         self.ego_vehicle = None
-
-        pass
+        self.setting = None
+        self._init_world()
 
     def _init_world(self, sync = True):
         client = carla.Client('localhost', 2000)
@@ -28,13 +27,15 @@ class Simulation:
                     settings.fixed_delta_seconds = 0.05
                     settings.rendering = True
             self.world.apply_settings(settings)
+        
+        self.spectator = self.world.get_spectator()
 
     def _update_camera_bird_view(self):
         ego_t = self.ego_vehicle.get_transform()
         spect_location = ego_t.location + carla.Location(z=45)
         spect_rotation = carla.Rotation(yaw=ego_t.rotation.yaw, pitch = -85)
         spect_t = carla.Transform(spect_location, spect_rotation)
-        spectator.set_transform(spect_t) 
+        self.spectator.set_transform(spect_t) 
 
     def setup(self):
         pass
@@ -44,7 +45,12 @@ class Simulation:
         return self.done
 
     def teardown(self):
-        pass
+        if self.original_settings:
+            self.original_settings.rendering = False
+            self.world.apply_settings(self.original_settings)
+            self.original_settings = None
+        for actor in self.actor_list:
+            actor.destroy()
 
 
 

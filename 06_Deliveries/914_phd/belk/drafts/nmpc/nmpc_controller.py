@@ -110,7 +110,7 @@ class NMPCController:
         sol = self.solver(lbg=0, ubg=0, p=params)
         u_opt = ca.reshape(sol['x'].full(), self.N, 2)
 
-        print(u_opt)
+        print(u_opt, '\n',sol)
 
         # Extract the first set of control actions
         throttle_value = float(max(u_opt[0, 0], 0))

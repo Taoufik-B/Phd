@@ -27,7 +27,7 @@ class NMPCController:
         y = ca.SX.sym('y')
         theta = ca.SX.sym('theta')
         # v = ca.SX.sym('v')
-        v = ca.DM(10)
+        v = 10
         delta = ca.SX.sym('delta')
 
         # State vector and control inputs
@@ -112,15 +112,15 @@ class NMPCController:
 
         # Solve the NMPC optimization problem
         sol = self.solver(lbg=0, ubg=0, p=params)
-        u_opt = ca.reshape(sol['x'].full(), self.N, 2)
+        u_opt = ca.reshape(sol['x'].full(), self.N, 1)
 
         print(u_opt, '\n',sol)
 
         # Extract the first set of control actions
-        throttle_value = float(max(u_opt[0, 0], 0))
-        steer_value = float(u_opt[0, 1])
+        # throttle_value = float(max(u_opt[0, 0], 0))
+        steer_value = float(u_opt[0, 0])
 
-        print(throttle_value, steer_value)
+        print(steer_value)
 
         # Return the control commands (as a dictionary)
         return {'throttle': 0.8, 'steer': 0, 'brake': 0}

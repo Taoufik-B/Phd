@@ -33,7 +33,7 @@ class NMPCController:
         # State vector and control inputs
         states = ca.vertcat(x, y, theta)
         # controls = ca.vertcat(v, delta)
-        controls = delta
+        controls = ca.vertcat(delta)
 
         # State update equations (kinematic bicycle model)
         rhs = ca.vertcat(v * ca.cos(theta)

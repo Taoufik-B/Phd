@@ -144,16 +144,19 @@ class NMPCController:
 
         # Solve the NMPC optimization problem
         sol = self.solver(**self.args)
-        print(sol)
+        # print(sol)
+        u_opt = sol['x'][3*(self.N+1):].reshape((1,self.N))
+        self.X0 = sol['x'][:3*(self.N+1)].reshape((3,self.N+1))
         # u_opt = ca.reshape(sol['x'].full(), self.N, 1)
 
         print(u_opt)
+        print(self.X0)
 
         # Extract the first set of control actions
         # throttle_value = float(max(u_opt[0, 0], 0))
         steer_value = float(u_opt[0, 0])
 
-        print(steer_value)
+        # print(steer_value)
 
         # Return the control commands (as a dictionary)
-        return {'throttle': 0.8, 'steer': 0, 'brake': 0}
+        return {'throttle': 0.8, 'steer': steer_value, 'brake': 0}

@@ -115,9 +115,8 @@ class NMPCController:
         # Extract the first set of control actions
         throttle_value = float(max(u_opt[0, 0], 0))
         steer_value = float(u_opt[0, 1])
-        brake_value = float(max(-u_opt[0, 0], 0))
 
-        print(throttle_value, steer_value, brake_value)
+        print(throttle_value, steer_value)
 
         # Return the control commands (as a dictionary)
         return {'throttle': 0.8, 'steer': 0, 'brake': 0}

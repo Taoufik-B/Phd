@@ -30,6 +30,13 @@ class Simulation:
             self.world.apply_settings(settings)
         
         self.spectator = self.world.get_spectator()
+        try:
+            self.map = self.world.get_map()
+        except RuntimeError as error:
+            print('RuntimeError: {}'.format(error))
+            print('  The server could not send the OpenDRIVE (.xodr) file:')
+            print('  Make sure it exists, has the same name of your town, and is correct.')
+            sys.exit(1)
 
     def _update_camera_bird_view(self):
         ego_t = self.ego_vehicle.get_transform()
@@ -82,7 +89,8 @@ def main():
     logging.basicConfig(format='%(asctime)s %(levelname)-8s: %(message)s', level=log_level, datefmt='%Y-%m-%d %H:%M:%S')
 
     # logging.info('listening to server %s:%s', args.host, args.port)
-
+    
+    nmpc = NMPCController()
     ###################
     #Prepare the simulation
     simulation = Simulation()
@@ -90,7 +98,6 @@ def main():
 
     # Initialize CARLA and NMPC
 
-    nmpc = NMPCController()
     ref_trajectory = ReferenceTrajectory()
 
     try:
@@ -103,21 +110,19 @@ def main():
                 logging.info("Program Exit")
                 break
                  
-            step=0
-            current_state = get_vehicle_state(vehicle)
-            ref_point = ref_trajectory.get_ref_point(step)
+            # step=0
+            # current_state = get_vehicle_state(vehicle)
+            # ref_point = ref_trajectory.get_ref_point(step)
             # control = nmpc.compute_control(current_state, ref_point)
             # print(control)
             # apply_control_to_vehicle(vehicle, control)
-            apply_target_speed(vehicle, speed=20)
-            update_camera_view(vehicle, spectator)
     except KeyboardInterrupt:
         print('\nCancelled by user. Bye!')
     except Exception as e:
         print(f'Exception occured due to {e}')
     finally:
         print("Simulation ended")
-        vehicle.destroy()
+        simulation.teardown()
 
 if __name__ == "__main__":
     main()

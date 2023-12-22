@@ -50,7 +50,7 @@ class NMPCController:
         R = [0.1]      # Control cost
 
         # Prediction horizon
-        U = ca.SX.sym('U', 2, self.N)  # Control matrix (2 controls: v, delta)
+        U = ca.SX.sym('U', 1, self.N)  # Control matrix (2 controls: v, delta)
         # U = ca.SX.sym('U', 1, self.N)  # Control matrix (2 controls: v, delta)
         P = ca.SX.sym('P', 3 + 3)  # Parameters (current state + reference trajectory)
 
@@ -115,7 +115,7 @@ class NMPCController:
         sol = self.solver(lbg=0, ubg=0, p=params)
         u_opt = ca.reshape(sol['x'].full(), self.N, 1)
 
-        print(u_opt, '\n',sol)
+        print(u_opt)
 
         # Extract the first set of control actions
         # throttle_value = float(max(u_opt[0, 0], 0))

@@ -14,7 +14,7 @@ class Simulation:
         self.setting = None
         self.actor_list = []
         self.controller = None
-        self.iteration = 1000
+        self.iteration = 100
         self._init_world()
 
     def _init_world(self, sync = True):
@@ -76,6 +76,7 @@ class Simulation:
         current_state = get_vehicle_state(self.ego_vehicle)
         # control = self.controller.compute_control(current_state, current_state)
         # apply_control_to_vehicle(control)
+        print(current_state)
         self.iteration -= 1
         self.done = self.iteration == 0
         self.world.tick()

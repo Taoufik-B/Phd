@@ -35,13 +35,26 @@ class NMPCController:
         # controls = ca.vertcat(v, delta)
         controls = ca.vertcat(delta)
 
+        n_states = states.numel()
+        n_controls = controls.numel()
+
+        n_ref = n_states + n_controls
+
         # State update equations (kinematic bicycle model)
         rhs = ca.vertcat(v * ca.cos(theta)
                          , v * ca.sin(theta)
                          , v/self.L * ca.tan(delta)
                          )
         self.f = ca.Function('f', [states, controls], [rhs])
-        print(rhs)
+
+
+        # Prediction horizon
+        U = ca.SX.sym('U', n_controls, self.N)  # Control matrix (2 controls: v, delta)
+        # U = ca.SX.sym('U', 1, self.N)  # Control matrix (2 controls: v, delta)
+        P = ca.SX.sym('P', 3 + 3)  # Parameters (current state + reference trajectory)
+
+        # Matrix of the states over the optimization problem
+        X = ca.SX.sym('X', 3, self.N+1)
 
         # Objective function and constraints
         # Cost weights
@@ -49,41 +62,26 @@ class NMPCController:
         # R = np.diag([0.1, 0.1])       # Control cost
         R = [0.1]      # Control cost
 
-        # Prediction horizon
-        U = ca.SX.sym('U', 1, self.N)  # Control matrix (2 controls: v, delta)
-        # U = ca.SX.sym('U', 1, self.N)  # Control matrix (2 controls: v, delta)
-        P = ca.SX.sym('P', 3 + 3)  # Parameters (current state + reference trajectory)
-
-        # Matrix of the states over the optimization problem
-        X = ca.SX.sym('X', 3, self.N+1)
-        # Predicted states
-        X[:,0] = P[0:3]
-
-        for k in range(self.N):
-            st = X[:,k]
-            con = U[:,k]
-            f_value = self.f(st, con)
-            st_next = st + (self.dt*f_value)
-            X[:,k+1]=st_next
-
-        # X = ca.vertcat(*[self.f(states, U[i, :]) for i in range(self.N)])  
-
         # Define the objective function
         obj = 0
-        # for i in range(self.N):
-        #     state_error = X[i*3:(i+1)*3] - P[3 + i*3:6 + i*3]
-        #     obj += ca.mtimes([state_error.T, Q, state_error])  # State cost
-        #     obj += ca.mtimes([U[i, :].T, R, U[i, :]])          # Control cost
-
-        for k in range(self.N):
-            st = X[:,k]
-            con = U[:,k]
-            state_error = st-P[3:6]
-            obj += state_error.T@Q@state_error# State cost
-            obj += con.T@R@con # Control cost
-
+ 
         # Define constraints (if any)
         g = []
+
+        g = ca.vertcat(g,X[:,0]-P[0:3]) #initial condition constraint
+
+        for k in range(self.N):
+            st_next_euler = X[:,k] + self.dt*self.f(X[:,k], U[:,k])
+            st_next = X[:,k+1] 
+            # Compute constraints
+            g = ca.vertcat(g, st_next - st_next_euler)
+            # Compute the objective function
+            # state_error = X[:,k] - P[3:6]
+            state_error = X[:,k] - P[n_ref*k+3:n_ref*k+3+3]
+            # con = U[:,k]
+            con = U[:,k] - P[n_ref*k+3+3:n_ref*k+3+3+2]
+            obj += state_error.T@self.Q@state_error# State cost
+            obj += con.T@self.R@con # Control cost
 
         # Setting Optimization variables
         Opt_Vars = ca.vertcat(X.reshape((-1,1)),U.reshape((-1,1)))

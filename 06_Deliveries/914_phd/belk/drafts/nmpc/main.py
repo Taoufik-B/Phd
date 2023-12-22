@@ -13,6 +13,7 @@ class Simulation:
         self.ego_vehicle = None
         self.setting = None
         self.actor_list = []
+        self.controller = None
         self._init_world()
 
     def _init_world(self, sync = True):
@@ -63,12 +64,17 @@ class Simulation:
             if self.ego_vehicle:
                 self.actor_list.append(self.ego_vehicle)
 
-    def setup(self):
+    def setup(self, controller):
+        self.controller = controller
         self._spawn_vehicle()
+
         pass
 
     def run_step(self):
         self._update_camera_bird_view()
+        current_state = get_vehicle_state(self.ego_vehicle)
+        control = self.controller.compute_control(current_state, reference_point)
+        apply_control_to_vehicle(control)
         self.world.tick()
 
         return self.done
@@ -89,12 +95,14 @@ def main():
     logging.basicConfig(format='%(asctime)s %(levelname)-8s: %(message)s', level=log_level, datefmt='%Y-%m-%d %H:%M:%S')
 
     # logging.info('listening to server %s:%s', args.host, args.port)
-    
-    nmpc = NMPCController()
+
     ###################
     #Prepare the simulation
     simulation = Simulation()
-    simulation.setup()
+    
+    nmpc = NMPCController()
+    
+    simulation.setup(nmpc)
 
     # Initialize CARLA and NMPC
 

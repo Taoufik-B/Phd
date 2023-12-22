@@ -3,7 +3,7 @@ import casadi as ca
 import numpy as np
 
 class NMPCController:
-    def __init__(self, L=2.8, dt=0.05, N=30):
+    def __init__(self, L=2.8, dt=0.05, N=10):
         """
         Initialize the NMPC controller.
 
@@ -149,8 +149,8 @@ class NMPCController:
         self.X0 = sol['x'][:3*(self.N+1)].reshape((3,self.N+1))
         # u_opt = ca.reshape(sol['x'].full(), self.N, 1)
 
-        print(u_opt)
-        print(self.X0)
+        print(u_opt[0,0])
+        print(self.X0[0,:])
 
         # Extract the first set of control actions
         # throttle_value = float(max(u_opt[0, 0], 0))

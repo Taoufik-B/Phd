@@ -35,7 +35,7 @@ class Simulation:
             settings = self.world.get_settings()
             if not settings.synchronous_mode:
                     settings.synchronous_mode = True
-                    settings.fixed_delta_seconds = 0.5
+                    settings.fixed_delta_seconds = 0.4
                     settings.rendering = True
             self.world.apply_settings(settings)
         
@@ -113,7 +113,7 @@ class Simulation:
 
         # print("Current speed: ",current_speed)
         self.iteration += 1
-        self.done = self.iteration == 152
+        self.done = self.iteration == 80
         self.world.tick()
 
         return self.done

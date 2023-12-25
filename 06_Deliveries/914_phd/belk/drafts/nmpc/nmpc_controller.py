@@ -71,7 +71,7 @@ class PIDLongitudinalController():
 
 
 class NMPCController:
-    def __init__(self, ref_trajectory, L=2.8, dt=0.02, N=10):
+    def __init__(self, ref_trajectory, L=2.8, dt=0.02, N=7):
         """
         Initialize the NMPC controller.
 

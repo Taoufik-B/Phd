@@ -20,6 +20,7 @@ class Simulation:
         self.actor_list = []
         self.controller = None
         self.iteration = 0
+        self.target_state = [0,0,0]
         self.map = "Town05"
         self._init_world()
 
@@ -96,7 +97,10 @@ class Simulation:
         current_state = get_vehicle_state(self.ego_vehicle)
         if current_state[0] == 0:
             current_state=ref_trajectory.x0
+        
+
         target_state  = ref_trajectory.get_ref_points(self.iteration, self.N)
+        self.target_state = 
         # print(current_state, target_state)
         current_speed=get_speed(self.ego_vehicle)
         self.controller.current_speed=current_speed

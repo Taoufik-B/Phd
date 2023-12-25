@@ -71,7 +71,7 @@ class PIDLongitudinalController():
 
 
 class NMPCController:
-    def __init__(self, ref_trajectory, L=2.8, dt=0.05, N=10):
+    def __init__(self, ref_trajectory, L=2.8, dt=0.02, N=10):
         """
         Initialize the NMPC controller.
 
@@ -234,7 +234,7 @@ class NMPCController:
             t_predict = k*self.dt
             x_ref = target_state[k,0]
             # x_ref = current_state[0]-t_predict*self.current_speed/3.6
-            # y_ref = target_state[k,1]
+            y_ref = target_state[k,1]
             # y_ref = current_state[1]
             theta_ref = target_state[k,2]
             phi_ref = target_state[k,3]

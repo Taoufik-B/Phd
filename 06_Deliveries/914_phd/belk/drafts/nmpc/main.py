@@ -35,7 +35,7 @@ class Simulation:
             settings = self.world.get_settings()
             if not settings.synchronous_mode:
                     settings.synchronous_mode = True
-                    settings.fixed_delta_seconds = 0.05
+                    settings.fixed_delta_seconds = 0.5
                     settings.rendering = True
             self.world.apply_settings(settings)
         

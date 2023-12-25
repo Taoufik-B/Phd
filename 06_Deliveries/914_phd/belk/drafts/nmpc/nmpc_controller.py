@@ -119,7 +119,7 @@ class NMPCController:
         rhs = ca.vertcat(v * ca.cos(theta)
                          , v*  ca.sin(theta)
                         #  , v/self.L * ca.tan(delta)
-                         ,  
+                         , v*delta/self.L 
                          )
         self.f = ca.Function('f', [states, controls], [rhs])
 
@@ -282,7 +282,7 @@ class NMPCController:
         speed_value = v.full()[0][0]
         # steer_value =  etha.full()[0][0]
         # steer_value =  (delta/1.2217)/ca.pi
-        steer_value =  np.clip(delta/1.2217,-1.0,1.0)
+        steer_value =  np.clip(delta,-1.0,1.0)
 
         if self._target_reached:
             speed_value = 0

@@ -4,9 +4,14 @@ from nmpc_controller import NMPCController
 from carla_utils import *
 from trajectory import ReferenceTrajectory
 import logging, time, sys
+import numpy as np
+
+
+
 
 class Simulation:
     def __init__(self) -> None:
+        self.N = 10
         self.done = False
         self.world=None
         self.spectator = None
@@ -14,13 +19,16 @@ class Simulation:
         self.setting = None
         self.actor_list = []
         self.controller = None
-        self.iteration = 100
+        self.iteration = 0
+        self.map = "Town05"
         self._init_world()
 
     def _init_world(self, sync = True):
         client = carla.Client('localhost', 2000)
         client.set_timeout(10.0)
-        self.world = client.get_world()
+        # self.world = client.get_world()
+        self.world = client.load_world(self.map)
+        # client.reload_world()
 
         if sync:
             self.settings = self.world.get_settings()
@@ -47,7 +55,7 @@ class Simulation:
         spect_t = carla.Transform(spect_location, spect_rotation)
         self.spectator.set_transform(spect_t)
 
-    def _spawn_vehicle(self, filter = "vehicle.*", role="hero"):
+    def _spawn_vehicle(self, spawn_point, filter = "vehicle.*", role="hero"):
         blueprint_library = self.world.get_blueprint_library()
         bp_vehicle = blueprint_library.filter(filter).find('vehicle.audi.etron')
         bp_vehicle.set_attribute('role_name', role)
@@ -55,35 +63,57 @@ class Simulation:
         bp_vehicle.set_attribute('color', '48, 80, 114')
 
         while self.ego_vehicle is None:
-            if not self.map.get_spawn_points():
-                print('There are no spawn points available in your map/town.')
-                print('Please add some Vehicle Spawn Point to your UE4 scene.')
-                sys.exit(1)
+            # if not self.map.get_spawn_points():
+            #     print('There are no spawn points available in your map/town.')
+            #     print('Please add some Vehicle Spawn Point to your UE4 scene.')
+            #     sys.exit(1)
             spawn_points = self.map.get_spawn_points()
-            spawn_point = spawn_points[23]
-            self.ego_vehicle = self.world.try_spawn_actor(bp_vehicle, spawn_point)
+            # for i,p in enumerate(spawn_points):
+            #     print(i,p)
+            # spawn_point_t = carla.Transform()
+            # spawn_point_t.location.x = 7.086513
+            # spawn_point_t.location.y = -200.483002
+            # spawn_point_t.rotation.yaw = np.rad2deg(spawn_point[2])
+            # print(spawn_point_t)
+            self.ego_vehicle = self.world.try_spawn_actor(bp_vehicle, spawn_points[266])
             if self.ego_vehicle:
                 self.actor_list.append(self.ego_vehicle)
+                #teleport vehicle
+                spawn_point_t = carla.Transform()
+                spawn_point_t.location.x = spawn_point[0]
+                spawn_point_t.location.y = spawn_point[1]
+                spawn_point_t.rotation.yaw = np.rad2deg(spawn_point[2])
+                self.ego_vehicle.set_transform(spawn_point_t)
 
-    def setup(self, controller):
+    def setup(self, controller, spawn_point):
         self.controller = controller
-        self._spawn_vehicle()
+        self._spawn_vehicle(spawn_point)
 
         pass
 
-    def run_step(self):
+    def run_step(self, ref_trajectory):
         self._update_camera_bird_view()
         current_state = get_vehicle_state(self.ego_vehicle)
-        target_state  = [16, 130, -1.14]
-        control = self.controller.compute_control(current_state, target_state)
-        apply_control_to_vehicle(self.ego_vehicle, control)
-        print("Current State: ",current_state)
-
+        if current_state[0] == 0:
+            current_state=ref_trajectory.x0
+        target_state  = ref_trajectory.get_ref_points(self.iteration, self.N)
+        # print(current_state, target_state)
         current_speed=get_speed(self.ego_vehicle)
-        self.controller.v=current_speed
-        print("Current speed: ",current_speed)
-        self.iteration -= 1
-        self.done = self.iteration == 0
+        self.controller.current_speed=current_speed
+        control, u = self.controller.compute_control(current_state, target_state, self.iteration)
+        apply_control_to_vehicle(self.ego_vehicle, control)
+        # apply_target_speed(self.ego_vehicle)
+        # print("Current State: ",current_state)
+        # control = carla.VehicleAckermannControl(steer=control['steer'], steer_speed=0.0, speed=control['speed'], acceleration=0.0, jerk=0.0)
+        # self.ego_vehicle.apply_ackermann_control(control)
+
+        self.controller.run_step(u)
+
+        # print(self.ego_vehicle.get_physics_control())
+
+        # print("Current speed: ",current_speed)
+        self.iteration += 1
+        self.done = self.iteration == 152
         self.world.tick()
 
         return self.done
@@ -107,21 +137,21 @@ def main():
 
     ###################
     #Prepare the simulation
+    ref_trajectory = ReferenceTrajectory()
     simulation = Simulation()
     
-    nmpc = NMPCController()
+    nmpc = NMPCController(ref_trajectory)
     
-    simulation.setup(nmpc)
+    simulation.setup(nmpc, ref_trajectory.x0)
 
     # Initialize CARLA and NMPC
 
-    ref_trajectory = ReferenceTrajectory()
 
     try:
         # for step in range(1000):  # Number of simulation steps
         logging.info("Simulation Start")
         while True:
-            simulation.run_step()
+            simulation.run_step(ref_trajectory)
             if simulation.done:
                 logging.info("Goal Reached")
                 logging.info("Program Exit")

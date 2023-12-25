@@ -35,12 +35,13 @@ def get_vehicle_state(vehicle):
     - state: Dict containing position (x, y) and heading (theta) of the vehicle
     """
     loc = vehicle.get_location()
-    rot = vehicle.get_transform().rotation.yaw
-    return {
-        'x': loc.x,
-        'y': loc.y,
-        'theta': rot  # Note: Depending on your setup, you might need to convert this to radians
-    }
+    rot = vehicle.get_transform().rotation.yaw * 0.017453293 #convert to rad
+    # return {
+    #     'x': loc.x,
+    #     'y': loc.y,
+    #     'theta': rot  # Note: Depending on your setup, you might need to convert this to radians
+    # }
+    return [loc.x, loc.y, rot]
 
 def apply_control_to_vehicle(vehicle, control):
     """
@@ -64,7 +65,7 @@ def apply_control_to_vehicle(vehicle, control):
     vehicle.apply_control(carla_control)
 
 def apply_target_speed(vehicle, speed=0):
-    vehicle.set_target_velocity(carla.Vector3D(2,2,0))
+    vehicle.set_target_velocity(carla.Vector3D(-4,0,0))
 
 
 def update_camera_view(vehicle, spectator):

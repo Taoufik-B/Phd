@@ -1,31 +1,26 @@
 # trajectory.py
 import numpy as np
+import casadi as ca
 
+    
 class ReferenceTrajectory:
-    def __init__(self):
-        """
-        Initialize the reference trajectory.
-        """
-        # Define a simple example trajectory
-        # Format: [x, y, theta]
-        self.trajectory_points = np.array([
-            [0, 0, 0],
-            [10, 0, 0],
-            [20, 10, 45],
-            [30, 20, 45],
-            # ... Add more points as needed
-        ])
+    def __init__(self) -> None:
+        self.x0 = None
+        self.xs = None
+        self.path = None
+        self._load()
+        self.size = len(self.path)
 
-    def get_ref_point(self, step):
-        """
-        Return the reference point for the given step.
+    def _load(self):
+        self.path = np.load("./wps.npy")
+        self.path = self.path[1:,]
+        self.path[:,2] = np.deg2rad(self.path[:,2])
+        self.x0 = self.path[0,:]
+        self.xs = self.path[-1,:]
 
-        Parameters:
-        - step: int, the current step in the simulation
-
-        Returns:
-        - ref_point: Array, the reference point [x, y, theta]
-        """
-        # Loop the trajectory if the step exceeds the length
-        index = step % len(self.trajectory_points)
-        return self.trajectory_points[index]
+    
+    def get_ref_points(self, step, horizon):
+        return self.path[step:step+horizon,:]
+    
+    def get_reference(self):
+        return ca.vertcat(self.x0, self.xs).full()[:,0]

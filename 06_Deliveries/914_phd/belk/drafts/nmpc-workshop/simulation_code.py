@@ -5,7 +5,7 @@ from matplotlib import animation
 from time import time
 
 
-def simulate(cat_states, cat_controls, t, step_horizon, N, reference, save=False):
+def simulate(trajectory, cat_states, cat_controls, t, step_horizon, N, reference, save=False):
     def create_triangle(state=[0,0,0], h=0.5, w=0.25, update=False):
         x, y, th = state
         triangle = np.array([
@@ -45,6 +45,7 @@ def simulate(cat_states, cat_controls, t, step_horizon, N, reference, save=False
         x = cat_states[0, 0, i]
         y = cat_states[1, 0, i]
         th = cat_states[2, 0, i]
+        
 
         # update path
         if i == 0:
@@ -69,16 +70,18 @@ def simulate(cat_states, cat_controls, t, step_horizon, N, reference, save=False
 
     # create figure and axes
     fig, ax = plt.subplots(figsize=(6, 6))
-    min_scale = min(reference[0], reference[1], reference[3], reference[4]) - 2
-    max_scale = max(reference[0], reference[1], reference[3], reference[4]) + 2
-    ax.set_xlim(left = min_scale, right = max_scale)
-    ax.set_ylim(bottom = min_scale, top = max_scale)
+    min_scale = min(reference[0], reference[1], reference[3], reference[4]) - 50
+    max_scale = max(reference[0], reference[1], reference[3], reference[4]) + 20
+    # ax.set_xlim(left = min_scale, right = max_scale)
+    # ax.set_ylim(bottom = min_scale, top = max_scale)
 
     # create lines:
     #   path
     path, = ax.plot([], [], 'k', linewidth=2)
     #   horizon
     horizon, = ax.plot([], [], 'x-g', alpha=0.8)
+
+    trajectory_plot, = ax.plot(trajectory[:,0], trajectory[:,1], 'x-r', alpha=0.3)
     #   current_state
     current_triangle = create_triangle(reference[:3])
     current_state = ax.fill(current_triangle[:, 0], current_triangle[:, 1], color='r')
@@ -89,12 +92,12 @@ def simulate(cat_states, cat_controls, t, step_horizon, N, reference, save=False
     target_state = ax.fill(target_triangle[:, 0], target_triangle[:, 1], color='b')
     target_state = target_state[0]
     # Trying obstacles spawning
-    obstacle_circle = create_circle([1.5,3], 0.25)
-    obstacle_state  = ax.plot(obstacle_circle[0], obstacle_circle[1], color='g')
-    obstacle_state = obstacle_state[0]
-    obstacle_circle_2 = create_circle([5,5], 1.25)
-    obstacle_state_2  = ax.plot(obstacle_circle_2[0], obstacle_circle_2[1], color='g')
-    obstacle_state_2 = obstacle_state_2[0]
+    # obstacle_circle = create_circle([1.5,3], 0.25)
+    # obstacle_state  = ax.plot(obstacle_circle[0], obstacle_circle[1], color='g')
+    # obstacle_state = obstacle_state[0]
+    # obstacle_circle_2 = create_circle([5,5], 1.25)
+    # obstacle_state_2  = ax.plot(obstacle_circle_2[0], obstacle_circle_2[1], color='g')
+    # obstacle_state_2 = obstacle_state_2[0]
     sim = animation.FuncAnimation(
         fig=fig,
         func=animate,

@@ -41,7 +41,7 @@ def get_vehicle_state(vehicle):
     #     'y': loc.y,
     #     'theta': rot  # Note: Depending on your setup, you might need to convert this to radians
     # }
-    return [loc.x, loc.y, rot]
+    return [loc.x, loc.y, rot, 0]
 
 def apply_control_to_vehicle(vehicle, control):
     """

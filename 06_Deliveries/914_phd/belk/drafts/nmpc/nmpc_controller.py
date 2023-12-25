@@ -114,10 +114,10 @@ class NMPCController:
         # controls = ca.vertcat(v, delta)
         controls = ca.vertcat(v, phi)
 
-        n_states = states.numel()
-        n_controls = controls.numel()
+        self.n_states = states.numel()
+        self.n_controls = controls.numel()
 
-        n_ref = n_states + n_controls
+        self.n_ref = self.n_states + self.n_controls
 
         # State update equations (kinematic bicycle model)
         rhs = ca.vertcat(v * ca.cos(theta+delta)
@@ -250,8 +250,8 @@ class NMPCController:
         # Solve the NMPC optimization problem
         sol = self.solver(**self.args)
         # print(sol)
-        u_opt = sol['x'][3*(self.N+1):].reshape((2,self.N))
-        self.X0 = sol['x'][:3*(self.N+1)].reshape((3,self.N+1))
+        u_opt = sol['x'][4*(self.N+1):].reshape((2,self.N))
+        self.X0 = sol['x'][:4*(self.N+1)].reshape((4,self.N+1))
         # u_opt = ca.reshape(sol['x'].full(), self.N, 1)
 
         # print("Target State", target_state)

@@ -129,12 +129,12 @@ class NMPCController:
 
 
         # Prediction horizon
-        U = ca.SX.sym('U', n_controls, self.N)  # Control matrix (2 controls: v, delta)
+        U = ca.SX.sym('U', self.n_controls, self.N)  # Control matrix (2 controls: v, delta)
         # U = ca.SX.sym('U', 1, self.N)  # Control matrix (2 controls: v, delta)
-        P = ca.SX.sym('P', n_states+n_ref*self.N)  # Parameters (current state + reference trajectory)
+        P = ca.SX.sym('P', self.n_states+self.n_ref*self.N)  # Parameters (current state + reference trajectory)
 
         # Matrix of the states over the optimization problem
-        X = ca.SX.sym('X', n_states, self.N+1)
+        X = ca.SX.sym('X', self.n_states, self.N+1)
 
         # Objective function and constraints
         # Cost weights
@@ -148,7 +148,7 @@ class NMPCController:
         # Define constraints (if any)
         g = []
 
-        g = ca.vertcat(g,X[:,0]-P[0:n_states]) #initial condition constraint
+        g = ca.vertcat(g,X[:,0]-P[0:self.n_states]) #initial condition constraint
 
         for k in range(self.N):
             st_next_euler = X[:,k] + self.dt*self.f(X[:,k], U[:,k])
@@ -157,9 +157,9 @@ class NMPCController:
             g = ca.vertcat(g, st_next - st_next_euler)
             # Compute the objective function
             # state_error = X[:,k] - P[3:6]
-            state_error = X[:,k] - P[n_states+n_ref*k:n_states+n_ref*k+n_states]
+            state_error = X[:,k] - P[self.n_states+self.n_ref*k:self.n_states+self.n_ref*k+self.n_states]
             # con = U[:,k]
-            con = U[:,k] - P[n_states+n_ref*k+n_states:n_states+n_ref*k+n_states+n_controls]
+            con = U[:,k] - P[self.n_states+self.n_ref*k+self.n_states:self.n_states+self.n_ref*k+self.n_states+self.n_controls]
             obj += state_error.T@self.Q@state_error# State cost
             obj += con.T@self.R@con # Control cost
 
@@ -193,7 +193,7 @@ class NMPCController:
         self.x0 = self.ref_trajectory.x0
         self.xs = self.ref_trajectory.xs
 
-        self.u0 = ca.DM.zeros((n_controls, self.N))
+        self.u0 = ca.DM.zeros((self.n_controls, self.N))
         self.X0 = ca.DM([x for x in self.x0]*(self.N+1))
 
 
@@ -203,7 +203,7 @@ class NMPCController:
             'ubx' : ub_states*(self.N+1)+ub_controls*self.N,
             'lbg' : g_bounds*(self.N+1),
             'ubg' : g_bounds*(self.N+1),
-            'p': ca.DM.zeros((n_states+self.N*n_ref,1)),
+            'p': ca.DM.zeros((self.n_states+self.N*self.n_ref,1)),
             'x0': ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
         }
 
@@ -228,7 +228,7 @@ class NMPCController:
         #     current_state_vector,
         #     ca.reshape(ref_trajectory, -1, 1)
         # )
-        self.args['p'][0:4] = current_state
+        self.args['p'][0:self.n_states] = current_state
 
         for k in range(self.N):
             t_predict = k*self.dt
@@ -239,10 +239,11 @@ class NMPCController:
             theta_ref = target_state[k,2]
             v_ref = self.current_speed
             delta_ref = 0
-            self.args['p'][6*k+4:6*k+4+4] = [x_ref, y_ref, theta_ref]
-            self.args['p'][6*k+4+4:6*k+4+4+2] = [v_ref, delta_ref]
+            self.args['p'][self.n_ref*k+self.n_states:self.n_ref*k+ 2*self.n_states] = [x_ref, y_ref, theta_ref]
+            self.args['p'][self.n_ref*k+2*self.n_states:self.n_ref*k+2*self.n_states+self.n_controls] = [v_ref, delta_ref]
             print('x : ', x_ref, current_state[0])
             print('y : ', y_ref, current_state[1])
+            print('theta : ', theta_ref, current_state[2])
             print('theta : ', theta_ref, current_state[2])
     
         self.args['x0'] = ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))

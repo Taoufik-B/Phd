@@ -232,10 +232,10 @@ class NMPCController:
 
         for k in range(self.N):
             t_predict = k*self.dt
-            # x_ref = target_state[k,0]
-            x_ref = current_state[0]-t_predict*self.current_speed/3.6
+            x_ref = target_state[k,0]
+            # x_ref = current_state[0]-t_predict*self.current_speed/3.6
             # y_ref = target_state[k,1]
-            y_ref = current_state[1]
+            # y_ref = current_state[1]
             theta_ref = target_state[k,2]
             phi_ref = target_state[k,3]
             v_ref = self.current_speed

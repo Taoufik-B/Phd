@@ -1,6 +1,6 @@
 # carla_utils.py
 import carla
-import random
+import random, math
 
 def initialize_vehicle(world, vehicle_type='model3', spawn_point=None):
     """
@@ -86,3 +86,21 @@ def get_speed(vehicle):
     vel = vehicle.get_velocity()
 
     return 3.6 * vel.length()
+
+def draw_waypoints(world, waypoints, z=0.5, lifespan=1.0, is_line=False):
+    """
+    Draw a list of waypoints at a certain height given in z.
+
+        :param world: carla.world object
+        :param waypoints: list or iterable container with the waypoints to draw
+        :param z: height in meters
+    """
+    for wpt in waypoints:
+        wpt_t = wpt.transform
+        begin = wpt_t.location + carla.Location(z=z)
+        angle = math.radians(wpt_t.rotation.yaw)
+        end = begin + carla.Location(x=math.cos(angle), y=math.sin(angle))
+        if is_line:
+            world.debug.draw_point(begin, size=0.2, color=carla.Color(0,100,50,150), life_time=lifespan)
+        else:
+            world.debug.draw_arrow(begin, end, arrow_size=0.3, life_time=lifespan)

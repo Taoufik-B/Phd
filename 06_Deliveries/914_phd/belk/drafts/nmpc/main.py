@@ -36,7 +36,7 @@ class Simulation:
             settings = self.world.get_settings()
             if not settings.synchronous_mode:
                     settings.synchronous_mode = True
-                    settings.fixed_delta_seconds = 0.4
+                    settings.fixed_delta_seconds = 1
                     settings.rendering = True
             self.world.apply_settings(settings)
         
@@ -121,12 +121,12 @@ class Simulation:
 
 
         ## test trajectory
-        point = ref_trajectory.path[self.iteration,0:3]
+        spawn_point = ref_trajectory.path[self.iteration,0:3]
         spawn_point_t = carla.Transform()
-                spawn_point_t.location.x = spawn_point[0]
-                spawn_point_t.location.y = spawn_point[1]
+        spawn_point_t.location.x = spawn_point[0]
+        spawn_point_t.location.y = spawn_point[1]
         spawn_point_t.rotation.yaw = np.rad2deg(spawn_point[2])
-        self.ego_vehicle.set_transform(ref_trajectory)
+        self.ego_vehicle.set_transform(spawn_point_t)
         self.iteration += 1
         self.done = self.iteration == 162
         self.world.tick()

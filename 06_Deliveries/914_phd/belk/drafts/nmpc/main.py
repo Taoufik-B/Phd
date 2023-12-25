@@ -36,7 +36,7 @@ class Simulation:
             settings = self.world.get_settings()
             if not settings.synchronous_mode:
                     settings.synchronous_mode = True
-                    settings.fixed_delta_seconds = 0.4
+                    settings.fixed_delta_seconds = 0.5
                     settings.rendering = True
             self.world.apply_settings(settings)
         
@@ -116,7 +116,7 @@ class Simulation:
         # print(self.ego_vehicle.get_physics_control())
 
         # print("Current speed: ",current_speed)
-        if current_state[0]-target_state[0,0] < 15.0:
+        if np.linalg.norm(current_state[0:2]-target_state[0:2]) <= 5.0:
             self.iteration += 1
         self.done = self.iteration == 80
         self.world.tick()

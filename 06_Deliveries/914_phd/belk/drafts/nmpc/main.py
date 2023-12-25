@@ -105,18 +105,18 @@ class Simulation:
         current_speed=get_speed(self.ego_vehicle)
         self.controller.current_speed=current_speed
         control, u = self.controller.compute_control(current_state, target_state, self.iteration)
-        # apply_control_to_vehicle(self.ego_vehicle, control)
+        apply_control_to_vehicle(self.ego_vehicle, control)
         # apply_target_speed(self.ego_vehicle)
         # print("Current State: ",current_state)
-        control = carla.VehicleAckermannControl(steer=control['steer'], steer_speed=0.0, speed=control['speed'], acceleration=0.0, jerk=0.0)
-        self.ego_vehicle.apply_ackermann_control(control)
+        # control = carla.VehicleAckermannControl(steer=control['steer'], steer_speed=0.0, speed=control['speed'], acceleration=0.0, jerk=0.0)
+        # self.ego_vehicle.apply_ackermann_control(control)
 
         self.controller.run_step(u)
 
         # print(self.ego_vehicle.get_physics_control())
 
         # print("Current speed: ",current_speed)
-        if current_state[0]-target_state[0,0] < 1.0:
+        if current_state[0]-target_state[0,0] < 5.0:
             self.iteration += 1
         self.done = self.iteration == 80
         self.world.tick()

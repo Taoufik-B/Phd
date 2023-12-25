@@ -15,7 +15,7 @@ class ReferenceTrajectory:
         self.path = np.load("./wps.npy")
         self.path = self.path[1:,]
         self.path[:,2] = np.deg2rad(self.path[:,2])
-        self.path[:,3] = 0
+        self.path = np.hstack((self.path, np.zeros((len(self.path),1))))
         self.x0 = self.path[0,:]
         self.xs = self.path[-1,:]
 

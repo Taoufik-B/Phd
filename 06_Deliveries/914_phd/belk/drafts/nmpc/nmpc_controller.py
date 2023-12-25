@@ -118,7 +118,8 @@ class NMPCController:
         # State update equations (kinematic bicycle model)
         rhs = ca.vertcat(v * ca.cos(theta)
                          , v*  ca.sin(theta)
-                         , v/self.L * ca.tan(delta)
+                        #  , v/self.L * ca.tan(delta)
+                         ,  
                          )
         self.f = ca.Function('f', [states, controls], [rhs])
 

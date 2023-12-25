@@ -100,7 +100,7 @@ class Simulation:
         
 
         target_state  = ref_trajectory.get_ref_points(self.iteration, self.N)
-        self.target_state = 
+        self.target_state = target_state[:,0]
         # print(current_state, target_state)
         current_speed=get_speed(self.ego_vehicle)
         self.controller.current_speed=current_speed

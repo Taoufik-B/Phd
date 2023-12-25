@@ -100,8 +100,7 @@ class Simulation:
         
 
         target_state  = ref_trajectory.get_ref_points(self.iteration, self.N)
-        if current_state[0]-target_state[0,0] < 1.0:
-            self.target_state = target_state[0,:]
+
         # print(current_state, target_state)
         current_speed=get_speed(self.ego_vehicle)
         self.controller.current_speed=current_speed
@@ -117,7 +116,8 @@ class Simulation:
         # print(self.ego_vehicle.get_physics_control())
 
         # print("Current speed: ",current_speed)
-        self.iteration += 1
+        if current_state[0]-target_state[0,0] < 1.0:
+            self.iteration += 1
         self.done = self.iteration == 80
         self.world.tick()
 

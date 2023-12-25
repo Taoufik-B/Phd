@@ -148,7 +148,7 @@ class NMPCController:
         # Define constraints (if any)
         g = []
 
-        g = ca.vertcat(g,X[:,0]-P[0:3]) #initial condition constraint
+        g = ca.vertcat(g,X[:,0]-P[0:n_states]) #initial condition constraint
 
         for k in range(self.N):
             st_next_euler = X[:,k] + self.dt*self.f(X[:,k], U[:,k])
@@ -181,13 +181,13 @@ class NMPCController:
         }
         self.solver = ca.nlpsol('solver', 'ipopt', self.nlp, opts)
         
-        lb_states = [-ca.inf, -ca.inf, -ca.inf]
-        ub_states = [ca.inf, ca.inf, ca.inf]
+        lb_states = [-ca.inf, -ca.inf, -ca.pi, -ca.pi]
+        ub_states = [ca.inf, ca.inf, ca.pi, ca.pi]
 
-        lb_controls = [0, -1.2217]
-        ub_controls = [5, 1.2217]
+        lb_controls = [0, -ca.pi/4]
+        ub_controls = [5, ca.pi/4]
 
-        g_bounds = [0, 0, 0]
+        g_bounds = [0, 0, 0, 0]
 
 
         self.x0 = self.ref_trajectory.x0
@@ -228,7 +228,7 @@ class NMPCController:
         #     current_state_vector,
         #     ca.reshape(ref_trajectory, -1, 1)
         # )
-        self.args['p'][0:3] = current_state
+        self.args['p'][0:4] = current_state
 
         for k in range(self.N):
             t_predict = k*self.dt
@@ -239,8 +239,8 @@ class NMPCController:
             theta_ref = target_state[k,2]
             v_ref = self.current_speed
             delta_ref = 0
-            self.args['p'][5*k+3:5*k+3+3] = [x_ref, y_ref, theta_ref]
-            self.args['p'][5*k+3+3:5*k+3+3+2] = [v_ref, delta_ref]
+            self.args['p'][6*k+4:6*k+4+4] = [x_ref, y_ref, theta_ref]
+            self.args['p'][6*k+4+4:6*k+4+4+2] = [v_ref, delta_ref]
             print('x : ', x_ref, current_state[0])
             print('y : ', y_ref, current_state[1])
             print('theta : ', theta_ref, current_state[2])

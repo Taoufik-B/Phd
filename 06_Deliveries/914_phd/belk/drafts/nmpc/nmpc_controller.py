@@ -240,7 +240,7 @@ class NMPCController:
             phi_ref = target_state[k,3]
             v_ref = self.current_speed
             delta_ref = 0
-            self.args['p'][self.n_ref*k+self.n_states:self.n_ref*k+ 2*self.n_states] = [x_ref, y_ref, theta_ref]
+            self.args['p'][self.n_ref*k+self.n_states:self.n_ref*k+ 2*self.n_states] = [x_ref, y_ref, theta_ref, phi_ref]
             self.args['p'][self.n_ref*k+2*self.n_states:self.n_ref*k+2*self.n_states+self.n_controls] = [v_ref, delta_ref]
             print('x : ', x_ref, current_state[0])
             print('y : ', y_ref, current_state[1])

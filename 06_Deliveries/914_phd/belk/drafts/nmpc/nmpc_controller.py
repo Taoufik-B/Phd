@@ -98,17 +98,21 @@ class NMPCController:
         """
         Sets up the NMPC optimization problem.
         """
+        #states
         x = ca.SX.sym('x')
         y = ca.SX.sym('y')
         theta = ca.SX.sym('theta')
-        v = ca.SX.sym('v')
-        
         delta = ca.SX.sym('delta')
+        
+        #controls
+        v = ca.SX.sym('v')
+        phi = ca.SX.sym('phi')
+        
 
         # State vector and control inputs
-        states = ca.vertcat(x, y, theta)
+        states = ca.vertcat(x, y, theta, delta)
         # controls = ca.vertcat(v, delta)
-        controls = ca.vertcat(v, delta)
+        controls = ca.vertcat(v, phi)
 
         n_states = states.numel()
         n_controls = controls.numel()
@@ -116,10 +120,10 @@ class NMPCController:
         n_ref = n_states + n_controls
 
         # State update equations (kinematic bicycle model)
-        rhs = ca.vertcat(v * ca.cos(theta)
-                         , v*  ca.sin(theta)
-                        #  , v/self.L * ca.tan(delta)
-                         , v*delta/self.L 
+        rhs = ca.vertcat(v * ca.cos(theta+delta)
+                         , v*  ca.sin(theta+delta)
+                         , v/self.L * ca.sin(delta)
+                         , phi
                          )
         self.f = ca.Function('f', [states, controls], [rhs])
 
@@ -134,8 +138,8 @@ class NMPCController:
 
         # Objective function and constraints
         # Cost weights
-        self.Q = np.diag([0.5, 1, 5])  # State cost
-        self.R = np.diag([0.05, 0.8])       # Control cost
+        self.Q = np.diag([1, 1, 0.05, 0.01])  # State cost
+        self.R = np.diag([0.5, 0.05])       # Control cost
         # self.R = [0.1]      # Control cost
 
         # Define the objective function

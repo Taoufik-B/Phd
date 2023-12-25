@@ -237,6 +237,7 @@ class NMPCController:
             # y_ref = target_state[k,1]
             y_ref = current_state[1]
             theta_ref = target_state[k,2]
+            phi_ref = target_state[k,3]
             v_ref = self.current_speed
             delta_ref = 0
             self.args['p'][self.n_ref*k+self.n_states:self.n_ref*k+ 2*self.n_states] = [x_ref, y_ref, theta_ref]
@@ -244,15 +245,15 @@ class NMPCController:
             print('x : ', x_ref, current_state[0])
             print('y : ', y_ref, current_state[1])
             print('theta : ', theta_ref, current_state[2])
-            print('theta : ', theta_ref, current_state[2])
+            print('Phi : ', phi_ref, current_state[3])
     
         self.args['x0'] = ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
 
         # Solve the NMPC optimization problem
         sol = self.solver(**self.args)
         # print(sol)
-        u_opt = sol['x'][4*(self.N+1):].reshape((2,self.N))
-        self.X0 = sol['x'][:4*(self.N+1)].reshape((4,self.N+1))
+        u_opt = sol['x'][self.n_states*(self.N+1):].reshape((self.n_controls,self.N))
+        self.X0 = sol['x'][:self.n_states*(self.N+1)].reshape((self.n_states,self.N+1))
         # u_opt = ca.reshape(sol['x'].full(), self.N, 1)
 
         # print("Target State", target_state)

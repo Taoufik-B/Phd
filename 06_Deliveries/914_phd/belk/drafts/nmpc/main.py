@@ -36,7 +36,7 @@ class Simulation:
             settings = self.world.get_settings()
             if not settings.synchronous_mode:
                     settings.synchronous_mode = True
-                    settings.fixed_delta_seconds = 1
+                    settings.fixed_delta_seconds = 0.4
                     settings.rendering = True
             self.world.apply_settings(settings)
         
@@ -94,41 +94,31 @@ class Simulation:
 
     def run_step(self, ref_trajectory):
         self._update_camera_bird_view()
-        # current_state = get_vehicle_state(self.ego_vehicle)
-        # if current_state[0] == 0:
-        #     current_state=ref_trajectory.x0
+        current_state = get_vehicle_state(self.ego_vehicle)
+        if current_state[0] == 0:
+            current_state=ref_trajectory.x0
         
 
-        # target_state  = ref_trajectory.get_ref_points(self.iteration, self.N)
+        target_state  = ref_trajectory.get_ref_points(self.iteration, self.N)
 
-        # # print(current_state, target_state)
-        # current_speed=get_speed(self.ego_vehicle)
-        # self.controller.current_speed=current_speed
-        # control, u = self.controller.compute_control(current_state, target_state, self.iteration)
-        # apply_control_to_vehicle(self.ego_vehicle, control)
-        # # apply_target_speed(self.ego_vehicle)
-        # # print("Current State: ",current_state)
-        # # control = carla.VehicleAckermannControl(steer=control['steer'], steer_speed=0.0, speed=control['speed'], acceleration=0.0, jerk=0.0)
-        # # self.ego_vehicle.apply_ackermann_control(control)
+        # print(current_state, target_state)
+        current_speed=get_speed(self.ego_vehicle)
+        self.controller.current_speed=current_speed
+        control, u = self.controller.compute_control(current_state, target_state, self.iteration)
+        apply_control_to_vehicle(self.ego_vehicle, control)
+        # apply_target_speed(self.ego_vehicle)
+        # print("Current State: ",current_state)
+        # control = carla.VehicleAckermannControl(steer=control['steer'], steer_speed=0.0, speed=control['speed'], acceleration=0.0, jerk=0.0)
+        # self.ego_vehicle.apply_ackermann_control(control)
 
-        # self.controller.run_step(u)
+        self.controller.run_step(u)
 
-        # # print(self.ego_vehicle.get_physics_control())
+        # print(self.ego_vehicle.get_physics_control())
 
-        # # print("Current speed: ",current_speed)
-        # if current_state[0]-target_state[0,0] < 5.0:
-        #     self.iteration += 1
-
-
-        ## test trajectory
-        spawn_point = ref_trajectory.path[self.iteration,0:3]
-        spawn_point_t = carla.Transform()
-        spawn_point_t.location.x = spawn_point[0]
-        spawn_point_t.location.y = spawn_point[1]
-        spawn_point_t.rotation.yaw = np.rad2deg(spawn_point[2])
-        self.ego_vehicle.set_transform(spawn_point_t)
-        self.iteration += 1
-        self.done = self.iteration == 162
+        # print("Current speed: ",current_speed)
+        if current_state[0]-target_state[0,0] < 15.0:
+            self.iteration += 1
+        self.done = self.iteration == 80
         self.world.tick()
 
         return self.done

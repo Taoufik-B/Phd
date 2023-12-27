@@ -1,13 +1,24 @@
 # main.py
+import sys, glob, os
+
+try:
+    sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
+        sys.version_info.major,
+        sys.version_info.minor,
+        'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
+except IndexError:
+    pass
+
+
 import carla
 from nmpc_controller import NMPCController
 from carla_utils import *
 from trajectory import ReferenceTrajectory
-import logging, time, sys
+import logging, time
 import numpy as np
 
 
-
+CARLA_SERVER_IP = '192.168.1.136'
 
 class Simulation:
     def __init__(self) -> None:
@@ -21,24 +32,28 @@ class Simulation:
         self.controller = None
         self.iteration = 0
         self.target_state = [0,0,0]
-        self.map = "Town05"
+        self.map_name = '/Game/Carla/Maps/Town05'
+        self.vehicle_position = np.zeros((0,4))
+        self.controls = np.zeros((0,2))
         self._init_world()
 
     def _init_world(self, sync = True):
-        client = carla.Client('localhost', 2000)
+        client = carla.Client(CARLA_SERVER_IP, 2000)
         client.set_timeout(10.0)
-        # self.world = client.get_world()
-        self.world = client.load_world(self.map)
-        # client.reload_world()
+        # print(client.get_available_maps())
+        self.world = client.get_world()
+        # self.world = client.load_world(self.map_name)
 
         if sync:
             self.settings = self.world.get_settings()
             settings = self.world.get_settings()
             if not settings.synchronous_mode:
                     settings.synchronous_mode = True
-                    settings.fixed_delta_seconds = 0.5
+                    settings.fixed_delta_seconds = 0.1
                     settings.rendering = True
             self.world.apply_settings(settings)
+            # client.reload_world(False)
+            # time.sleep(3)
         
         self.spectator = self.world.get_spectator()
         try:
@@ -64,18 +79,8 @@ class Simulation:
         bp_vehicle.set_attribute('color', '48, 80, 114')
 
         while self.ego_vehicle is None:
-            # if not self.map.get_spawn_points():
-            #     print('There are no spawn points available in your map/town.')
-            #     print('Please add some Vehicle Spawn Point to your UE4 scene.')
-            #     sys.exit(1)
+
             spawn_points = self.map.get_spawn_points()
-            # for i,p in enumerate(spawn_points):
-            #     print(i,p)
-            # spawn_point_t = carla.Transform()
-            # spawn_point_t.location.x = 7.086513
-            # spawn_point_t.location.y = -200.483002
-            # spawn_point_t.rotation.yaw = np.rad2deg(spawn_point[2])
-            # print(spawn_point_t)
             self.ego_vehicle = self.world.try_spawn_actor(bp_vehicle, spawn_points[266])
             if self.ego_vehicle:
                 self.actor_list.append(self.ego_vehicle)
@@ -95,8 +100,8 @@ class Simulation:
     def run_step(self, ref_trajectory):
         self._update_camera_bird_view()
         current_state = get_vehicle_state(self.ego_vehicle)
-        if current_state[0] == 0:
-            current_state=ref_trajectory.x0
+        # if current_state[0] == 0:
+        #     current_state=ref_trajectory.x0
         
 
         target_state  = ref_trajectory.get_ref_points(self.iteration, self.N)
@@ -105,20 +110,27 @@ class Simulation:
         current_speed=get_speed(self.ego_vehicle)
         self.controller.current_speed=current_speed
         control, u = self.controller.compute_control(current_state, target_state, self.iteration)
-        apply_control_to_vehicle(self.ego_vehicle, control)
+        # apply_control_to_vehicle(self.ego_vehicle, control)
         # apply_target_speed(self.ego_vehicle)
-        # print("Current State: ",current_state)
-        # control = carla.VehicleAckermannControl(steer=control['steer'], steer_speed=0.0, speed=control['speed'], acceleration=0.0, jerk=0.0)
+        # control = carla.VehicleAckermannControl(steer=control['steer'], steer_speed=control['steer_rate'], speed=control['speed'], acceleration=0.0, jerk=0.0)
         # self.ego_vehicle.apply_ackermann_control(control)
+
+        ### TEST Teleport
+        # print(self.controller.X0[:,0])
+        teleport(self.ego_vehicle, self.controller.X0[:,1])
 
         self.controller.run_step(u)
 
-        # print(self.ego_vehicle.get_physics_control())
+        self.controls = np.vstack((self.controls, [control['speed'], control['steer']]))
 
-        # print("Current speed: ",current_speed)
-        if np.linalg.norm(current_state[0:2]-target_state[0:2]) <= 5.0:
+        self.vehicle_position=np.vstack((self.vehicle_position,current_state))
+
+        # print(self.ego_vehicle.get_physics_control())
+        # if np.linalg.norm(current_state[0:2]-target_state[0:2]) <= 5.0:
+        # if np.linalg.norm(current_state[0:1]-target_state[0,0:1]) <= 5.0:
+        if current_state[0]-target_state[0,0] <= 5.0 and current_state[1]-target_state[0,1] <= 5.0 :
             self.iteration += 1
-        self.done = self.iteration == 80
+            self.done = self.iteration == len(ref_trajectory.path)-self.N
         self.world.tick()
 
         return self.done
@@ -130,6 +142,8 @@ class Simulation:
             self.settings = None
         for actor in self.actor_list:
             actor.destroy()
+        np.save('vp.npy', self.vehicle_position)
+        np.save('controls.npy', self.controls)
 
 
 
@@ -138,10 +152,9 @@ def main():
     log_level = logging.DEBUG
     logging.basicConfig(format='%(asctime)s %(levelname)-8s: %(message)s', level=log_level, datefmt='%Y-%m-%d %H:%M:%S')
 
-    # logging.info('listening to server %s:%s', args.host, args.port)
 
     ###################
-    #Prepare the simulation
+    # Prepare the simulation
     ref_trajectory = ReferenceTrajectory()
     simulation = Simulation()
     
@@ -149,32 +162,26 @@ def main():
     
     simulation.setup(nmpc, ref_trajectory.x0)
 
-    # Initialize CARLA and NMPC
 
 
     try:
-        # for step in range(1000):  # Number of simulation steps
         logging.info("Simulation Start")
         while True:
+            st = time.time()
             simulation.run_step(ref_trajectory)
+            et = time.time()
+            print("World_tick elapsed_Time(s): ", et-st)
             if simulation.done:
                 logging.info("Goal Reached")
                 logging.info("Program Exit")
                 break
-                 
-            # step=0
-            # current_state = get_vehicle_state(vehicle)
-            # ref_point = ref_trajectory.get_ref_point(step)
-            # control = nmpc.compute_control(current_state, ref_point)
-            # print(control)
-            # apply_control_to_vehicle(vehicle, control)
     except KeyboardInterrupt:
         print('\nCancelled by user. Bye!')
     except Exception as e:
         print(f'Exception occured due to {e}')
     finally:
-        print("Simulation ended")
         simulation.teardown()
+        print("Simulation ended")
 
 if __name__ == "__main__":
     main()

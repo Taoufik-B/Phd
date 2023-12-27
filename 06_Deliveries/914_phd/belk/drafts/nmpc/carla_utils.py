@@ -1,6 +1,7 @@
 # carla_utils.py
 import carla
 import random, math
+import numpy as np
 
 def initialize_vehicle(world, vehicle_type='model3', spawn_point=None):
     """
@@ -34,6 +35,7 @@ def get_vehicle_state(vehicle):
     Returns:
     - state: Dict containing position (x, y) and heading (theta) of the vehicle
     """
+    carla_control = carla.VehicleControl()
     loc = vehicle.get_location()
     rot = vehicle.get_transform().rotation.yaw * 0.017453293 #convert to rad
     # return {
@@ -41,7 +43,7 @@ def get_vehicle_state(vehicle):
     #     'y': loc.y,
     #     'theta': rot  # Note: Depending on your setup, you might need to convert this to radians
     # }
-    return [loc.x, loc.y, rot, 0]
+    return [loc.x, loc.y, rot, carla_control.steer*1.2217]
 
 def apply_control_to_vehicle(vehicle, control):
     """
@@ -86,6 +88,19 @@ def get_speed(vehicle):
     vel = vehicle.get_velocity()
 
     return 3.6 * vel.length()
+
+def teleport(vehicle, to_state):
+    if vehicle is None:
+        return
+    if abs(to_state[0]) <= 0.001:
+        return
+    #teleport vehicle
+    vehicle_t = vehicle.get_transform()
+    vehicle_t.location.x = float(to_state[0])
+    vehicle_t.location.y = float(to_state[1])
+    vehicle_t.rotation.yaw = np.rad2deg(float(to_state[2]))
+    print(' Teleporting to : ', vehicle_t)
+    vehicle.set_transform(vehicle_t)
 
 def draw_waypoints(world, waypoints, z=0.5, lifespan=1.0, is_line=False):
     """

@@ -2,6 +2,7 @@
 import casadi as ca
 import numpy as np
 from collections import deque
+from scipy.integrate import trapz
 
 
 class PIDLongitudinalController():
@@ -71,7 +72,7 @@ class PIDLongitudinalController():
 
 
 class NMPCController:
-    def __init__(self, ref_trajectory, L=2.8, dt=0.02, N=7):
+    def __init__(self, ref_trajectory, L=2.8, dt=0.05, N=10):
         """
         Initialize the NMPC controller.
 
@@ -101,18 +102,19 @@ class NMPCController:
         #states
         x = ca.SX.sym('x')
         y = ca.SX.sym('y')
-        theta = ca.SX.sym('theta')
-        delta = ca.SX.sym('delta')
+        psi = ca.SX.sym('psi')
+        beta = ca.SX.sym('beta') # the steering angle
+
+        # s
         
         #controls
         v = ca.SX.sym('v')
-        phi = ca.SX.sym('phi')
+        delta = ca.SX.sym('delta') # the steering rate
         
 
         # State vector and control inputs
-        states = ca.vertcat(x, y, theta, delta)
-        # controls = ca.vertcat(v, delta)
-        controls = ca.vertcat(v, phi)
+        states = ca.vertcat(x, y, psi, beta)
+        controls = ca.vertcat(v, delta)
 
         self.n_states = states.numel()
         self.n_controls = controls.numel()
@@ -120,10 +122,15 @@ class NMPCController:
         self.n_ref = self.n_states + self.n_controls
 
         # State update equations (kinematic bicycle model)
-        rhs = ca.vertcat(v * ca.cos(theta+delta)
-                         , v*  ca.sin(theta+delta)
-                         , v/self.L * ca.sin(delta)
-                         , phi
+        # rhs = ca.vertcat(v * ca.cos(theta+delta)
+        #                  , v*  ca.sin(theta+delta)
+        #                  , v/self.L * ca.sin(delta)
+        #                  , phi
+        #                  )
+        rhs = ca.vertcat(v * ca.cos(psi+beta)-self.L/2
+                         , v*  ca.sin(psi+beta)
+                         , v/self.L * ca.cos(beta)*ca.tan(delta)
+                         , delta
                          )
         self.f = ca.Function('f', [states, controls], [rhs])
 
@@ -138,7 +145,7 @@ class NMPCController:
 
         # Objective function and constraints
         # Cost weights
-        self.Q = np.diag([1, 1, 0.05, 0.01])  # State cost
+        self.Q = np.diag([20, 20, 0.1, 0.05])  # State cost
         self.R = np.diag([0.5, 0.05])       # Control cost
         # self.R = [0.1]      # Control cost
 
@@ -151,10 +158,18 @@ class NMPCController:
         g = ca.vertcat(g,X[:,0]-P[0:self.n_states]) #initial condition constraint
 
         for k in range(self.N):
-            st_next_euler = X[:,k] + self.dt*self.f(X[:,k], U[:,k])
+            # st_runge_kutta
+            k1 = self.f(X[:,k], U[:,k])
+            k2 = self.f(X[:,k]+self.dt/2*k1, U[:,k])
+            k3 = self.f(X[:,k]+self.dt/2*k2, U[:,k])
+            k4 = self.f(X[:,k]+self.dt/2*k3, U[:,k])
+            st_rk4 = X[:,k]+self.dt/6*(k1+2*k2+2*k3+k4)
+            # st_next_euler = X[:,k] + k1*self.dt
             st_next = X[:,k+1] 
             # Compute constraints
-            g = ca.vertcat(g, st_next - st_next_euler)
+            # g = ca.vertcat(g, st_next - st_next_euler)
+            # rk4
+            g = ca.vertcat(g, st_next - st_rk4)
             # Compute the objective function
             # state_error = X[:,k] - P[3:6]
             state_error = X[:,k] - P[self.n_states+self.n_ref*k:self.n_states+self.n_ref*k+self.n_states]
@@ -181,13 +196,14 @@ class NMPCController:
         }
         self.solver = ca.nlpsol('solver', 'ipopt', self.nlp, opts)
         
-        lb_states = [-ca.inf, -ca.inf, -ca.pi, -ca.pi]
-        ub_states = [ca.inf, ca.inf, ca.pi, ca.pi]
+        lb_states = [-ca.inf, -ca.inf, -ca.pi, -1.2217]
+        ub_states = [ca.inf, ca.inf, ca.pi, 1.2217]
 
-        lb_controls = [0, -ca.pi/4]
-        ub_controls = [5, ca.pi/4]
+        lb_controls = [0, -1.2217]
+        ub_controls = [5, 1.2217]
 
-        g_bounds = [0, 0, 0, 0]
+        lg_bounds = [0, 0, 0, 0]
+        ug_bounds = [0, 0, 0, 0]
 
 
         self.x0 = self.ref_trajectory.x0
@@ -201,8 +217,8 @@ class NMPCController:
         self.args = {
             'lbx' : lb_states*(self.N+1)+lb_controls*self.N,
             'ubx' : ub_states*(self.N+1)+ub_controls*self.N,
-            'lbg' : g_bounds*(self.N+1),
-            'ubg' : g_bounds*(self.N+1),
+            'lbg' : lg_bounds*(self.N+1),
+            'ubg' : ug_bounds*(self.N+1),
             'p': ca.DM.zeros((self.n_states+self.N*self.n_ref,1)),
             'x0': ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
         }
@@ -221,25 +237,19 @@ class NMPCController:
         - control: Dict, calculated control commands
         """
         # Convert current_state to the format required by the NMPC problem
-        # current_state_vector = ca.DM([current_state['x'], current_state['y'], current_state['theta']])
-        # current_state_vector = current_state
-        # Formulate the problem parameters
-        # self.args['p'] = ca.vertcat(
-        #     current_state_vector,
-        #     ca.reshape(ref_trajectory, -1, 1)
-        # )
         self.args['p'][0:self.n_states] = current_state
 
-        for k in range(self.N):
-            t_predict = k*self.dt
+        print(f'###### ITERATION {iteration} ###########')
+
+        for k in range(len(target_state)):
             x_ref = target_state[k,0]
             # x_ref = current_state[0]-t_predict*self.current_speed/3.6
             y_ref = target_state[k,1]
             # y_ref = current_state[1]
             theta_ref = target_state[k,2]
             phi_ref = target_state[k,3]
-            v_ref = self.current_speed
-            delta_ref = 0
+            v_ref = 5
+            delta_ref = current_state[3]
             self.args['p'][self.n_ref*k+self.n_states:self.n_ref*k+ 2*self.n_states] = [x_ref, y_ref, theta_ref, phi_ref]
             self.args['p'][self.n_ref*k+2*self.n_states:self.n_ref*k+2*self.n_states+self.n_controls] = [v_ref, delta_ref]
             print('x : ', x_ref, current_state[0])
@@ -276,11 +286,6 @@ class NMPCController:
             throttle_value = 0.0
             brake_value = min(abs(acceleration), 1)
 
-        # if current_state_vector[0]<= ref_trajectory[0]:
-        #     throttle_value=0
-        #     brake_value=1
-        #     print("Target reached")
-
         # beta= np.clip(steer_value, -1.0,1.0)
         etha = ca.tan(delta)*v/self.L*self.dt
         print("calculated steer_value :", delta, etha)
@@ -288,7 +293,12 @@ class NMPCController:
         speed_value = v.full()[0][0]
         # steer_value =  etha.full()[0][0]
         # steer_value =  (delta/1.2217)/ca.pi
-        steer_value =  np.clip(delta,-1.0,1.0)
+
+        # steer_value =  np.clip(delta,-1.0,1.0)
+        # steer_value = np.clip(float(self.X0[3,0]), -1,1)
+        # steer_value = np.clip(float(self.X0[3,1]), -1,1)
+        steer_value = np.clip(float(self.X0[3,0])/1.2217, -1,1)
+        # steer_value = np.clip(float(trapz(self.X0[3,:], self.dt), -1,1))
 
         if self._target_reached:
             speed_value = 0
@@ -296,12 +306,19 @@ class NMPCController:
 
 
 
-        control = {'throttle': throttle_value, 'steer': steer_value, 'brake': brake_value, 'speed':speed_value}
+        control = {  'throttle': throttle_value
+                   , 'steer': steer_value
+                   , 'brake': brake_value
+                   , 'speed':speed_value
+                   , 'steer_rate':delta
+                }
         print(control)
         # Return the control commands (as a dictionary)
         return control, u_opt
     
     def run_step(self, u):
-        self.u0[:,:-1] = u[:,1:]
+        # f_value = self.f(self.x0, u[:, 0])
+        # self.x0  = ca.DM.full(self.x0 + (self.dt * f_value))
+        self.u0[:,0:-1] = u[:,1:]
         # print(self.X0)
-        self.X0[:,:-1]=self.X0[:,1:]
+        self.X0[:,0:-1]=self.X0[:,1:]

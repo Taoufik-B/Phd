@@ -25,7 +25,19 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/09.Wiki/01.Definitions/Dynamic Job Shop Scheduling Problems (DJSSPs).md",
+                "file": "Notes/02.Literature Analysis/00.Analysis/Analysis approach.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "00057c52e2c312bc",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Notes/00.Archive/Test note.md",
                 "mode": "source",
                 "source": false
               }
@@ -62,7 +74,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#engineers",
+                "query": "tag:#research/link",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -79,12 +91,12 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "f3ff7b58f3b226a9",
@@ -100,7 +112,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/09.Wiki/01.Definitions/Dynamic Job Shop Scheduling Problems (DJSSPs).md",
+                "file": "Notes/02.Literature Analysis/00.Analysis/Analysis approach.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -117,7 +129,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/09.Wiki/01.Definitions/Dynamic Job Shop Scheduling Problems (DJSSPs).md",
+                "file": "Notes/02.Literature Analysis/00.Analysis/Analysis approach.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -140,7 +152,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/09.Wiki/01.Definitions/Dynamic Job Shop Scheduling Problems (DJSSPs).md"
+                "file": "Notes/02.Literature Analysis/00.Analysis/Analysis approach.md"
               }
             }
           },
@@ -169,12 +181,11 @@
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
-    "width": 325.5,
-    "collapsed": true
+    "width": 325.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -193,37 +204,38 @@
   },
   "active": "0358f2122dae1b69",
   "lastOpenFiles": [
-    "_attachments/_screenshots/Pasted image 20231221092728.png",
-    "Notes/09.Wiki/01.Definitions/IPOPT.md",
-    "Notes/09.Wiki/01.Definitions/Dynamic Job Shop Scheduling Problems (DJSSPs).md",
-    "Notes/09.Wiki/Links.md",
-    "Notes/09.Wiki/03.Training Plans/Modern dynamics and control systems.md",
-    "_attachments/03_Learning/tsfs12/Lecture_notes/lecture_07_model_predictive_control_for_autonomous_vehicles.pdf",
-    "Notes/09.Wiki/02.Tools/Conda - python.md",
-    "Notes/09.Wiki/05.Chatgpt/NMPC Kinematic Model Casadi.md",
-    "Notes/00.Archive/Test note.md",
-    "Notes/01.Project Overview/Accounts.md",
-    "_attachments/03_Learning/mpc-rl/mpcrl23-bib.pdf",
-    "_attachments/03_Learning/mpc-rl/Unconfirmed 515930.crdownload",
-    "Notes/09.Wiki/02.Tools/Carla Api build.md",
-    "Notes/09.Wiki/02.Tools/Carla.md",
-    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Phd_summary_Submission_Example_Workshop.md",
-    "Notes/08.Communication/02.Reports/03.Posters and Workshops/LINK.md",
-    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Navigating AI.md",
+    "Notes/07.Resources and Bibliography/02.Papers and Articles/Trajectory based lateral control A Reinforcement Learning case study.md",
+    "Notes/07.Resources and Bibliography/02.Papers and Articles/Multi-Tree Guided Efficient Robot Motion Planning.md",
+    "Notes/07.Resources and Bibliography/02.Papers and Articles/Learning Model Predictive Controllers with Real-Time Attention for Real-World Navigation.md",
+    "Notes/02.Literature Analysis/2. Literature review.md",
     "Notes/08.Communication/01.Events/Intelligence Artificielle Multimodale, Apprentissage Automatique et Applicationsles 6-7 décembre 2023.md",
-    "Notes/01.Project Overview/_02.Status/_Overall status.md",
-    "Notes/01.Project Overview/_01.tasksCalendar/Tasks_calendar.md",
-    "Notes/01.Project Overview/_00.Taskido/Tasks_timleine.md",
-    "Notes/08.Communication/01.Events/2nd International Conference on Frontiers in Academic Research ICFAR 2023.md",
+    "Notes/09.Wiki/01.Definitions/Framework Synthesis.md",
+    "Notes/00.Archive/Test note.md",
+    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Phd_summary_Submission_Example_Workshop.md",
+    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Navigating AI.md",
+    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Chatgpt_example.md",
+    "Notes/08.Communication/02.Reports/02.Yearly/Yearly Report.md",
+    "Notes/07.Resources and Bibliography/Bibliography.md",
+    "Notes/05.Experimental Results/Observations.md",
+    "Notes/08.Communication/05.MoM/Supervisor Meetings.md",
+    "Notes/09.Wiki/01.Definitions/Dynamic Job Shop Scheduling Problems (DJSSPs).md",
+    "Notes/09.Wiki/01.Definitions/IPOPT.md",
     "Notes/08.Communication/_Home.md",
-    "Notes/00.Archive/2023-11-18.md",
-    "Notes/00.Archive/Tasks Plugin - Review and check your Statuses 2023-12-02 22-57-35.md",
-    "Notes/09.Wiki/01.Definitions/Lyapunov function.md",
-    "Notes/09.Wiki/01.Definitions/System identification.md",
+    "Untitled.canvas",
+    "Notes/08.Communication/01.Events/2nd International Conference on Frontiers in Academic Research ICFAR 2023.md",
+    "Notes/01.Project Overview/_Home.md",
+    "Notes/01.Project Overview/_02.Status/Timeline & Milestones.md",
+    "Notes/01.Project Overview/_02.Status/_Overall status.md",
+    "Notes/01.Project Overview/Accounts.md",
+    "Notes/01.Project Overview/_00.Taskido/Tasks_timleine.md",
     "Notes/08.Communication/04.Logs/02.Weekly/23CW49.md",
     "Notes/10.Courses/02.Control_Dynamics/Learn MPC.md",
+    "Notes/09.Wiki/01.Definitions/Lyapunov function.md",
+    "_attachments/_screenshots/Pasted image 20231221092728.png",
+    "_attachments/03_Learning/tsfs12/Lecture_notes/lecture_07_model_predictive_control_for_autonomous_vehicles.pdf",
+    "_attachments/03_Learning/mpc-rl/mpcrl23-bib.pdf",
+    "_attachments/03_Learning/mpc-rl/Unconfirmed 515930.crdownload",
     "Notes/02.Literature Analysis/00.Analysis",
-    "Untitled.canvas",
     "_attachments/04_Diags/Thesis_Proposal.drawio",
     "_attachments/04_Diags",
     "Notes/00.Archive",
@@ -238,7 +250,6 @@
     "_attachments/_screenshots/Pasted image 20231126085202.png",
     "_attachments/_screenshots/Pasted image 20231126085049.png",
     "_attachments/_screenshots/Pasted image 20231126084624.png",
-    "_attachments/_screenshots/Pasted image 20231126084345.png",
-    "_attachments/_screenshots/Pasted image 20231126084250.png"
+    "_attachments/_screenshots/Pasted image 20231126084345.png"
   ]
 }

@@ -110,7 +110,7 @@ def simulate(trajectory, cat_states, cat_controls, t, step_horizon, N, reference
     plt.show()
 
     if save == True:
-        sim.save('./animation' + str(time()) +'.gif', writer='ffmpeg', fps=30)
+        sim.save('./figures/animation' + str(time()) +'.gif', writer='ffmpeg', fps=30)
 
     return
 

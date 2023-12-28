@@ -38,12 +38,13 @@ def get_vehicle_state(vehicle):
     carla_control = carla.VehicleControl()
     loc = vehicle.get_location()
     rot = vehicle.get_transform().rotation.yaw * 0.017453293 #convert to rad
+    steer_angle = carla_control.steer*1.2217
     # return {
     #     'x': loc.x,
     #     'y': loc.y,
     #     'theta': rot  # Note: Depending on your setup, you might need to convert this to radians
     # }
-    return [loc.x, loc.y, rot, carla_control.steer*1.2217]
+    return [loc.x, loc.y, rot, steer_angle]
 
 def apply_control_to_vehicle(vehicle, control):
     """
@@ -98,7 +99,7 @@ def teleport(vehicle, to_state):
     vehicle_t = vehicle.get_transform()
     vehicle_t.location.x = float(to_state[0])
     vehicle_t.location.y = float(to_state[1])
-    vehicle_t.rotation.yaw = np.rad2deg(float(to_state[2]))
+    # vehicle_t.rotation.yaw = np.rad2deg(float(to_state[2]))
     print(' Teleporting to : ', vehicle_t)
     vehicle.set_transform(vehicle_t)
 

@@ -11,14 +11,12 @@ except IndexError:
 
 
 import carla
-from nmpc_controller import NMPCController
-from carla_utils import *
-from trajectory import ReferenceTrajectory
 import logging, time
 import numpy as np
-
-
-CARLA_SERVER_IP = '192.168.1.136'
+from nmpc_controller import NMPCController
+from trajectory import ReferenceTrajectory
+from carla_utils import *
+from visualization import *
 
 class Simulation:
     def __init__(self) -> None:
@@ -146,41 +144,91 @@ class Simulation:
         np.save('controls.npy', self.controls)
 
 
+def run_dry_simulation(nmpc,ref_trajectory, N):
+    t=[]
+    reference = ref_trajectory.get_reference()
+    mpciter=0
+    t0 = 0
+    v_ref = 5
+    delta_ref = 0
+    distance = 0.1
+    try:
+        while (mpciter < 500):
+            if mpciter+N >= ref_trajectory.size:
+                ref_point=ref_point
+            else:
+                # ref_point = ref_trajectory.get_ref_points(mpciter, N)
+                ref_point = ref_trajectory.get_fake_ref_points(mpciter, N)
+            distance = math.sqrt((ref_point[0,0]-nmpc.x0[0])**2 + (ref_point[0,1]-nmpc.x0[1])**2)
+            # distance = math.sqrt((ref_point[0,0]-nmpc.X0[0,-1])**2 + (ref_point[0,1]-nmpc.X0[1,-1])**2)
+            u_opt  = nmpc.compute_control(mpciter, ref_point, v_ref, delta_ref)
+            nmpc.run_step(u_opt)
+            t.append(t0)
+            print(distance)
+            # print(ref_point[1,0:2])
+            # print(nmpc.x0[0:2])
+            # if distance < 40:
+            mpciter += 1
+            
+        simulate(ref_trajectory.path,nmpc.x_history, nmpc.u_opt_history, t, nmpc.dt, nmpc.N,reference, False)
+    except Exception as e:
+        print(e)
+    finally:
+        print("Simulation ended")
+
 
 def main():
     ###########
-    log_level = logging.DEBUG
+    # logging
+    log_level = logging.INFO
     logging.basicConfig(format='%(asctime)s %(levelname)-8s: %(message)s', level=log_level, datefmt='%Y-%m-%d %H:%M:%S')
+    ###################
+    # config
+    # CARLA_SERVER_IP = '192.168.1.136'
+    CARLA_SERVER_IP = 'localhost'
+
+    ###################
+    # NMPC parameters
+    N = 10                      # horizon
+    dt = 0.1                    # delta time
+    Q = [10, 10, 0.05, 0.005]    # states
+    R = [0.5, 0.05]             # controls
+
+    # Model Parameters
+    L = 2.8
+    activate_rk4 = False
+
+    ###################
+    # Trajectory
+    trajectory = ReferenceTrajectory()
 
 
     ###################
     # Prepare the simulation
-    ref_trajectory = ReferenceTrajectory()
-    simulation = Simulation()
+    nmpc = NMPCController(trajectory.x0, trajectory.size, Q, R, L, dt, N, activate_rk4)
+    # carla_simulation = Simulation()
     
-    nmpc = NMPCController(ref_trajectory)
     
-    simulation.setup(nmpc, ref_trajectory.x0)
-
-
-
+    # carla_simulation.setup(nmpc, trajectory)
     try:
-        logging.info("Simulation Start")
-        while True:
-            st = time.time()
-            simulation.run_step(ref_trajectory)
-            et = time.time()
-            print("World_tick elapsed_Time(s): ", et-st)
-            if simulation.done:
-                logging.info("Goal Reached")
-                logging.info("Program Exit")
-                break
+        logging.info("simulation Start")
+        run_dry_simulation(nmpc,trajectory, N)
+    #     while True:
+    #         st = time.time()
+    #         carla_simulation.run_step()
+    #         et = time.time()
+    #         print("World_tick elapsed_Time(s): ", et-st)
+    #         if carla_simulation.done:
+    #             logging.info("Goal Reached")
+    #             logging.info("Program Exit")
+    #             break
+        
     except KeyboardInterrupt:
         print('\nCancelled by user. Bye!')
     except Exception as e:
         print(f'Exception occured due to {e}')
     finally:
-        simulation.teardown()
+        # carla_simulation.teardown()
         print("Simulation ended")
 
 if __name__ == "__main__":

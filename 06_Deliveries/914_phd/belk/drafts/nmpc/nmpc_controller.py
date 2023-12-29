@@ -127,8 +127,8 @@ class NMPCController:
         self.lb_states = [-ca.inf, -ca.inf, -ca.pi, -1.2217]
         self.ub_states = [ca.inf, ca.inf, ca.pi, 1.2217]
 
-        self.lb_controls = [5, -ca.pi]
-        self.ub_controls = [5, ca.pi]
+        self.lb_controls = [0, -1.22]
+        self.ub_controls = [15, 1.22]
 
         self.lg_bounds = [0, 0, 0, 0]
         self.ug_bounds = [0, 0, 0, 0]
@@ -148,8 +148,8 @@ class NMPCController:
         }
 
         ## History controls and states
-        self.u_opt_history=np.zeros((self.n_controls,self.N,500)) # controls
-        self.x_history=np.zeros((self.n_states,self.N+1,500)) # states
+        self.u_opt_history=np.zeros((self.n_controls,self.N,self.path_size)) # controls
+        self.x_history=np.zeros((self.n_states,self.N+1,self.path_size)) # states
         logging.info("MPC Setup Completed")
 
 
@@ -172,13 +172,11 @@ class NMPCController:
 
         for k in range(self.N):
             x_ref = target_state[k,0]
-            # x_ref = current_state[0]-t_predict*self.current_speed/3.6
             y_ref = target_state[k,1]
-            # y_ref = current_state[1]
             psi_ref = target_state[k,2]
-            delta_ref = target_state[k,3]
+            beta_ref = target_state[k,3]
 
-            self.args['p'][self.n_ref*k+self.n_states:self.n_ref*k+ 2*self.n_states] = [x_ref, y_ref, psi_ref, delta_ref]
+            self.args['p'][self.n_ref*k+self.n_states:self.n_ref*k+ 2*self.n_states] = [x_ref, y_ref, psi_ref, beta_ref]
             self.args['p'][self.n_ref*k+2*self.n_states:self.n_ref*k+2*self.n_states+self.n_controls] = [v_ref, delta_ref]
     
         self.args['x0'] = ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))

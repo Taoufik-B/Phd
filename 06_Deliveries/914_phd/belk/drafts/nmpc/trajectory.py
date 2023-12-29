@@ -23,10 +23,6 @@ class ReferenceTrajectory:
 
     def get_fake_ref_points(self, step, horizon):
         array = self.path[step:step+1,:]
-        print(self.path[step:step+2,:])
-        print(array)
-        print(np.repeat(array, horizon, axis=0))
-        print(np.repeat(array, horizon, axis=1))
         return np.repeat(array, horizon, axis=0)
 
     

@@ -149,26 +149,28 @@ def run_dry_simulation(nmpc,ref_trajectory, N):
     reference = ref_trajectory.get_reference()
     mpciter=0
     t0 = 0
-    v_ref = 5
+    v_ref = 10
     delta_ref = 0
     distance = 0.1
     try:
-        while (mpciter < 500):
+        while (mpciter < ref_trajectory.size):
             if mpciter+N >= ref_trajectory.size:
                 ref_point=ref_point
             else:
-                # ref_point = ref_trajectory.get_ref_points(mpciter, N)
-                ref_point = ref_trajectory.get_fake_ref_points(mpciter, N)
+                ref_point = ref_trajectory.get_ref_points(mpciter, N)
+                # ref_point = ref_trajectory.get_fake_ref_points(mpciter, N)
             distance = math.sqrt((ref_point[0,0]-nmpc.x0[0])**2 + (ref_point[0,1]-nmpc.x0[1])**2)
             # distance = math.sqrt((ref_point[0,0]-nmpc.X0[0,-1])**2 + (ref_point[0,1]-nmpc.X0[1,-1])**2)
             u_opt  = nmpc.compute_control(mpciter, ref_point, v_ref, delta_ref)
             nmpc.run_step(u_opt)
-            t.append(t0)
             print(distance)
             # print(ref_point[1,0:2])
             # print(nmpc.x0[0:2])
-            # if distance < 40:
+            # if distance < 0.5:
             mpciter += 1
+            t.append(t0)
+            # if distance > 10:
+            #     break
             
         simulate(ref_trajectory.path,nmpc.x_history, nmpc.u_opt_history, t, nmpc.dt, nmpc.N,reference, False)
     except Exception as e:
@@ -190,7 +192,7 @@ def main():
     ###################
     # NMPC parameters
     N = 10                      # horizon
-    dt = 0.1                    # delta time
+    dt = 0.5                    # delta time
     Q = [10, 10, 0.05, 0.005]    # states
     R = [0.5, 0.05]             # controls
 

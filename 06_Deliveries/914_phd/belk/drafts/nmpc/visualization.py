@@ -8,7 +8,7 @@ import logging
 
 log_level = logging.NOTSET
 
-def simulate(trajectory, cat_states, cat_controls, t, step_horizon, N, reference, save=False):
+def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, reference, save=False):
     def create_triangle(state=[0,0,0], h=0.5, w=0.25, update=False):
         x, y, th = state
         triangle = np.array([
@@ -41,13 +41,19 @@ def simulate(trajectory, cat_states, cat_controls, t, step_horizon, N, reference
         pass
 
     def init():
-        return path_p, horizon_p, current_state, target_state, velocity_p, delta_p
+        return path_p, horizon_p, params_p, current_state, target_state, velocity_p, delta_p
 
     def animate(i):
         # get variables
         x = cat_states[0, 0, i]
         y = cat_states[1, 0, i]
         th = cat_states[2, 0, i]
+        phi = cat_states[3, 0, i]
+
+        # params
+        xp = params[0, 0, i]
+        yp = params[1, 0, i]
+
 
         if i == len(t):
             v = cat_controls[0,0,i-1]
@@ -62,6 +68,7 @@ def simulate(trajectory, cat_states, cat_controls, t, step_horizon, N, reference
         # update path
         if i == 0:
             path_p.set_data(np.array([]), np.array([]))
+            params_p.set_data(np.array([]), np.array([]))
             velocity_p.set_data(np.array([]), np.array([]))
             delta_p.set_data(np.array([]), np.array([]))
 
@@ -70,12 +77,15 @@ def simulate(trajectory, cat_states, cat_controls, t, step_horizon, N, reference
         y_new = np.hstack((path_p.get_ydata(), y))
         path_p.set_data(x_new, y_new)
 
-
-
         # update horizon
         x_new = cat_states[0, :, i]
         y_new = cat_states[1, :, i]
         horizon_p.set_data(x_new, y_new)
+
+        # params
+        x_new = params[0,:,i]
+        y_new = params[1,:,i]
+        params_p.set_data(x_new, y_new)
 
         # update controls
         vx_new = np.hstack((velocity_p.get_xdata(), i))
@@ -83,8 +93,11 @@ def simulate(trajectory, cat_states, cat_controls, t, step_horizon, N, reference
         velocity_p.set_data(vx_new,vy_new)
        
         deltax_new = np.hstack((delta_p.get_xdata(), i))
-        deltay_new = np.hstack((delta_p.get_ydata(), delta))
+        deltay_new = np.hstack((delta_p.get_ydata(), phi))
         delta_p.set_data(deltax_new,deltay_new)
+        # deltax_new = np.hstack((delta_p.get_xdata(), i))
+        # deltay_new = np.hstack((delta_p.get_ydata(), delta))
+        # delta_p.set_data(deltax_new,deltay_new)
 
 
         # update current_state
@@ -94,7 +107,7 @@ def simulate(trajectory, cat_states, cat_controls, t, step_horizon, N, reference
         # xy = target_state.get_xy()
         # target_state.set_xy(xy)            
 
-        return path_p, horizon_p, current_state, target_state, velocity_p, delta_p
+        return path_p, params_p, horizon_p, current_state, target_state, velocity_p, delta_p
 
     # create figure and axes
     fig = plt.figure(figsize=(6,6), layout='constrained')
@@ -112,6 +125,8 @@ def simulate(trajectory, cat_states, cat_controls, t, step_horizon, N, reference
     path_p, = axs["path"].plot([], [], 'k', linewidth=2)
     #   horizon
     horizon_p, = axs["path"].plot([], [], 'x-g', alpha=0.8)
+    # params
+    params_p, = axs["path"].plot([], [], 'o-r', alpha=0.8)
 
     #controls
     velocity_p, = axs["speed"].plot([], [], 'g', alpha=0.8)
@@ -126,7 +141,7 @@ def simulate(trajectory, cat_states, cat_controls, t, step_horizon, N, reference
     trajectory_plot, = axs["path"].plot(trajectory[:,0], trajectory[:,1], 'ob', alpha=0.3)
     #   current_state
     current_triangle = create_triangle(reference[:3])
-    current_state = axs["path"].fill(current_triangle[:, 0], current_triangle[:, 1], color='r')
+    current_state = axs["path"].fill(current_triangle[:, 0], current_triangle[:, 1], color='m')
     current_state = current_state[0]
     #   target_state
     target_triangle = create_triangle(reference[4:-1])

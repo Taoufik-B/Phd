@@ -149,30 +149,41 @@ def run_dry_simulation(nmpc,ref_trajectory, N):
     reference = ref_trajectory.get_reference()
     mpciter=0
     t0 = 0
-    v_ref = 10
+    v_ref = 20
     delta_ref = 0
     distance = 0.1
+
+    print(ref_trajectory.size)
     try:
-        while (mpciter < ref_trajectory.size):
-            if mpciter+N >= ref_trajectory.size:
-                ref_point=ref_point
-            else:
-                ref_point = ref_trajectory.get_ref_points(mpciter, N)
-                # ref_point = ref_trajectory.get_fake_ref_points(mpciter, N)
-            distance = math.sqrt((ref_point[0,0]-nmpc.x0[0])**2 + (ref_point[0,1]-nmpc.x0[1])**2)
-            # distance = math.sqrt((ref_point[0,0]-nmpc.X0[0,-1])**2 + (ref_point[0,1]-nmpc.X0[1,-1])**2)
-            u_opt  = nmpc.compute_control(mpciter, ref_point, v_ref, delta_ref)
+        # while (mpciter < ref_trajectory.size):
+        while (True):
+            # if mpciter+N > ref_trajectory.size:
+            #     break
+            # else:
+            #     ref_point = ref_trajectory.get_next_wps(mpciter, N)
+            # if len(ref_point) < N:
+            #     break
+            u_opt  = nmpc.compute_control(mpciter, v_ref, delta_ref)
             nmpc.run_step(u_opt)
-            print(distance)
+            # distance = math.sqrt((ref_point[0,0]-nmpc.x0[0])**2 + (ref_point[0,1]-nmpc.x0[1])**2)
+            # print("Current Distance",distance)
             # print(ref_point[1,0:2])
             # print(nmpc.x0[0:2])
-            # if distance < 0.5:
-            mpciter += 1
+            # if distance < 5:
+            #     print("Goal Reached at iteration: ", mpciter)
+            distance = np.linalg.norm(ref_trajectory.xs[0:2]-nmpc.x0[0:2])
+            distance_p = np.linalg.norm(ref_trajectory.xs[0:2]-nmpc.p_history[0:2,0,mpciter])
+            logging.info(f"Distance iteration {mpciter} : {distance}")
+            mpciter += 1     
             t.append(t0)
-            # if distance > 10:
+            if distance < 0.5:
+                break
+            if distance_p <0.5:
+                break
+            # if mpciter > 500:
             #     break
             
-        simulate(ref_trajectory.path,nmpc.x_history, nmpc.u_opt_history, t, nmpc.dt, nmpc.N,reference, False)
+        simulate(ref_trajectory.path, nmpc.p_history, nmpc.x_history, nmpc.u_opt_history, t, nmpc.dt, nmpc.N,reference, False)
     except Exception as e:
         print(e)
     finally:
@@ -191,14 +202,15 @@ def main():
 
     ###################
     # NMPC parameters
-    N = 10                      # horizon
-    dt = 0.5                    # delta time
-    Q = [10, 10, 0.05, 0.005]    # states
-    R = [0.5, 0.05]             # controls
+    N = 25                      # horizon
+    dt = 0.05                    # delta time
+    Q = [15, 15, 0.5, 0.01]    # states
+    R = [0.05, 0.5]             # controls
+
 
     # Model Parameters
-    L = 2.8
-    activate_rk4 = False
+    L = 3
+    activate_rk4 = True
 
     ###################
     # Trajectory
@@ -207,7 +219,7 @@ def main():
 
     ###################
     # Prepare the simulation
-    nmpc = NMPCController(trajectory.x0, trajectory.size, Q, R, L, dt, N, activate_rk4)
+    nmpc = NMPCController(trajectory, Q, R, L, dt, N, activate_rk4)
     # carla_simulation = Simulation()
     
     

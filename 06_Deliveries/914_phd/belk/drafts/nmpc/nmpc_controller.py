@@ -6,7 +6,7 @@ import logging
 
 
 class NMPCController:
-    def __init__(self, x0, path_size, Q, R, L=2.8, dt=0.1, N=10, activate_rk4=False):
+    def __init__(self, trajectory, Q, R, L=2.8, dt=0.1, N=10, activate_rk4=False):
         """
         Initialize the NMPC controller.
 
@@ -29,13 +29,16 @@ class NMPCController:
         self.current_speed = 0
 
         # initial_state
-        self.x0 = x0
-        self.path_size = path_size
+        self.trajectory = trajectory
+        self.x0 = trajectory.x0
+        self.path_size = trajectory.size
+
+        self.activate_rk4 = activate_rk4
 
         # Define the NMPC problem
-        self._setup_nmpc(activate_rk4)
+        self._setup_nmpc()
 
-    def _setup_nmpc(self, activate_rk4):
+    def _setup_nmpc(self):
         """
         Sets up the NMPC optimization problem.
         """
@@ -89,7 +92,7 @@ class NMPCController:
         for k in range(self.N):
             # st_runge_kutta
             k1 = self.f(X[:,k], U[:,k])
-            if activate_rk4:
+            if self.activate_rk4:
                 k2 = self.f(X[:,k]+self.dt/2*k1, U[:,k])
                 k3 = self.f(X[:,k]+self.dt/2*k2, U[:,k])
                 k4 = self.f(X[:,k]+self.dt/2*k3, U[:,k])
@@ -124,11 +127,11 @@ class NMPCController:
         }
         self.solver = ca.nlpsol('solver', 'ipopt', self.nlp, opts)
         
-        self.lb_states = [-ca.inf, -ca.inf, -ca.pi, -1.2217]
-        self.ub_states = [ca.inf, ca.inf, ca.pi, 1.2217]
+        self.lb_states = [-ca.inf, -ca.inf, -ca.pi, -ca.pi]
+        self.ub_states = [ca.inf, ca.inf, ca.pi, ca.pi]
 
-        self.lb_controls = [0, -1.22]
-        self.ub_controls = [15, 1.22]
+        self.lb_controls = [0, -ca.pi]
+        self.ub_controls = [22, ca.pi]
 
         self.lg_bounds = [0, 0, 0, 0]
         self.ug_bounds = [0, 0, 0, 0]
@@ -148,13 +151,14 @@ class NMPCController:
         }
 
         ## History controls and states
-        self.u_opt_history=np.zeros((self.n_controls,self.N,self.path_size)) # controls
-        self.x_history=np.zeros((self.n_states,self.N+1,self.path_size)) # states
+        self.u_opt_history=np.zeros((self.n_controls,self.N,0)) # controls
+        self.x_history=np.zeros((self.n_states,self.N+1,0)) # states
+        self.p_history=np.zeros((self.n_ref,self.N,0)) # parameters
         logging.info("MPC Setup Completed")
 
 
 
-    def compute_control(self, mpciter, target_state, v_ref, delta_ref):
+    def compute_control(self, mpciter, v_ref, delta_ref):
         """
         Compute the control action based on the current state and the reference trajectory.
 
@@ -166,15 +170,22 @@ class NMPCController:
         - u_opt, X0: return optimized controls and Calculated states
         """
         # Convert current_state to the format required by the NMPC problem
+        print(f"################## Compute Control at iteration {mpciter} ##################")
+        print("tCurrent x0: ", self.x0)
         self.args['p'][0:self.n_states] = self.x0
 
         logging.info(f"MPC compute control at iteration: {mpciter}")
+        print(f"MPC compute control at iteration: {mpciter}")
 
+        print(f"#### x_ref, y_ref, psi_ref, delta_ref ####")
         for k in range(self.N):
-            x_ref = target_state[k,0]
-            y_ref = target_state[k,1]
-            psi_ref = target_state[k,2]
-            beta_ref = target_state[k,3]
+            t_predict = (mpciter+k)*self.dt
+            ref = self.trajectory.get_next_wp(t_predict)
+            x_ref = ref[0]
+            y_ref = ref[1]
+            psi_ref = ref[2]
+            beta_ref = ref[3]
+            print(x_ref,y_ref, psi_ref, beta_ref)
 
             self.args['p'][self.n_ref*k+self.n_states:self.n_ref*k+ 2*self.n_states] = [x_ref, y_ref, psi_ref, beta_ref]
             self.args['p'][self.n_ref*k+2*self.n_states:self.n_ref*k+2*self.n_states+self.n_controls] = [v_ref, delta_ref]
@@ -189,9 +200,16 @@ class NMPCController:
         u_opt = sol['x'][self.n_states*(self.N+1):].reshape((self.n_controls,self.N))
         self.X0 = sol['x'][:self.n_states*(self.N+1)].reshape((self.n_states,self.N+1))
         logging.info(f"MPC compute control - extracting controls and states at iteration: {mpciter}")
+        
+        print("### Computed Solution X0", self.X0)
+        print("### Constraints : ",self.args['p'])
+        p = self.args['p'][self.n_states:].reshape((self.n_ref,self.N))
+        self.p_history = np.dstack((self.p_history,p))
 
-        self.u_opt_history[:,:,mpciter] = u_opt
-        self.x_history[:,:,mpciter] = self.X0
+
+        # print(u_opt.shape, self.X0.shape, self.u_opt_history.shape)
+        self.u_opt_history=np.dstack((self.u_opt_history,u_opt))
+        self.x_history=np.dstack((self.x_history,self.X0))
 
         return u_opt
     
@@ -199,8 +217,21 @@ class NMPCController:
         logging.info(f"MPC run step")
         if current_state is None:
             logging.info(f"MPC run step - Shifting")
+                        # st_runge_kutta
+            k1 = self.f(self.x0, u[:, 0])
+            if self.activate_rk4:
+                k2 = self.f(self.x0+self.dt/2*k1, u[:, 0])
+                k3 = self.f(self.x0+self.dt/2*k2, u[:, 0])
+                k4 = self.f(self.x0+self.dt/2*k3, u[:, 0])
+                st_rk4 = self.x0+self.dt/6*(k1+2*k2+2*k3+k4)
+                st_next_aprx = st_rk4
+            else:
+                st_next_euler =self.x0 + k1*self.dt
+                st_next_aprx = st_next_euler
             f_value = self.f(self.x0, u[:, 0])
-            self.x0  = ca.DM.full(self.x0 + (self.dt * f_value))
+            # self.x0  = ca.DM.full(self.x0 + (self.dt * f_value))
+            self.x0  = st_next_aprx
+            print("### Calulating x0+1 using f value:", self.x0)
             logging.info(f"MPC run step - Shifting Done")
         else:
             self.x0 = current_state

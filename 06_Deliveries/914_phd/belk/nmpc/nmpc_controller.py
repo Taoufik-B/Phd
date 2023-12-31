@@ -10,6 +10,12 @@ class NMPCController:
         """
         Setup the NMPC optimization problem
         """
+        self.opti = ca.Opti()
+        #states
+        x = self.opti.variable
+        y = self.opti.variable
+        psi = self.opti.variable    # the yaw angle
+        beta = self.opti.variable   # the slip angle angle
 
         pass
 

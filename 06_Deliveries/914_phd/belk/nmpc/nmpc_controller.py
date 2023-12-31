@@ -19,7 +19,12 @@ class NMPCController:
         u = self.opti.variable(n_controls, self.N)
         #parameters
         p = self.opti.parameter(n_states+(n_states+n_controls)*self.N)
-        
+
+        #objective
+
+        #constraints
+        for k in self.N:
+            
 
         pass
 

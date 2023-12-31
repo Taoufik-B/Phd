@@ -13,10 +13,13 @@ class NMPCController:
         self.opti = ca.Opti()
         #states
         n_states = 4
-        x = self.opti.variable()
-        y = self.opti.variable
-        psi = self.opti.variable    # the yaw angle
-        beta = self.opti.variable   # the slip angle angle
+        x = self.opti.variable(n_states, self.N+1)
+        #controls
+        n_controls = 2
+        u = self.opti.variable(n_controls, self.N)
+        #parameters
+        p = self.opti.parameter(n_states+(n_states+n_controls)*self.N)
+        
 
         pass
 

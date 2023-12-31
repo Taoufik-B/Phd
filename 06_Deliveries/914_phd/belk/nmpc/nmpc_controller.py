@@ -24,7 +24,7 @@ class NMPCController:
 
         #constraints
         for k in self.N:
-            
+            self.opti.subject_to(x[:,k+1]==F(x[:,k],u[:,k]))
 
         pass
 

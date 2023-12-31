@@ -12,7 +12,8 @@ class NMPCController:
         """
         self.opti = ca.Opti()
         #states
-        x = self.opti.variable
+        n_states = 4
+        x = self.opti.variable()
         y = self.opti.variable
         psi = self.opti.variable    # the yaw angle
         beta = self.opti.variable   # the slip angle angle

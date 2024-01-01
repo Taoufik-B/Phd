@@ -1,9 +1,14 @@
 import configparser
+import yaml
 import os
 import logging
 
 def load_configuration(path):
-    configParser = configparser.ConfigParser()
+    configParser = configparser.ConfigParser(converters={'list': lambda x: [i.strip() for i in x.split(',')]})
+    configParser.read(path)
+    return configParser
+def load_yaml_config(path):
+    configParser = configparser.ConfigParser(converters={'list': lambda x: [i.strip() for i in x.split(',')]})
     configParser.read(path)
     return configParser
 

@@ -1,9 +1,12 @@
 import casadi as ca
 
 class NMPCController:
-    def __init__(self, ) -> None:
-        self.internals = internals
-        self.internals = externalsternals
+    def __init__(self, dae, dT, N, Q, R) -> None:
+        self.dae = dae
+        self.dT = dT
+        self.N = N
+        self.Q = Q
+        self.R = R
         self._setup()
         pass
 

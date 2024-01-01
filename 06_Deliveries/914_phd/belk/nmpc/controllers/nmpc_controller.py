@@ -46,7 +46,31 @@ class NMPCController:
             obj += state_error.T@self.Q@state_error# State cost
             obj += con.T@self.R@con # Control cost
 
+        # Setting Optimization variables
+        Opt_Vars = ca.vertcat(X.reshape((-1,1)),U.reshape((-1,1)))
+                # Define the NMPC optimization problem
+        # self.nlp = {'f': obj, 'x': ca.reshape(U, -1, 1), 'g': ca.vertcat(*g), 'p': P}
+        self.nlp = {'f': obj, 'x': Opt_Vars, 'g': g, 'p': P}
+        opts = {
+            'ipopt': # interior point optimizer
+            {
+                'max_iter':100,
+                'print_level':0,
+                'acceptable_tol':1e-8,
+                'acceptable_obj_change_tol':1e-6
+            },
+            'print_time':0,
+        }
+        self.solver = ca.nlpsol('solver', 'ipopt', self.nlp, opts)
+        
+        self.lb_states = [-ca.inf, -ca.inf, -ca.pi, -ca.pi]
+        self.ub_states = [ca.inf, ca.inf, ca.pi, ca.pi]
 
+        self.lb_controls = [0, -ca.pi]
+        self.ub_controls = [22, ca.pi]
+
+        self.lg_bounds = [0, 0, 0, 0]
+        self.ug_bounds = [0, 0, 0, 0]
         pass
 
     def compute_controls(self):

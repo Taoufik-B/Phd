@@ -28,7 +28,7 @@ class VehicleKinematicModel:
             'fac': self._kvmodel_fac,
             'cog': self._kvmodel_cog
         }
-        pass
+        self.f_function = self._getmodel(self.model_type)
     ### desired point is at the center of the rear axle,
     def _kvmodel_rac(self):
         # State update equations (kinematic bicycle model)
@@ -64,6 +64,6 @@ class VehicleKinematicModel:
         return ca.Function('f', [self.states, self.controls], [rhs])
     
     ### Get the kinematic model
-    def getmodel(self):
+    def _getmodel(self):
         logging.info(f"Loading the vehicle kinematic model of type: {self.model_type}")
         return self.model[self.model_type]

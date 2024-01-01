@@ -4,6 +4,7 @@
 
 import logging
 import argparse
+from utils.config im
 
 
 def main():
@@ -31,7 +32,7 @@ def main():
     print(__doc__)
 
     try:
-        print(args)
+        config = 
         ## prepare the environement
         ## run the environement
         ## store the results

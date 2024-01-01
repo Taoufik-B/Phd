@@ -8,55 +8,18 @@
         "type": "tabs",
         "children": [
           {
-            "id": "2752a516b3b8d29f",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Notes/09.Wiki/01.Definitions/IPOPT.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "0358f2122dae1b69",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Notes/02.Literature Analysis/00.Analysis/Analysis approach.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
             "id": "8f29479fd7cc3391",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/09.Wiki/Links.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "00057c52e2c312bc",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Notes/00.Archive/Test note.md",
+                "file": "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
         ],
-        "currentTab": 2,
         "stacked": true
       }
     ],
@@ -123,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/09.Wiki/Links.md",
+                "file": "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -140,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/09.Wiki/Links.md",
+                "file": "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -163,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/09.Wiki/Links.md"
+                "file": "Notes/08.Communication/04.Logs/01.Daily/30122023.md"
               }
             }
           },
@@ -215,6 +178,7 @@
   },
   "active": "8f29479fd7cc3391",
   "lastOpenFiles": [
+    "Notes/09.Wiki/Links.md",
     "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
     "Notes/08.Communication/04.Logs/02.Weekly/Weekly Reflexion.md",
     "Notes/08.Communication/04.Logs/02.Weekly/23CW49.md",
@@ -241,7 +205,6 @@
     "Notes/08.Communication/01.Events/2nd International Conference on Frontiers in Academic Research ICFAR 2023.md",
     "Notes/01.Project Overview/_02.Status/Timeline & Milestones.md",
     "Notes/01.Project Overview/_02.Status/_Overall status.md",
-    "Notes/01.Project Overview/Accounts.md",
     "_attachments/_screenshots/Pasted image 20231221092728.png",
     "_attachments/03_Learning/tsfs12/Lecture_notes/lecture_07_model_predictive_control_for_autonomous_vehicles.pdf",
     "_attachments/03_Learning/mpc-rl/mpcrl23-bib.pdf",

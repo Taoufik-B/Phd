@@ -9,6 +9,6 @@ def load_configuration(path):
 
 if __name__ == '__main__':
     logging.info("Loading the configuration file")
-    config = load_configuration('./configs/test.cfg')
+    config = load_configuration('./configs/basic.cfg')
     logging.info("Printing configuration file")
     print(dict(config))

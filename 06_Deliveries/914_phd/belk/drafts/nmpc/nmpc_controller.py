@@ -11,7 +11,7 @@ class NMPCController:
         Initialize the NMPC controller.
 
         Parameters:
-        - L: float, wheelbase of the vehicle
+        - L: float, wheelbase of the vehicle    
         - dt: float, time step
         - N: int, prediction horizon
         """

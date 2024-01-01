@@ -23,8 +23,8 @@ class VehicleKinematicModel:
     def kvmodel_rac(self):
         # State update equations (kinematic bicycle model)
         rhs = ca.vertcat( self.v * ca.cos(self.psi)
-                        , self.v*  ca.sin(self.psi)
-                        , self.v/self.L * ca.tan(self.delta)
+                        , self.v * ca.sin(self.psi)
+                        , self.v * ca.tan(self.delta) /self.L
                         , self.phi
                         )
         
@@ -34,8 +34,8 @@ class VehicleKinematicModel:
     def kvmodel_fac(self):
         # State update equations (kinematic bicycle model)
         rhs = ca.vertcat( self.v * ca.cos(self.psi+self.delta)
-                        , self.v*  ca.sin(self.psi+self.delta)
-                        , self.v/self.L * ca.sin(self.delta)
+                        , self.v * ca.sin(self.psi+self.delta)
+                        , self.v * ca.sin(self.delta) / self.L
                         , self.phi
                         )
         
@@ -44,10 +44,10 @@ class VehicleKinematicModel:
     ### desired point is at the center of gravity:
     def kvmodel_cg(self):
         # State update equations (kinematic bicycle model)
-        beta = ca.arctan2
-        rhs = ca.vertcat( self.v * ca.cos(self.psi+self.beta)
-                        , self.v*  ca.sin(self.psi+self.beta)
-                        , self.v/self.L * ca.sin(self.delta)
+        beta = ca.arctan(self.Lr/self.L*ca.tan(self.delta))
+        rhs = ca.vertcat( self.v * ca.cos(self.psi+beta)
+                        , self.v * ca.sin(self.psi+beta)
+                        , self.v * ca.tan(self.delta) * ca.cos(beta)
                         , self.phi
                         )
         

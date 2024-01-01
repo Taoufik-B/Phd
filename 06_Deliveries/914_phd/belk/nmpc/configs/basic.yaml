@@ -14,7 +14,10 @@ NMPC.externals:
   u_ref:
     - 20 # v (m/s)
     - 0 # phi steering rate (rad/s2)
-  model_type
+  vehicle:
+    model_type: rac # (rac, fac, cog) rear axle center
+    L: 4 # vehicle length
+    Lr: 2.3 # distance from rac to cog
 
 NMPC.environment:
   map: Town05 #example carla map

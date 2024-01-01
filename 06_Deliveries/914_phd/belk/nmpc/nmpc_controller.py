@@ -21,6 +21,7 @@ class NMPCController:
         p = self.opti.parameter(n_states+(n_states+n_controls)*self.N)
 
         #objective
+        F = ca.Function('F', [x, u], )
 
         #constraints
         for k in self.N:

@@ -1,8 +1,8 @@
 import casadi as ca
 
 class NMPCController:
-    def __init__(self, model, dT, N, Q, R) -> None:
-        self.model = model
+    def __init__(self, dae, dT, N, Q, R) -> None:
+        self.dae = dae
         self.dT = dT
         self.N = N
         self.Q = Q
@@ -14,22 +14,23 @@ class NMPCController:
         """
         Setup the NMPC optimization problem
         """
-        self.n_states
-
-        #matrix of the states over the optimization problem
-        X = ca.SX.sym('X', self.n_states, self.N+1)
+        self.opti = ca.Opti()
+        #states
+        n_states = 4
+        x = self.opti.variable(n_states, self.N+1)
         
         #controls
         n_controls = 2
-        U = ca.SX.sym('U', self.n_controls, self.N)
+        u = self.opti.variable(n_controls, self.N)
         #parameters
-        P = ca.SX.sym('P', self.n_states+self.n_ref*self.N) 
+        p = self.opti.parameter(n_states+(n_states+n_controls)*self.N)
 
         #objective
-
+        F = ca.Function('F', [x, u], )
 
         #constraints
-
+        for k in self.N:
+            self.opti.subject_to(x[:,k+1]==F(x[:,k],u[:,k]))
 
         pass
 

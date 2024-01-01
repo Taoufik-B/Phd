@@ -20,6 +20,9 @@ class VehicleKinematicModel:
         # State and Control vector
         self.states = ca.vertcat(self.x, self.y, self.psi, self.delta)
         self.controls = ca.vertcat(self.v, self.delta)
+        self.n_states = self.states.numel()
+        self.n_controls = self.controls.numel()
+        self.n_opt_vars = self.n_states + self.n_controls
         self.model = {
             'rac': self._kvmodel_rac,
             'fac': self._kvmodel_fac,

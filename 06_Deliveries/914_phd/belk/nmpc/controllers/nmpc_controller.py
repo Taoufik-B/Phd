@@ -14,21 +14,21 @@ class NMPCController:
         """
         Setup the NMPC optimization problem
         """
-        self.n_states
 
         #matrix of the states over the optimization problem
-        X = ca.SX.sym('X', self.n_states, self.N+1)
+        X = ca.SX.sym('X', self.model.n_states, self.N+1)
         
         #controls
-        n_controls = 2
-        U = ca.SX.sym('U', self.n_controls, self.N)
+        U = ca.SX.sym('U', self.model.n_controls, self.N)
         #parameters
-        P = ca.SX.sym('P', self.n_states+self.n_ref*self.N) 
+        P = ca.SX.sym('P', self.model.n_states+self.model.n_opt_vars*self.N) 
 
         #objective
 
 
         #constraints
+        g = []
+        g = ca.vertcat(g,X[:,0]-P[0:self.model.n_states]) #initial condition constraint
 
 
         pass

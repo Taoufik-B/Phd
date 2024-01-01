@@ -14,8 +14,11 @@ NMPC.externals:
   u_ref:
     - 20 # v (m/s)
     - 0 # phi steering rate (rad/s2)
+  model_type
 
 NMPC.environment:
   map: Town05 #example carla map
   wps_file: ./maps/dummy.npy #wps file name env_mapname_date.npy
+  wps_factor: 4 # reduce the total number of waypoints by a facotr of 4
+  run_environment: Simulation # or Carla simulation
 

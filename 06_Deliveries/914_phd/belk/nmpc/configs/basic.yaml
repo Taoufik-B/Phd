@@ -1,4 +1,10 @@
-maintainer: Mert Cobanov
+maintainer:
+  another level:
+    params:
+      - 1
+      - 2
+      - 3
+    others: [1, 2, 3]
 pca_params:
   n_components: 224
 umap_params:

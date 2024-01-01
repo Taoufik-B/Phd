@@ -6,6 +6,7 @@ import logging
 import argparse
 from utils.config import load_yaml_config
 from utils.trajectory import ReferenceTrajectory
+from controllers.nmpc_controller import NMPCController
 
 
 def main():
@@ -36,7 +37,8 @@ def main():
         ## prepare the environement
         config = load_yaml_config(args.config)
         print(config)
-        trajectory = ReferenceTrajectory(**config['NMPC.environment'])
+        trajectory = ReferenceTrajectory(**config['NMPC.environment']['trajectory'])
+        nmpc = NMPCController()
         ## run the environement
         ## store the results
         ## plot the results if required

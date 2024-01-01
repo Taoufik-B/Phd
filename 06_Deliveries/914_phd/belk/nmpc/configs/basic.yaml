@@ -30,8 +30,9 @@ NMPC.externals:
     Lr: 2.3 # distance from rac to cog
 
 NMPC.environment:
-  map: Town05 #example carla map
-  wps_file: ./maps/carla_town05_02012024.wps #wps file name env_mapname_date.wps (npy form)
-  wps_factor: 4 # reduce the total number of waypoints by a facotr of 4
+  world_map: Town05 #example carla map
+  trajectory:
+    wps_file: ./maps/carla_town05_02012024.wps #wps file name env_mapname_date.wps (npy form)
+    wps_factor: 4 # reduce the total number of waypoints by a facotr of 4
   run_environment: Simulation # or Carla simulation
 

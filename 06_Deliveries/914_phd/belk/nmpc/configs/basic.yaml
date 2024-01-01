@@ -9,3 +9,7 @@ NMPC.internals:
   R:
     - 0.05 # velocity
     - 0.5 # steering rate
+
+NMPC.environment:
+  map: Town05 #example carla map
+  wps_file: ./maps/dummy.npy #wps file name env_mapname_date.npy

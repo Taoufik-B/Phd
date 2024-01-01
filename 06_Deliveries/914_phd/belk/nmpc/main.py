@@ -15,23 +15,18 @@ def main():
         dest='debug',
         help='print debug information')
     argparser.add_argument(
-        '--config',
-        metavar='c',
-        default='127.0.0.1',
-        help='IP of the host server (default: 127.0.0.1)')
-    argparser.add_argument(
-        '-p', '--port',
-        metavar='P',
-        default=2000,
-        type=int,
-        help='TCP port to listen to (default: 2000)')
+        '-c','--config',
+        metavar='cfg',
+        default='./configs/basic.yaml',
+        help='configuration file in yaml form under ./configs')
+
 
     args = argparser.parse_args()
 
     log_level = logging.DEBUG if args.debug else logging.INFO
     logging.basicConfig(format='%(asctime)s %(levelname)-8s: %(message)s', level=log_level, datefmt='%Y-%m-%d %H:%M:%S')
 
-    logging.info('listening to server %s:%s', args.host, args.port)
+    # logging.info('listening to server %s:%s', args.host, args.port)
 
     print(__doc__)
 

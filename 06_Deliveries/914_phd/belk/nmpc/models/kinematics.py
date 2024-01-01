@@ -24,7 +24,7 @@ class VehicleKinematicModel:
         # State update equations (kinematic bicycle model)
         rhs = ca.vertcat( self.v * ca.cos(self.psi)
                         , self.v * ca.sin(self.psi)
-                        , self.v * ca.tan(self.delta) /self.L
+                        , self.v * ca.tan(self.delta) / self.L
                         , self.phi
                         )
         

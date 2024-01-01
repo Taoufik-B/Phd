@@ -36,7 +36,7 @@ def main():
         ## prepare the environement
         config = load_yaml_config(args.config)
         print(config)
-        trajectory = 
+        trajectory = ReferenceTrajectory(config['NMPC.environment']['wps_file'])
         ## run the environement
         ## store the results
         ## plot the results if required

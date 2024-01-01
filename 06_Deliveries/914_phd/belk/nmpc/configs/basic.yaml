@@ -14,6 +14,10 @@ NMPC.externals:
   u_ref:
     - 20 # v (m/s)
     - 0 # phi steering rate (rad/s2)
+  bounds:
+    x:
+      - [1,2,3,4] #lbx
+      - [1,2,3,4]
   vehicle:
     model_type: rac # (rac, fac, cog) rear axle center
     L: 4 # vehicle length

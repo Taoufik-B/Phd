@@ -1,4 +1,5 @@
 import casadi as ca
+import logging
 
 ## Model definition
 class VehicleKinematicModel:
@@ -61,4 +62,5 @@ class VehicleKinematicModel:
     
     ### Get the kinematic model
     def getmodel(self):
-        return self.model[]
+        logging.info(f"Loading the vehicle kinematic model of type: {self.model_type}")
+        return self.model[self.model_type]

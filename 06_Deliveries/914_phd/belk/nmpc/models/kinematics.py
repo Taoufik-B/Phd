@@ -2,7 +2,7 @@ import casadi as ca
 
 ## Model definition
 class VehicleKinematicModel:
-    def __init__(self, L, Lr) -> None:
+    def __init__(self, L, Lr, model="rac") -> None:
         self.L = L
         self.Lr = Lr
         #states
@@ -20,7 +20,7 @@ class VehicleKinematicModel:
         self.controls = ca.vertcat(self.v, self.delta)
         pass
     ### desired point is at the center of the rear axle,
-    def kvmodel_rac(self):
+    def _kvmodel_rac(self):
         # State update equations (kinematic bicycle model)
         rhs = ca.vertcat( self.v * ca.cos(self.psi)
                         , self.v * ca.sin(self.psi)
@@ -31,7 +31,7 @@ class VehicleKinematicModel:
         return ca.Function('f', [self.states, self.controls], [rhs])
 
     ### desired point is at the center of the front axle:
-    def kvmodel_fac(self):
+    def _kvmodel_fac(self):
         # State update equations (kinematic bicycle model)
         rhs = ca.vertcat( self.v * ca.cos(self.psi+self.delta)
                         , self.v * ca.sin(self.psi+self.delta)
@@ -42,7 +42,7 @@ class VehicleKinematicModel:
         return ca.Function('f', [self.states, self.controls], [rhs])
 
     ### desired point is at the center of gravity:
-    def kvmodel_cg(self):
+    def _kvmodel_cg(self):
         # State update equations (kinematic bicycle model)
         beta = ca.arctan(self.Lr/self.L*ca.tan(self.delta))
         rhs = ca.vertcat( self.v * ca.cos(self.psi+beta)

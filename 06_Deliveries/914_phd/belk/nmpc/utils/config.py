@@ -7,8 +7,9 @@ def load_configuration(path):
     configParser = configparser.ConfigParser(converters={'list': lambda x: [i.strip() for i in x.split(',')]})
     configParser.read(path)
     return configParser
-def get_list(key, value, type):
-    list(map(type, config.getlist(key,value)))
+
+def get_list(config, key, value, type=float):
+    return list(map(type, config.getlist(key,value)))
 
 def load_yaml_config(path):
     with open(path) as f:

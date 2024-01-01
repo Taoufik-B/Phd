@@ -2,7 +2,7 @@ NMPC.internals:
   dT: 0.05 # This is a comment
   N: 25 # Horizon
   Q: # Stage cost
-    - [15,30,20.0 # x
+    - 15 # x
     - 15 # y
     - 0.5 # psi heading angle
     - 0.01 # delta steering angle

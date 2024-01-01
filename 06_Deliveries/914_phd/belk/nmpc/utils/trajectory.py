@@ -6,10 +6,10 @@ from scipy.interpolate import CubicSpline
 
     
 class ReferenceTrajectory:
-    def __init__(self, path_file) -> None:
+    def __init__(self, path_file, wps_factor) -> None:
         self.path = None
         self.trajectory = None
-        self._load(path_file)
+        self._load(path_file, wps_factor)
         self._generate_spline()
         self.x0 = self.cs(0)
         self.xs = self.cs(len(self.x)-1)

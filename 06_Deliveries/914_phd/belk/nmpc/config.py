@@ -1,5 +1,6 @@
 import configparser
 import os
+import logging
 
 def load_configuration(path):
     configParser = configparser.ConfigParser()
@@ -7,6 +8,11 @@ def load_configuration(path):
     return configParser
 
 
-if __name__ == 'main':
+def main():
+    logging.info("Loading the configuration file")
     config = load_configuration('./configs/test.cfg')
+    logging.info("Printing configuration file")
     print(config)
+
+if __name__ == 'main':
+    main()

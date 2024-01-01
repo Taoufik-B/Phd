@@ -5,7 +5,7 @@
 import logging
 import argparse
 from utils.config import load_yaml_config
-from utils.config import ReferenceTrajectory
+from utils.trajectory import ReferenceTrajectory
 
 
 def main():

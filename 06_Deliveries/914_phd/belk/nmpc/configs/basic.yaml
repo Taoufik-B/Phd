@@ -16,8 +16,14 @@ NMPC.externals:
     - 0 # phi steering rate (rad/s2)
   bounds:
     x:
-      - [1,2,3,4] #lbx
-      - [1,2,3,4]
+      - [1, 2, 3, 4] #lbx
+      - [1, 2, 3, 4] #ubx
+    u:
+      - [1, 2] #lbu
+      - [1, 2] #ubu
+    g:
+      - [0, 0, 0, 0] #lbg
+      - [0, 0, 0, 0] #ubg
   vehicle:
     model_type: rac # (rac, fac, cog) rear axle center
     L: 4 # vehicle length
@@ -25,7 +31,7 @@ NMPC.externals:
 
 NMPC.environment:
   map: Town05 #example carla map
-  wps_file: ./maps/dummy.npy #wps file name env_mapname_date.npy
+  wps_file: ./maps/town05_wps_02012024.npy #wps file name env_mapname_date.npy
   wps_factor: 4 # reduce the total number of waypoints by a facotr of 4
   run_environment: Simulation # or Carla simulation
 

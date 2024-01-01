@@ -14,6 +14,7 @@ class NMPCController:
         #states
         n_states = 4
         x = self.opti.variable(n_states, self.N+1)
+        
         #controls
         n_controls = 2
         u = self.opti.variable(n_controls, self.N)

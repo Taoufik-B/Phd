@@ -4,7 +4,7 @@
 
 import logging
 import argparse
-from utils.config im
+from utils.config import load_yaml_config
 
 
 def main():
@@ -32,8 +32,9 @@ def main():
     print(__doc__)
 
     try:
-        config = 
         ## prepare the environement
+        config = load_yaml_config(args.config)
+        print(config)
         ## run the environement
         ## store the results
         ## plot the results if required

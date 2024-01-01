@@ -5,6 +5,7 @@
 import logging
 import argparse
 from utils.config import load_yaml_config
+from utils.config import ReferenceTrajectory
 
 
 def main():
@@ -35,6 +36,7 @@ def main():
         ## prepare the environement
         config = load_yaml_config(args.config)
         print(config)
+        trajectory = 
         ## run the environement
         ## store the results
         ## plot the results if required

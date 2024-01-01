@@ -37,7 +37,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
+                "file": "Notes/09.Wiki/Links.md",
                 "mode": "source",
                 "source": false
               }
@@ -123,7 +123,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
+                "file": "Notes/09.Wiki/Links.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -140,7 +140,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
+                "file": "Notes/09.Wiki/Links.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -163,7 +163,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/08.Communication/04.Logs/01.Daily/30122023.md"
+                "file": "Notes/09.Wiki/Links.md"
               }
             }
           },
@@ -215,8 +215,8 @@
   },
   "active": "8f29479fd7cc3391",
   "lastOpenFiles": [
-    "Notes/08.Communication/04.Logs/02.Weekly/Weekly Reflexion.md",
     "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
+    "Notes/08.Communication/04.Logs/02.Weekly/Weekly Reflexion.md",
     "Notes/08.Communication/04.Logs/02.Weekly/23CW49.md",
     "Notes/08.Communication/04.Logs/01.Daily/231023.md",
     "Notes/01.Project Overview/_Home.md",

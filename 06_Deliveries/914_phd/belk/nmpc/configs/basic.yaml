@@ -9,6 +9,7 @@ NMPC.internals:
   R:
     - 0.05 # velocity
     - 0.5 # steering rate
+  only_euler: False #use rk4
 
 NMPC.externals:
   u_ref:

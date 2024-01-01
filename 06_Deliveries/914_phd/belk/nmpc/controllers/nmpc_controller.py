@@ -1,12 +1,14 @@
 import casadi as ca
+from utils.discretize import discretize_rk4
 
 class NMPCController:
-    def __init__(self, model, dT, N, Q, R) -> None:
+    def __init__(self, model, dT, N, Q, R, only_euler) -> None:
         self.model = model
         self.dT = dT
         self.N = N
         self.Q = Q
         self.R = R
+        self.only_euler = only_euler
         self._setup()
         pass
 
@@ -32,6 +34,7 @@ class NMPCController:
 
         # compute g and obj
         for k in range(self.N):
+            st_next_aprx = discretize_rk4(self.model.f_function, X[:,k], U[:,k], self.only_euler)
             st_next = X[:,k+1] 
             # Compute constraints
             g = ca.vertcat(g, st_next - st_next_aprx)

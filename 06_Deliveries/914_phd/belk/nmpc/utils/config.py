@@ -20,4 +20,3 @@ if __name__ == '__main__':
     config = load_configuration('./configs/basic.cfg')
     yaml_config = load_yaml_config('./configs/basic.yaml')
     logging.info("Printing configuration file")
-    print(dict(config))

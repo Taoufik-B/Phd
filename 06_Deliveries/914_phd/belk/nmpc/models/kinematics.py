@@ -2,8 +2,9 @@ import casadi as ca
 
 ## Model definition
 class VehicleKinematicModel:
-    def __init__(self, L) -> None:
+    def __init__(self, L, Lr) -> None:
         self.L = L
+        self.Lr = Lr
         #states
         self.x = ca.SX.sym('x')
         self.y = ca.SX.sym('y')
@@ -21,7 +22,7 @@ class VehicleKinematicModel:
         pass
     ### desired point is at the center of the rear axle,
     def kvmodel_rac(self):
-        # State vector and control inputs
+        # State vector 
         states = ca.vertcat(self.x, self.y, self.psi, self.delta)
 
         # State update equations (kinematic bicycle model)
@@ -35,52 +36,28 @@ class VehicleKinematicModel:
 
     ### desired point is at the center of the front axle:
     def kvmodel_fac(self):
-        #states
-        x = ca.SX.sym('x')
-        y = ca.SX.sym('y')
-        psi = ca.SX.sym('psi')      # the yaw angle
-        beta = ca.SX.sym('beta')    # the slip angle angle
-        
-        #controls
-        v = ca.SX.sym('v')
-        delta = ca.SX.sym('delta') # the steering rate
-        
-
-        # State vector and control inputs
-        states = ca.vertcat(x, y, psi, beta)
-        controls = ca.vertcat(v, delta)
+        # State vector 
+        states = ca.vertcat(self.x, self.y, self.psi, self.delta)
 
         # State update equations (kinematic bicycle model)
-        rhs = ca.vertcat(v * ca.cos(psi+beta)
-                            , v*  ca.sin(psi+beta)
-                            , v/L * ca.sin(delta)
-                            , delta
-                            )
+        rhs = ca.vertcat( self.v * ca.cos(self.psi+self.delta)
+                        , self.v*  ca.sin(self.psi+self.delta)
+                        , self.v/self.L * ca.sin(self.delta)
+                        , self.phi
+                        )
         
-        return ca.Function('f', [states, controls], [rhs])
+        return ca.Function('f', [self.states, self.controls], [rhs])
 
     ### desired point is at the center of gravity:
-    def kvmodel_cg():
-    #states
-    x = ca.SX.sym('x')
-    y = ca.SX.sym('y')
-    psi = ca.SX.sym('psi')      # the yaw angle
-    beta = ca.SX.sym('beta')    # the slip angle angle
-    
-    #controls
-    v = ca.SX.sym('v')
-    delta = ca.SX.sym('delta') # the steering rate
-    
+    def kvmodel_cg(self):
+        # State vector 
+        states = ca.vertcat(self.x, self.y, self.psi, self.delta)
 
-    # State vector and control inputs
-    states = ca.vertcat(x, y, psi, beta)
-    controls = ca.vertcat(v, delta)
-
-    # State update equations (kinematic bicycle model)
-    rhs = ca.vertcat(v * ca.cos(psi+beta)
-                        , v*  ca.sin(psi+beta)
-                        , v/self.L * ca.sin(delta)
-                        , delta
+        # State update equations (kinematic bicycle model)
+        rhs = ca.vertcat( self.v * ca.cos(self.psi+self.beta)
+                        , self.v*  ca.sin(self.psi+self.beta)
+                        , self.v/self.L * ca.sin(self.delta)
+                        , self.phi
                         )
-    
-    return ca.Function('f', [states, controls], [rhs])
+        
+        return ca.Function('f', [self.states, self.controls], [rhs])

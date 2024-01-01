@@ -32,6 +32,10 @@ def main():
 
     try:
         print(args)
+        ## prepare the environement
+        ## run the environement
+        ## store the results
+        ## plot the results if required
     except KeyboardInterrupt:
         print('\nCancelled by user. Bye!')
 

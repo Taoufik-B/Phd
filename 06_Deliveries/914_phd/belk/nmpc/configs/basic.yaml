@@ -1,7 +1,7 @@
 maintainer:
   another level:
     params:
-      - 1
+      - 1 #this is a comment
       - 2
       - 3
     others: [1, 2, 3]

@@ -5,14 +5,15 @@ import logging
 
 
 class NMPCController:
-    def __init__(self, model, dT, N, Q, R, only_euler, bounds) -> None:
+    def __init__(self, model, trajectory, dT, N, Q, R, only_euler, bounds) -> None:
         self.model = model
         self.dT = dT
         self.N = N
-        self.Q = Q
-        self.R = R
+        self.Q = np.diag(Q)
+        self.R = np.diag(R)
         self.only_euler = only_euler
         self.bounds = bounds
+        self.x0=tr
         self._setup()
         pass
 
@@ -35,7 +36,7 @@ class NMPCController:
         #constraints
         g = []
         g = ca.vertcat(g,X[:,0]-P[0:self.model.n_states]) #initial condition constraint
-        print(self.R)
+
         # compute g and obj
         for k in range(self.N):
             st_next_aprx = discretize_rk4(self.model.f_function, X[:,k], U[:,k], self.dT, self.only_euler)
@@ -46,8 +47,8 @@ class NMPCController:
                                      :self.model.n_states+self.model.n_opt_vars*k+self.model.n_states]
             con = U[:,k] - P[self.model.n_states+self.model.n_opt_vars*k+self.model.n_states
                             :self.model.n_states+self.model.n_opt_vars*k+self.model.n_states+self.model.n_controls]
-            print(con)
             obj += state_error.T@self.Q@state_error# State cost
+            print(obj)
             obj += con.T@self.R@con # Control cost
 
         # Setting Optimization variables

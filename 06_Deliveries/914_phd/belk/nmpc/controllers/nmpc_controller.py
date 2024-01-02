@@ -1,5 +1,6 @@
 import casadi as ca
 from utils.discretize import discretize_rk4
+import logging
 
 class NMPCController:
     def __init__(self, model, dT, N, Q, R, only_euler, bounds) -> None:
@@ -64,25 +65,25 @@ class NMPCController:
         }
         self.solver = ca.nlpsol('solver', 'ipopt', self.nlp, opts)
         
-        lb_states = self.bounds['x'][0]
-        ub_states = self.bounds['x'][1]
+        lb_x = self.bounds['x'][0]
+        ub_x = self.bounds['x'][1]
 
-        lb_controls = self.bounds['u'][0]
-        ub_controls = self.bounds['u'][1]
+        lb_u = self.bounds['u'][0]
+        ub_u = self.bounds['u'][1]
 
-        lg_bounds = self.bounds['g'][0]
-        ug_bounds = self.bounds['g'][1]
+        lb_g = self.bounds['g'][0]
+        ub_g = self.bounds['g'][1]
 
-        self.u0 = ca.DM.zeros((self.n_controls, self.N))
+        self.u0 = ca.DM.zeros((self.model.n_controls, self.N))
         # TODO: need to be optimized
         self.X0 = ca.DM([x for x in self.x0]*(self.N+1))
 
         self.args = {
-            'lbx' : self.bounds['x'][0]*(self.N+1)+self.lb_controls*self.N,
-            'ubx' : self.ub_states*(self.N+1)+self.ub_controls*self.N,
-            'lbg' : self.lg_bounds*(self.N+1),
-            'ubg' : self.ug_bounds*(self.N+1),
-            'p': ca.DM.zeros((self.n_states+self.N*self.n_ref,1)),
+            'lbx' : lb_x*(self.N+1)+self.lb_u*self.N,
+            'ubx' : ub_x*(self.N+1)+ub_u.self.N,
+            'lbg' : lb_g*(self.N+1),
+            'ubg' : ub_g*(self.N+1),
+            'p': ca.DM.zeros((self.model.n_states+self.N*self.model.opt_vars,1)),
             'x0': ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
         }
 
@@ -93,9 +94,49 @@ class NMPCController:
         logging.info("MPC Setup Completed")
         pass
 
-    def compute_controls(self):
+    def compute_controls(self, mpc):
+                print(f"################## Compute Control at iteration {mpciter} ##################")
+        print("tCurrent x0: ", self.x0)
+        self.args['p'][0:self.n_states] = self.x0
 
-        pass
+        logging.info(f"MPC compute control at iteration: {mpciter}")
+        print(f"MPC compute control at iteration: {mpciter}")
+
+        print(f"#### x_ref, y_ref, psi_ref, delta_ref ####")
+        for k in range(self.N):
+            t_predict = (mpciter+k)*self.dt
+            ref = self.trajectory.get_next_wp(t_predict)
+            x_ref = ref[0]
+            y_ref = ref[1]
+            psi_ref = ref[2]
+            beta_ref = ref[3]
+            print(x_ref,y_ref, psi_ref, beta_ref)
+
+            self.args['p'][self.n_ref*k+self.n_states:self.n_ref*k+ 2*self.n_states] = [x_ref, y_ref, psi_ref, beta_ref]
+            self.args['p'][self.n_ref*k+2*self.n_states:self.n_ref*k+2*self.n_states+self.n_controls] = [v_ref, delta_ref]
+    
+        self.args['x0'] = ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
+
+        # Solve the NMPC optimization problem
+        logging.info(f"MPC compute control - solving at iteration: {mpciter}")
+        sol = self.solver(**self.args)
+        logging.info(f"MPC compute control - solving done at iteration: {mpciter}")
+
+        u_opt = sol['x'][self.n_states*(self.N+1):].reshape((self.n_controls,self.N))
+        self.X0 = sol['x'][:self.n_states*(self.N+1)].reshape((self.n_states,self.N+1))
+        logging.info(f"MPC compute control - extracting controls and states at iteration: {mpciter}")
+        
+        # print("### Computed Solution X0", self.X0)
+        # print("### Constraints : ",self.args['p'])
+        # p = self.args['p'][self.n_states:].reshape((self.n_ref,self.N))
+        # self.p_history = np.dstack((self.p_history,p))
+
+
+        # print(u_opt.shape, self.X0.shape, self.u_opt_history.shape)
+        # self.u_opt_history=np.dstack((self.u_opt_history,u_opt))
+        # self.x_history=np.dstack((self.x_history,self.X0))
+
+        return u_opt
 
     def run_step(self):
         pass

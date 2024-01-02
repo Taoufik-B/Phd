@@ -9,6 +9,7 @@ from utils.trajectory import ReferenceTrajectory
 from controllers.nmpc_controller import NMPCController
 from models.kinematics import VehicleKinematicModel
 from utils.visualization import simulate
+import numpy as np
 
 
 def main():
@@ -62,7 +63,7 @@ def main():
             
         ## store the results
         ## plot the results if required
-        simulate(trajectory.path, nmpc.p_history, nmpc.x_history, nmpc.u_opt_history, t, nmpc.dt, nmpc.N,reference, False)
+        simulate(trajectory.path, nmpc.p_history, nmpc.x_history, nmpc.u_opt_history, t, nmpc.dT, nmpc.N,reference, False)
     except KeyboardInterrupt:
         print('\nCancelled by user. Bye!')
 

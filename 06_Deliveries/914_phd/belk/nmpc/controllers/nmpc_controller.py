@@ -107,7 +107,7 @@ class NMPCController:
 
         print(f"#### x_ref, y_ref, psi_ref, delta_ref ####")
         for k in range(self.N):
-            t_predict = (mpciter+k)*self.dt
+            t_predict = (mpciter+k)*self.dT
             ref = self.trajectory.get_next_wp(t_predict)
             x_ref = ref[0]
             y_ref = ref[1]

@@ -7,6 +7,7 @@ import argparse
 from utils.config import load_yaml_config
 from utils.trajectory import ReferenceTrajectory
 from controllers.nmpc_controller import NMPCController
+from models.kinematics import VehicleKinematicModel
 
 
 def main():
@@ -38,6 +39,7 @@ def main():
         config = load_yaml_config(args.config)
         print(config)
         trajectory = ReferenceTrajectory(**config['NMPC.environment']['trajectory'])
+        vehicle_model = VehicleKinematicModel()
         nmpc = NMPCController()
         ## run the environement
         ## store the results

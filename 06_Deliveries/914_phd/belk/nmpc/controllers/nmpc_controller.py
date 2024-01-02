@@ -3,6 +3,7 @@ import casadi as ca
 from utils.discretize import discretize_rk4
 import logging
 
+
 class NMPCController:
     def __init__(self, model, dT, N, Q, R, only_euler, bounds) -> None:
         self.model = model
@@ -141,14 +142,12 @@ class NMPCController:
 
         return u_opt
 
-    def run_step(self, current_state):
+    def run_step(self,u, current_state=None):
         logging.info(f"MPC run step")
         if current_state is None:
             logging.info(f"MPC run step - Shifting")
             # st_runge_kutta
-            st_next_aprx = discretize_rk4(self.model.f_function, X[:,k], U[:,k], self.only_euler)
-
-            # self.x0  = ca.DM.full(self.x0 + (self.dt * f_value))
+            st_next_aprx = discretize_rk4(self.model.f_function, self.x0, u[:,0], self.only_euler)
             self.x0  = st_next_aprx
             print("### Calulating x0+1 using f value:", self.x0)
             logging.info(f"MPC run step - Shifting Done")

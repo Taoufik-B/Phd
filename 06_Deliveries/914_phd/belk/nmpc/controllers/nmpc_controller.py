@@ -13,7 +13,8 @@ class NMPCController:
         self.R = np.diag(R)
         self.only_euler = only_euler
         self.bounds = bounds
-        self.x0=tr
+        self.trajectory = trajectory
+        self.x0 = self.trajectory.x0
         self._setup()
         pass
 
@@ -48,7 +49,6 @@ class NMPCController:
             con = U[:,k] - P[self.model.n_states+self.model.n_opt_vars*k+self.model.n_states
                             :self.model.n_states+self.model.n_opt_vars*k+self.model.n_states+self.model.n_controls]
             obj += state_error.T@self.Q@state_error# State cost
-            print(obj)
             obj += con.T@self.R@con # Control cost
 
         # Setting Optimization variables
@@ -82,18 +82,18 @@ class NMPCController:
         self.X0 = ca.DM([x for x in self.x0]*(self.N+1))
 
         self.args = {
-            'lbx' : lb_x*(self.N+1)+self.lb_u*self.N,
-            'ubx' : ub_x*(self.N+1)+ub_u.self.N,
+            'lbx' : lb_x*(self.N+1)+lb_u*self.N,
+            'ubx' : ub_x*(self.N+1)+ub_u*self.N,
             'lbg' : lb_g*(self.N+1),
             'ubg' : ub_g*(self.N+1),
-            'p': ca.DM.zeros((self.model.n_states+self.N*self.model.opt_vars,1)),
+            'p': ca.DM.zeros((self.model.n_states+self.N*self.model.n_opt_vars,1)),
             'x0': ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
         }
 
         ## History controls and states
         self.u_opt_history=np.zeros((self.model.n_controls,self.N,0)) # controls
         self.x_history=np.zeros((self.model.n_states,self.N+1,0)) # states
-        self.p_history=np.zeros((self.model.opt_vars,self.N,0)) # parameters
+        self.p_history=np.zeros((self.model.n_opt_vars,self.N,0)) # parameters
         logging.info("MPC Setup Completed")
         pass
 
@@ -115,10 +115,10 @@ class NMPCController:
             beta_ref = ref[3]
             print(x_ref,y_ref, psi_ref, beta_ref)
 
-            self.args['p'][self.model.opt_vars*k+self.model.n_states
-                           :self.model.opt_vars*k+ 2*self.model.n_states] = [x_ref, y_ref, psi_ref, beta_ref]
-            self.args['p'][self.model.opt_vars*k+2*self.model.n_states
-                           :self.model.opt_vars*k+2*self.model.n_states+self.model.n_controls] = u_ref
+            self.args['p'][self.model.n_opt_vars*k+self.model.n_states
+                           :self.model.n_opt_vars*k+ 2*self.model.n_states] = [x_ref, y_ref, psi_ref, beta_ref]
+            self.args['p'][self.model.n_opt_vars*k+2*self.model.n_states
+                           :self.model.n_opt_vars*k+2*self.model.n_states+self.model.n_controls] = u_ref
     
         self.args['x0'] = ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
 
@@ -133,7 +133,7 @@ class NMPCController:
         
         # print("### Computed Solution X0", self.X0)
         # print("### Constraints : ",self.args['p'])
-        p = self.args['p'][self.model.n_states:].reshape((self.model.opt_vars,self.N))
+        p = self.args['p'][self.model.n_states:].reshape((self.model.n_opt_vars,self.N))
         self.p_history = np.dstack((self.p_history,p))
 
 

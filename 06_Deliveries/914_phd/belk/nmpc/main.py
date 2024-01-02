@@ -40,7 +40,7 @@ def main():
         print(config)
         trajectory = ReferenceTrajectory(**config['NMPC.environment']['trajectory'])
         vehicle_model = VehicleKinematicModel(**config['NMPC.externals']['vehicle'])
-        nmpc = NMPCController(model=vehicle_model, **config['NMPC.internals'], bounds=config['NMPC.externals']['bounds'])
+        nmpc = NMPCController(model=vehicle_model,trajectory=trajectory, **config['NMPC.internals'], bounds=config['NMPC.externals']['bounds'])
         ## run the environement
         ## store the results
         ## plot the results if required

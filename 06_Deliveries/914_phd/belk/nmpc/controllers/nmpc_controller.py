@@ -88,16 +88,16 @@ class NMPCController:
         }
 
         ## History controls and states
-        self.u_opt_history=np.zeros((self.n_controls,self.N,0)) # controls
-        self.x_history=np.zeros((self.n_states,self.N+1,0)) # states
-        self.p_history=np.zeros((self.n_ref,self.N,0)) # parameters
+        # self.u_opt_history=np.zeros((self.n_controls,self.N,0)) # controls
+        # self.x_history=np.zeros((self.n_states,self.N+1,0)) # states
+        # self.p_history=np.zeros((self.n_ref,self.N,0)) # parameters
         logging.info("MPC Setup Completed")
         pass
 
-    def compute_controls(self, mpc):
-                print(f"################## Compute Control at iteration {mpciter} ##################")
+    def compute_controls(self, mpciter, u_ref):
+        print(f"################## Compute Control at iteration {mpciter} ##################")
         print("tCurrent x0: ", self.x0)
-        self.args['p'][0:self.n_states] = self.x0
+        self.args['p'][0:self.model.n_states] = self.x0
 
         logging.info(f"MPC compute control at iteration: {mpciter}")
         print(f"MPC compute control at iteration: {mpciter}")
@@ -112,8 +112,10 @@ class NMPCController:
             beta_ref = ref[3]
             print(x_ref,y_ref, psi_ref, beta_ref)
 
-            self.args['p'][self.n_ref*k+self.n_states:self.n_ref*k+ 2*self.n_states] = [x_ref, y_ref, psi_ref, beta_ref]
-            self.args['p'][self.n_ref*k+2*self.n_states:self.n_ref*k+2*self.n_states+self.n_controls] = [v_ref, delta_ref]
+            self.args['p'][self.model.opt_vars*k+self.model.n_states
+                           :self.model.opt_vars*k+ 2*self.model.n_states] = [x_ref, y_ref, psi_ref, beta_ref]
+            self.args['p'][self.model.opt_vars*k+2*self.model.n_states
+                           :self.model.opt_vars*k+2*self.model.n_states+self.model.n_controls] = u_ref
     
         self.args['x0'] = ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
 
@@ -122,8 +124,8 @@ class NMPCController:
         sol = self.solver(**self.args)
         logging.info(f"MPC compute control - solving done at iteration: {mpciter}")
 
-        u_opt = sol['x'][self.n_states*(self.N+1):].reshape((self.n_controls,self.N))
-        self.X0 = sol['x'][:self.n_states*(self.N+1)].reshape((self.n_states,self.N+1))
+        u_opt = sol['x'][self.model.n_states*(self.N+1):].reshape((self.model.n_controls,self.N))
+        self.X0 = sol['x'][:self.model.n_states*(self.N+1)].reshape((self.model.n_states,self.N+1))
         logging.info(f"MPC compute control - extracting controls and states at iteration: {mpciter}")
         
         # print("### Computed Solution X0", self.X0)

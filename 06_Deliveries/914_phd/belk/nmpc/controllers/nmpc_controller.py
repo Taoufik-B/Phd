@@ -2,14 +2,14 @@ import casadi as ca
 from utils.discretize import discretize_rk4
 
 class NMPCController:
-    def __init__(self, model, dT, N, Q, R, only_euler) -> None:
+    def __init__(self, model, dT, N, Q, R, only_euler, bounds) -> None:
         self.model = model
         self.dT = dT
         self.N = N
         self.Q = Q
         self.R = R
         self.only_euler = only_euler
-        self.bounds
+        self.bounds = bounds
         self._setup()
         pass
 
@@ -64,21 +64,21 @@ class NMPCController:
         }
         self.solver = ca.nlpsol('solver', 'ipopt', self.nlp, opts)
         
-        self.lb_states = [-ca.inf, -ca.inf, -ca.pi, -ca.pi]
-        self.ub_states = [ca.inf, ca.inf, ca.pi, ca.pi]
+        lb_states = self.bounds['x'][0]
+        ub_states = self.bounds['x'][1]
 
-        self.lb_controls = [0, -ca.pi]
-        self.ub_controls = [22, ca.pi]
+        lb_controls = self.bounds['u'][0]
+        ub_controls = self.bounds['u'][1]
 
-        self.lg_bounds = [0, 0, 0, 0]
-        self.ug_bounds = [0, 0, 0, 0]
+        lg_bounds = self.bounds['g'][0]
+        ug_bounds = self.bounds['g'][1]
 
         self.u0 = ca.DM.zeros((self.n_controls, self.N))
         # TODO: need to be optimized
         self.X0 = ca.DM([x for x in self.x0]*(self.N+1))
 
         self.args = {
-            'lbx' : self.lb_states*(self.N+1)+self.lb_controls*self.N,
+            'lbx' : self.bounds['x'][0]*(self.N+1)+self.lb_controls*self.N,
             'ubx' : self.ub_states*(self.N+1)+self.ub_controls*self.N,
             'lbg' : self.lg_bounds*(self.N+1),
             'ubg' : self.ug_bounds*(self.N+1),

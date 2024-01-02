@@ -38,7 +38,7 @@ class NMPCController:
 
         # compute g and obj
         for k in range(self.N):
-            st_next_aprx = discretize_rk4(self.model.f_function, X[:,k], U[:,k], self.only_euler)
+            st_next_aprx = discretize_rk4(self.model.f_function, X[:,k], U[:,k], self.dT, self.only_euler)
             st_next = X[:,k+1] 
             # Compute constraints
             g = ca.vertcat(g, st_next - st_next_aprx)
@@ -147,7 +147,7 @@ class NMPCController:
         if current_state is None:
             logging.info(f"MPC run step - Shifting")
             # st_runge_kutta
-            st_next_aprx = discretize_rk4(self.model.f_function, self.x0, u[:,0], self.only_euler)
+            st_next_aprx = discretize_rk4(self.model.f_function, self.x0, u[:,0], self.dT, self.only_euler)
             self.x0  = st_next_aprx
             print("### Calulating x0+1 using f value:", self.x0)
             logging.info(f"MPC run step - Shifting Done")

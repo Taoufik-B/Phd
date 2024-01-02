@@ -39,8 +39,8 @@ def main():
         config = load_yaml_config(args.config)
         print(config)
         trajectory = ReferenceTrajectory(**config['NMPC.environment']['trajectory'])
-        vehicle_model = VehicleKinematicModel()
-        nmpc = NMPCController()
+        vehicle_model = VehicleKinematicModel(**config['NMPC.externals']['vehicle'])
+        nmpc = NMPCController(model=vehicle_model, **config['NMPC.internals'], bounds=config['NMPC.externals']['bounds'])
         ## run the environement
         ## store the results
         ## plot the results if required

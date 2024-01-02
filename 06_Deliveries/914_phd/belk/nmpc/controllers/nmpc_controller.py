@@ -9,6 +9,7 @@ class NMPCController:
         self.Q = Q
         self.R = R
         self.only_euler = only_euler
+        self.bounds
         self._setup()
         pass
 
@@ -71,6 +72,25 @@ class NMPCController:
 
         self.lg_bounds = [0, 0, 0, 0]
         self.ug_bounds = [0, 0, 0, 0]
+
+        self.u0 = ca.DM.zeros((self.n_controls, self.N))
+        # TODO: need to be optimized
+        self.X0 = ca.DM([x for x in self.x0]*(self.N+1))
+
+        self.args = {
+            'lbx' : self.lb_states*(self.N+1)+self.lb_controls*self.N,
+            'ubx' : self.ub_states*(self.N+1)+self.ub_controls*self.N,
+            'lbg' : self.lg_bounds*(self.N+1),
+            'ubg' : self.ug_bounds*(self.N+1),
+            'p': ca.DM.zeros((self.n_states+self.N*self.n_ref,1)),
+            'x0': ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
+        }
+
+        ## History controls and states
+        self.u_opt_history=np.zeros((self.n_controls,self.N,0)) # controls
+        self.x_history=np.zeros((self.n_states,self.N+1,0)) # states
+        self.p_history=np.zeros((self.n_ref,self.N,0)) # parameters
+        logging.info("MPC Setup Completed")
         pass
 
     def compute_controls(self):

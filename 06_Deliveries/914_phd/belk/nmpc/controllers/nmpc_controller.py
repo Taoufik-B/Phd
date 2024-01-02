@@ -1,3 +1,4 @@
+import numpy as np
 import casadi as ca
 from utils.discretize import discretize_rk4
 import logging
@@ -88,9 +89,9 @@ class NMPCController:
         }
 
         ## History controls and states
-        # self.u_opt_history=np.zeros((self.n_controls,self.N,0)) # controls
-        # self.x_history=np.zeros((self.n_states,self.N+1,0)) # states
-        # self.p_history=np.zeros((self.n_ref,self.N,0)) # parameters
+        self.u_opt_history=np.zeros((self.model.n_controls,self.N,0)) # controls
+        self.x_history=np.zeros((self.model.n_states,self.N+1,0)) # states
+        self.p_history=np.zeros((self.model.opt_vars,self.N,0)) # parameters
         logging.info("MPC Setup Completed")
         pass
 
@@ -130,15 +131,28 @@ class NMPCController:
         
         # print("### Computed Solution X0", self.X0)
         # print("### Constraints : ",self.args['p'])
-        # p = self.args['p'][self.n_states:].reshape((self.n_ref,self.N))
-        # self.p_history = np.dstack((self.p_history,p))
+        p = self.args['p'][self.model.n_states:].reshape((self.model.opt_vars,self.N))
+        self.p_history = np.dstack((self.p_history,p))
 
 
         # print(u_opt.shape, self.X0.shape, self.u_opt_history.shape)
-        # self.u_opt_history=np.dstack((self.u_opt_history,u_opt))
-        # self.x_history=np.dstack((self.x_history,self.X0))
+        self.u_opt_history=np.dstack((self.u_opt_history,u_opt))
+        self.x_history=np.dstack((self.x_history,self.X0))
 
         return u_opt
 
-    def run_step(self):
-        pass
+    def run_step(self, current_state):
+        logging.info(f"MPC run step")
+        if current_state is None:
+            logging.info(f"MPC run step - Shifting")
+            # st_runge_kutta
+            st_next_aprx = discretize_rk4(self.model.f_function, X[:,k], U[:,k], self.only_euler)
+
+            # self.x0  = ca.DM.full(self.x0 + (self.dt * f_value))
+            self.x0  = st_next_aprx
+            print("### Calulating x0+1 using f value:", self.x0)
+            logging.info(f"MPC run step - Shifting Done")
+        else:
+            self.x0 = current_state
+        self.u0[:,:-1] = u[:,1:]
+        self.X0[:,:-1]=self.X0[:,1:]

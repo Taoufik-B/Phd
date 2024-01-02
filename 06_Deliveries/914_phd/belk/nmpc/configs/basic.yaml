@@ -26,7 +26,7 @@ NMPC.externals:
       - [0, 0, 0, 0] #lbg
       - [0, 0, 0, 0] #ubg
   vehicle:
-    model_type: rac # (rac, fac, cog) rear axle center
+    model_type: fac # (rac, fac, cog) rear axle center
     L: 4 # vehicle length
     Lr: 2.3 # distance from rac to cog
 

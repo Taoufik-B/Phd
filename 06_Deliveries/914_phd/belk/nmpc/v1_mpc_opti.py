@@ -118,14 +118,6 @@ class NMPC:
       self.opti.minimize(obj) 
 
    def _set_constraints(self):
-      #states
-      x_x     = self.X[0,:]
-      x_y     = self.X[1,:]
-      x_psi   = self.X[2,:]
-      x_delta = self.X[3,:]
-      #controls
-      u_v     = self.U[0,:]
-      u_phi   = self.U[1,:]
       # ---- dynamics conditions -----------
       # subject to dynamics xk+1 = F(xk,uk)
       for k in range(self.N):
@@ -133,15 +125,14 @@ class NMPC:
          self.opti.subject_to(self.X[:,k+1]==st_next) # close the gaps
       # ---- boundary conditions -----------
       ## Bounds
-      
+      lb_x = self.dae.x_bounds[0]
+      ub_x = self.dae.x_bounds[1]
+      lb_u = self.dae.u_bounds[0]
+      ub_u = self.dae.u_bounds[1]
       #states
-      self.opti.subject_to(self.opti.bounded(-inf,x_x,inf)) # state is limited
-      self.opti.subject_to(self.opti.bounded(-inf,x_y,inf)) # state is limited
-      self.opti.subject_to(self.opti.bounded(-pi,x_psi,pi)) # state is limited
-      self.opti.subject_to(self.opti.bounded(-pi/2.5,x_delta,pi/2.5)) # state is limited
+      self.opti.subject_to(self.opti.bounded(lb_x,self.X,ub_x)) # state is limited
       #controls
-      self.opti.subject_to(self.opti.bounded(0,u_v,25)) # control is limited
-      self.opti.subject_to(self.opti.bounded(-pi/4,u_phi,pi/4)) # control is limited
+      self.opti.subject_to(self.opti.bounded(lb_u,self.U,ub_u)) # control is limited
       pass
 
    def _set_initial_values(self):

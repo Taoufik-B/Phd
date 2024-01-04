@@ -109,7 +109,7 @@ opti.subject_to(opti.bounded(-pi/4,phi,pi/4)) # control is limited
 # opti.subject_to(opti.bounded(-inf,y,inf)) # state is limited
 # opti.subject_to(opti.bounded(-pi,psi,pi)) # state is limited
 # opti.subject_to(opti.bounded(-pi/2.5,delta,pi/2.5)) # state is limited
-opti.subject_to(opti[-inf, -inf, -pi, -pi/2.5]<=X<=[inf, inf, pi, pi/2.5]) # state is limited
+opti.subject_to(opti.bounded([-inf, -inf, -pi, -pi/2.5],X,[inf, inf, pi, pi/2.5])) # state is limited
 
 
 

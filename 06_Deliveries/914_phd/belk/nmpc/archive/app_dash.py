@@ -1,12 +1,13 @@
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 import numpy as np
+import pandas as pd
 
 df = px.data.gapminder()
 app = Dash(__name__)
 
 x_history = np.load('data/x_1704396094.8685088.npy')
-print(x_history)
+mydf = pd.DataFrame(x_history, )
 
 
 app.layout = html.Div(

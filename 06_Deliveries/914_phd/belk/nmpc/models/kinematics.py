@@ -28,7 +28,8 @@ class VehicleKinematicModel:
         self.model = {
             'rac': self._kvmodel_rac(),
             'fac': self._kvmodel_fac(),
-            'cog': self._kvmodel_cog()
+            'cog': self._kvmodel_cog(),
+            'dummy': self._kvmodel_dummy(),
         }
         self.f_function = self._getmodel()
     ### desired point is at the center of the rear axle,
@@ -56,10 +57,22 @@ class VehicleKinematicModel:
     ### desired point is at the center of gravity:
     def _kvmodel_cog(self):
         # State update equations (kinematic bicycle model)
-        beta = ca.arctan(self.Lr/self.L*ca.tan(self.delta))
+        beta = ca.atan(self.Lr/self.L*ca.tan(self.delta))
         rhs = ca.vertcat( self.v * ca.cos(self.psi+beta)
                         , self.v * ca.sin(self.psi+beta)
-                        , self.v * ca.tan(self.delta) * ca.cos(beta)
+                        , self.v * ca.tan(self.delta) * ca.cos(beta) / self.L
+                        , self.phi
+                        )
+        
+        return ca.Function('f', [self.states, self.controls], [rhs])
+    
+    ### desired point is at the center of gravity:
+    def _kvmodel_dummy(self):
+        # State update equations (kinematic bicycle model)
+        # beta = ca.atan(self.Lr/self.L*ca.tan(self.delta))
+        rhs = ca.vertcat( self.v * ca.cos(self.psi)
+                        , self.v * ca.sin(self.psi)
+                        , self.v * ca.tan(self.phi)
                         , self.phi
                         )
         
@@ -69,3 +82,13 @@ class VehicleKinematicModel:
     def _getmodel(self):
         logging.info(f"Loading the vehicle kinematic model of type: {self.model_type}")
         return self.model[self.model_type]
+    
+    def dummy_dae(self, st, con):
+        dt=0.1
+        x,y,psi,delta = ca.vertsplit(st)
+        v,phi = ca.vertsplit(con)
+        return st + dt*ca.vertcat( v*ca.cos(psi)
+                                  ,v*ca.sin(psi)
+                                  ,v*ca.tan(delta)/3.0
+                                  ,phi
+        )

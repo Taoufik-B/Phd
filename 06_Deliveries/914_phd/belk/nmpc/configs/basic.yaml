@@ -1,15 +1,15 @@
 NMPC.internals:
-  dT: 0.05 # This is a comment
-  N: 25 # Horizon
+  dT: 0.1 # This is a comment
+  N: 10 # Horizon
   Q: # Stage cost
-    - 15 # x
-    - 15 # y
+    - 10 # x
+    - 10 # y
     - 0.5 # psi heading angle
     - 0.01 # delta steering angle
   R:
-    - 0.05 # velocity
-    - 0.5 # steering rate
-  only_euler: False #use rk4
+    - 0.5 # velocity
+    - 0.05 # steering rate
+  only_euler: True #use rk4
 
 NMPC.externals:
   u_ref:
@@ -17,18 +17,18 @@ NMPC.externals:
     - 0 # phi steering rate (rad/s2)
   bounds:
     x:
-      - [-50000, -50000, -3.14, -3.14] #lbx
-      - [50000, 50000, 3.14, 3.14] #ubx
+      - [-20000, -20000, -3.14, -3.14] #lbx
+      - [20000, 200000, 3.14, 3.14] #ubx
     u:
       - [0, -3.14] #lbu
-      - [24, 3.14] #ubu
+      - [25, 3.14] #ubu
     g:
       - [0, 0, 0, 0] #lbg
       - [0, 0, 0, 0] #ubg
   vehicle:
-    model_type: fac # (rac, fac, cog) rear axle center
-    L: 4 # vehicle length
-    Lr: 2.3 # distance from rac to cog
+    model_type: dummy # (rac, fac, cog) rear axle center
+    L: 3.0 # vehicle length
+    Lr: 1.382 # distance from rac to cog
 
 NMPC.environment:
   world_map: Town05 #example carla map

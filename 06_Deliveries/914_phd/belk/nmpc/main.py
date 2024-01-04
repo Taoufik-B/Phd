@@ -43,11 +43,13 @@ def main():
         trajectory = ReferenceTrajectory(**config['NMPC.environment']['trajectory'])
         vehicle_model = VehicleKinematicModel(**config['NMPC.externals']['vehicle'])
         nmpc = NMPCController(model=vehicle_model,trajectory=trajectory, **config['NMPC.internals'], bounds=config['NMPC.externals']['bounds'])
+        ## run the environement
         t=[]
         reference = trajectory.get_reference()
         mpciter=0
         t0 = 0
-        ## run the environement
+        #######
+        print(nmpc.args,nmpc.bounds, nmpc.Q, nmpc.R, nmpc.x0, nmpc.model, nmpc.dT, nmpc.N)
         while (True):
             u_opt  = nmpc.compute_controls(mpciter, config['NMPC.externals']['u_ref'])
             nmpc.run_step(u_opt)
@@ -59,6 +61,8 @@ def main():
             if distance < 0.5:
                 break
             if distance_p <0.5:
+                break
+            if mpciter > 150:
                 break
             
         ## store the results

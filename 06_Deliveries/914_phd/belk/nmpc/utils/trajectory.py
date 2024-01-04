@@ -37,13 +37,24 @@ class ReferenceTrajectory:
             raise ValueError(f"{e} If you are getting a sequence error, do check if your input dataset contains consecutive duplicate(s).")
     
     def get_reference(self):
-        return ca.vertcat(self.x0, self.xs).full()[:,0]
+        return ca.vertcat(self.x0, self.xs).full()[:,0] 
     
     def get_next_wp(self, step):
         if step >= self.size:
             return self.cs(self.size-1)
         else:
             return self.cs(step)
+    def get_tracking_wps(self, step, N):
+        if step+N >= self.size:
+            cs= self.cs(self.size-1)
+        else:
+            cs= self.cs(step)
+        
+        
+    def get_fd_wp(self, step):
+        v_vect = self.cs.derivative(1)(step)[0:2]
+        phi_ref = self.cs.derivative(1)(step)[2]
+        return [float(ca.norm_2(v_vect)), float(phi_ref)]
 
 
 def main():

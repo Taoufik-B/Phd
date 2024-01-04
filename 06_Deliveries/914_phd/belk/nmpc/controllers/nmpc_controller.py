@@ -37,20 +37,23 @@ class NMPCController:
         #constraints
         g = []
         g = ca.vertcat(g,X[:,0]-P[0:self.model.n_states]) #initial condition constraint
-
+        print(X)
         # compute g and obj
         for k in range(self.N):
-            st_next_aprx = discretize_rk4(self.model.f_function, X[:,k], U[:,k], self.dT, self.only_euler)
-            st_next = X[:,k+1] 
+            # st_next_aprx = discretize_rk4(self.model.f_function, X[:,k], U[:,k], self.dT, self.only_euler)
+            st_next_aprx = self.model.dummy_dae(X[:,k], U[:,k])
+            st_next = X[:,k+1]
             # Compute constraints
             g = ca.vertcat(g, st_next - st_next_aprx)
-            state_error = X[:,k] - P[self.model.n_states+self.model.n_opt_vars*k
-                                     :self.model.n_states+self.model.n_opt_vars*k+self.model.n_states]
-            con = U[:,k] - P[self.model.n_states+self.model.n_opt_vars*k+self.model.n_states
-                            :self.model.n_states+self.model.n_opt_vars*k+self.model.n_states+self.model.n_controls]
+            state_error = X[:,k] - P[self.model.n_states*(k+1)
+                                     :self.model.n_states+self.model.n_states*(k+1)]
+            con = U[:,k] - P[self.model.n_states*(self.N+1)+self.model.n_controls*k
+                            :self.model.n_states*(self.N+1)+self.model.n_controls*(k+1)]
             obj += state_error.T@self.Q@state_error# State cost
             obj += con.T@self.R@con # Control cost
 
+        print("OBJECTIVE :",obj)
+        print("Constraints :",g)
         # Setting Optimization variables
         Opt_Vars = ca.vertcat(X.reshape((-1,1)),U.reshape((-1,1)))
                 # Define the NMPC optimization problem
@@ -61,8 +64,8 @@ class NMPCController:
             {
                 'max_iter':100,
                 'print_level':0,
-                'acceptable_tol':1e-8,
-                'acceptable_obj_change_tol':1e-6
+                'acceptable_tol':1e-4,
+                'acceptable_obj_change_tol':1e-3
             },
             'print_time':0,
         }
@@ -90,11 +93,14 @@ class NMPCController:
             'x0': ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
         }
 
+        print("ARGS: ",self.args)
+
         ## History controls and states
         self.u_opt_history=np.zeros((self.model.n_controls,self.N,0)) # controls
         self.x_history=np.zeros((self.model.n_states,self.N+1,0)) # states
         self.p_history=np.zeros((self.model.n_opt_vars,self.N,0)) # parameters
         logging.info("MPC Setup Completed")
+        print("MPC Setup Completed")
         pass
 
     def compute_controls(self, mpciter, u_ref):
@@ -108,18 +114,17 @@ class NMPCController:
         print(f"#### x_ref, y_ref, psi_ref, delta_ref ####")
         for k in range(self.N):
             t_predict = (mpciter+k)*self.dT
-            ref = self.trajectory.get_next_wp(t_predict)
-            x_ref = ref[0]
-            y_ref = ref[1]
-            psi_ref = ref[2]
-            beta_ref = ref[3]
-            print(x_ref,y_ref, psi_ref, beta_ref)
+            st_ref = self.trajectory.get_next_wp(t_predict)
+            v_ref = self.trajectory.get_fd_wp(t_predict)
+            phi_ref = u_ref[1]
+            # x_ref = ca.vertcat(st_ref,v_ref,phi_ref)
+            # print(st_ref)
 
-            self.args['p'][self.model.n_opt_vars*k+self.model.n_states
-                           :self.model.n_opt_vars*k+ 2*self.model.n_states] = [x_ref, y_ref, psi_ref, beta_ref]
-            self.args['p'][self.model.n_opt_vars*k+2*self.model.n_states
-                           :self.model.n_opt_vars*k+2*self.model.n_states+self.model.n_controls] = u_ref
-    
+            self.args['p'][self.model.n_states + self.model.n_states*k
+                           :self.model.n_states + self.model.n_states*(k+1)] = st_ref
+            self.args['p'][self.model.n_states*(self.N+1) + self.model.n_controls*k
+                           :self.model.n_states*(self.N+1) + self.model.n_controls*(k+1)] = [v_ref,phi_ref]
+        print(self.args['p']) 
         self.args['x0'] = ca.vertcat(self.X0.reshape((-1,1)),self.u0.reshape((-1,1)))
 
         # Solve the NMPC optimization problem
@@ -131,9 +136,11 @@ class NMPCController:
         self.X0 = sol['x'][:self.model.n_states*(self.N+1)].reshape((self.model.n_states,self.N+1))
         logging.info(f"MPC compute control - extracting controls and states at iteration: {mpciter}")
         
-        # print("### Computed Solution X0", self.X0)
+        print("### Computed Solution X0", self.X0)
         # print("### Constraints : ",self.args['p'])
-        p = self.args['p'][self.model.n_states:].reshape((self.model.n_opt_vars,self.N))
+        p_x = self.args['p'][self.model.n_states:self.model.n_states*(self.N+1)].reshape((self.model.n_states,self.N))
+        p_u = self.args['p'][self.model.n_states*(self.N+1):].reshape((self.model.n_controls,self.N))
+        p = ca.vertcat(p_x,p_u)
         self.p_history = np.dstack((self.p_history,p))
 
 
@@ -148,11 +155,12 @@ class NMPCController:
         if current_state is None:
             logging.info(f"MPC run step - Shifting")
             # st_runge_kutta
-            st_next_aprx = discretize_rk4(self.model.f_function, self.x0, u[:,0], self.dT, self.only_euler)
+            # st_next_aprx = discretize_rk4(self.model.f_function, self.x0, u[:,0], self.dT, self.only_euler)
+            st_next_aprx = self.model.dummy_dae(self.x0, u[:,0])
             self.x0  = st_next_aprx
             print("### Calulating x0+1 using f value:", self.x0)
             logging.info(f"MPC run step - Shifting Done")
         else:
             self.x0 = current_state
-        self.u0[:,:-1] = u[:,1:]
+        self.u0 = ca.horzcat(u[:,1:],u[:,-1:])
         self.X0[:,:-1]=self.X0[:,1:]

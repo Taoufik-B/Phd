@@ -51,7 +51,7 @@ class NMPCController:
         rhs = ca.vertcat(
             v*ca.cos(theta),
             v*ca.sin(theta),
-            v/self.L*ca.tan(omega)
+            v/self.L*ca.tan(omega)  
             # omega
         )
         self.f = ca.Function('f', [states, controls], [rhs])

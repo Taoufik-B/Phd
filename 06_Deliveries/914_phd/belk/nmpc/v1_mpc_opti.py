@@ -9,6 +9,7 @@ from utils.visualization import simulate
 ## prepare the environement
 config = load_yaml_config('./configs/basic.yaml')
 NMPC_internals = config['NMPC.internals']
+NMPC_externals = config['NMPC.externals']
 trajectory = ReferenceTrajectory(**config['NMPC.environment']['trajectory'])
 ## run the environement
 t=[]
@@ -62,14 +63,14 @@ class KinematicBicycleModel:
 
 
 class NMPC:
-   def __init__(self, dae, Q, R) -> None:
+   def __init__(self, dae, x0, dT, N, Q, R) -> None:
       self.opti = Opti()
-      self.x0 = None
-      self.N = None
-      self.Q, self.R = Q,R
-      self._f= dae.f
+      self.x0 = x0
+      self.N = N
+      self.dT = dT
+      self.Q, self.R = diag(Q),diag(R)
+      self.dae = dae
       self._setup()
-      pass
 
    def _setup(self):
       n_states=4

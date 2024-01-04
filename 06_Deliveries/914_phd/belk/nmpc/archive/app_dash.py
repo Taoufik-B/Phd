@@ -2,6 +2,7 @@ from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 
 df = px.data.gapminder()
+px.data.
 
 app = Dash(__name__)
 

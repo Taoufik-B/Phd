@@ -197,7 +197,8 @@ except Exception as e:
    print(e)   
 
 def plot_sim():
-   simulate(trajectory.path, history.p, history.x, history.u, t, dT, N,reference, False)
+   sim = simulate(trajectory.path, history.p, history.x, history.u, t, dT, N,reference, False)
+   sim.to_jshtml(30,True)
 
 
 # ---- post-processing        ------

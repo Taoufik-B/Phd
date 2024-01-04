@@ -25,6 +25,20 @@ L=3
 Lr=1.382
 model = 'fac'
 
+class NMPC:
+   def __init__(self) -> None:
+      opti = Opti()
+      pass
+
+   def _setup(self):
+      pass
+
+   def compute_control(self):
+      pass
+
+   def run_step(self):
+      pass
+
 opti = Opti() # Optimization problem
 
 

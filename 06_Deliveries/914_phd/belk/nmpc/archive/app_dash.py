@@ -2,9 +2,10 @@ from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
 
 df = px.data.gapminder()
-px.data.
-
+print(type(df))
 app = Dash(__name__)
+
+px.line()
 
 app.layout = html.Div(
     [

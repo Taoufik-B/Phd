@@ -15,20 +15,20 @@ NMPC.externals:
   u_ref:
     - 20 # v (m/s)
     - 0 # phi steering rate (rad/s2)
-  bounds:
-    x:
-      - [-20000, -20000, -3.14, -3.14] #lbx
-      - [20000, 200000, 3.14, 3.14] #ubx
-    u:
-      - [0, -3.14] #lbu
-      - [25, 3.14] #ubu
-    g:
-      - [0, 0, 0, 0] #lbg
-      - [0, 0, 0, 0] #ubg
   vehicle:
     model_type: dummy # (rac, fac, cog) rear axle center
     L: 3.0 # vehicle length
     Lr: 1.382 # distance from rac to cog
+    bounds:
+      x:
+        - [-20000, -20000, -3.14, -3.14] #lbx
+        - [20000, 200000, 3.14, 3.14] #ubx
+      u:
+        - [0, -3.14] #lbu
+        - [25, 3.14] #ubu
+      g:
+        - [0, 0, 0, 0] #lbg
+        - [0, 0, 0, 0] #ubg
 
 NMPC.environment:
   world_map: Town05 #example carla map

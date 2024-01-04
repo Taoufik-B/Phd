@@ -218,9 +218,10 @@ class Config:
 config = Config('./configs/basic.yaml')
 NMPC_internals = config.data['NMPC.internals']
 NMPC_externals = config.data['NMPC.externals']
+VEHICULE_model = config.data['NMPC.externals']['vehicle']
 
-history  = History(N)
-dae      = KinematicBicycleModel()
+history  = History(NMPC_internals.N)
+dae      = KinematicBicycleModel(VEHICULE_model)
 nmpc     = NMPC()
 try:
    while (True):

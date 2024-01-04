@@ -69,6 +69,7 @@ class Model:
 class NMPC:
    def __init__(self) -> None:
       opti = Opti()
+      self.x0 = None
       self._setup()
       pass
 
@@ -91,6 +92,15 @@ class NMPC:
       self.P_x = self.opti.parameter(4,N+1)     
       self.P_u = self.opti.parameter(2,N)    
       pass
+
+   def _set_objective(self):
+      for k in range(self.N): # loop over control intervals
+         # objective to minimize
+         st = self.X[:,k]-self.P_x[:,k]
+         con = self.U[:,k]-self.P_u[:,k]
+         obj += st.T@Q@st + con.T@R@con
+
+      self.opti.minimize(obj) 
 
    def _set_constraints(self):
       x_x     = self.X[0,:]
@@ -117,6 +127,8 @@ class NMPC:
       pass
 
    def _set_initial_values(self):
+      self.opti.set_value(self.P_u,repmat([0,0],1,self.N))
+      self.opti.set_value(self.P_x,repmat(self.x0,1,self.N+1))
       pass
 
    def compute_control(self):

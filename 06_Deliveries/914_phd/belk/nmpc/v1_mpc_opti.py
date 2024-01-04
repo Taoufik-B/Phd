@@ -132,6 +132,8 @@ class NMPC:
          st_next = self._F(self.X[:,k], self.U[:,k])
          self.opti.subject_to(self.X[:,k+1]==st_next) # close the gaps
       # ---- boundary conditions -----------
+      ## Bounds
+      
       #states
       self.opti.subject_to(self.opti.bounded(-inf,x_x,inf)) # state is limited
       self.opti.subject_to(self.opti.bounded(-inf,x_y,inf)) # state is limited

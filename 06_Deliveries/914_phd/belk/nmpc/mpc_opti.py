@@ -105,10 +105,11 @@ opti.minimize(obj) # race in minimal time
 opti.subject_to(opti.bounded(0,v,25)) # control is limited
 opti.subject_to(opti.bounded(-pi/4,phi,pi/4)) # control is limited
 #states
-opti.subject_to(opti.bounded(-inf,x,inf)) # state is limited
-opti.subject_to(opti.bounded(-inf,y,inf)) # state is limited
-opti.subject_to(opti.bounded(-pi,psi,pi)) # state is limited
-opti.subject_to(opti.bounded(-pi/2.5,delta,pi/2.5)) # state is limited
+# opti.subject_to(opti.bounded(-inf,x,inf)) # state is limited
+# opti.subject_to(opti.bounded(-inf,y,inf)) # state is limited
+# opti.subject_to(opti.bounded(-pi,psi,pi)) # state is limited
+# opti.subject_to(opti.bounded(-pi/2.5,delta,pi/2.5)) # state is limited
+opti.subject_to(opti[-inf, -inf, -pi, -pi/2.5]<=X<=[inf, inf, pi, pi/2.5]) # state is limited
 
 
 

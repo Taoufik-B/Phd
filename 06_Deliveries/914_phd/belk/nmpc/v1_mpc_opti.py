@@ -36,7 +36,7 @@ class Model:
       psi,delta   =  st[2],st[3]
       v,phi       =  con[0],con[1]
       if model == 'cog':
-         beta  = atan(Lr/L*tan(delta))
+         beta  = atan(self.Lr/self.L*tan(delta))
          dx    = cos(psi+beta)
          dy    = sin(psi+beta)
          dpsi  = tan(delta) * cos(beta)
@@ -53,11 +53,11 @@ class Model:
       
       return vertcat(  v * dx
                      , v * dy
-                     , v / L  * dpsi
+                     , v / self.L  * dpsi
                      , phi
                      )
 
-   def F(self,st,u):
+   def F(self,st,con):
          # Runge-Kutta 4 integration
       k1 = f(st         ,con)
       k2 = f(st+dT/2*k1 ,con)
@@ -69,9 +69,27 @@ class Model:
 class NMPC:
    def __init__(self) -> None:
       opti = Opti()
+      self._setup()
       pass
 
    def _setup(self):
+      n_states=4
+      n_controls=2
+      # ---- decision variables ---------
+      #states
+      self.X = self.opti.variable(n_states,N+1) # state trajectory
+      x_x     = X[0,:]
+      x_y     = X[1,:]
+      x_psi   = X[2,:]
+      x_delta = X[3,:]
+      #controls
+      self.U = self.opti.variable(n_controls,N)   # control trajectory (throttle)
+      u_v     = U[0,:]
+      u_phi   = U[1,:]
+      # T = opti.variable()      # final time
+
+      self.P_x = self.opti.parameter(4,N+1)     
+      self.P_u = self.opti.parameter(2,N)    
       pass
 
    def _set_constraints(self):

@@ -87,11 +87,13 @@ class NMPC:
       self.P_u = self.opti.parameter(n_controls,N)
 
       # Objective
+      self._set_objective()
 
       # Constraints
+      self._set_constraints()
 
       # Initials
-
+      self._set_initial_values()
 
       ## Options
       opts = {
@@ -148,123 +150,34 @@ class NMPC:
       self.opti.set_value(self.P_x,repmat(self.x0,1,self.N+1))
       pass
 
-   def compute_control(self):
-      pass
-
-   def run_step(self):
-      pass
-
-opti = Opti() # Optimization problem
-
-
-n_states=4
-n_controls=2
-# ---- decision variables ---------
-#states
-X = opti.variable(n_states,N+1) # state trajectory
-x_x     = X[0,:]
-x_y     = X[1,:]
-x_psi   = X[2,:]
-x_delta = X[3,:]
-#controls
-U = opti.variable(n_controls,N)   # control trajectory (throttle)
-u_v     = U[0,:]
-u_phi   = U[1,:]
-# T = opti.variable()      # final time
-
-P_x = opti.parameter(4,N+1)     
-P_u = opti.parameter(2,N)     
-
-# ---- dynamic constraints --------
-def f(st,u):
-   psi,delta=st[2],st[3]
-   v,phi=u[0],u[1]
-   if model == 'cog':
-      beta  = atan(Lr/L*tan(delta))
-      dx    = cos(psi+beta)
-      dy    = sin(psi+beta)
-      dpsi  = tan(delta) * cos(beta)
-   
-   if model == 'fac':
-      dx    = cos(psi+delta)
-      dy    = sin(psi+delta)
-      dpsi  = sin(delta)
-   
-   if model == 'rac':
-      dx    = cos(psi)
-      dy    = sin(psi)
-      dpsi  = tan(delta)
-   
-   return vertcat(  v * dx
-                  , v * dy
-                  , v / L  * dpsi
-                  , phi
-                  )
- 
-
-def F(st,con):
-   # Runge-Kutta 4 integration
-   k1 = f(st         ,con)
-   k2 = f(st+dT/2*k1 ,con)
-   k3 = f(st+dT/2*k2 ,con)
-   k4 = f(st+dT*k3   ,con)
-   return st+ dT/6*(k1+2*k2+2*k3+k4)
-
-obj = 0
-for k in range(N): # loop over control intervals
-   # objective to minimize
-   st = X[:,k]-P_x[:,k]
-   con = U[:,k]-P_u[:,k]
-   obj += st.T@Q@st + con.T@R@con 
-   # subject to dynamics xk+1 = F(xk,uk)
-   st_next = F(X[:,k], U[:,k])
-   opti.subject_to(X[:,k+1]==st_next) # close the gaps
-# ---- objective          ---------
-opti.minimize(obj) # race in minimal time
-
-# ---- boundary conditions -----------
-#controls
-opti.subject_to(opti.bounded(0,u_v,25)) # control is limited
-opti.subject_to(opti.bounded(-pi/4,u_phi,pi/4)) # control is limited
-#states
-opti.subject_to(opti.bounded(-inf,x_x,inf)) # state is limited
-opti.subject_to(opti.bounded(-inf,x_y,inf)) # state is limited
-opti.subject_to(opti.bounded(-pi,x_psi,pi)) # state is limited
-opti.subject_to(opti.bounded(-pi/2.5,x_delta,pi/2.5)) # state is limited
-
-# ---- path constraints -----------
-
-# ---- misc. constraints  ----------
-
-# ---- initial values for solver ---
-opti.set_value(P_u,repmat([0,0],1,N))
-opti.set_value(P_x,repmat(trajectory.x0,1,N+1))
-
-
-opts = {
-   'ipopt': # interior point optimizer
-   {
-         'max_iter':100,
-         'print_level':0,
-         'acceptable_tol':1e-8,
-         'acceptable_obj_change_tol':1e-6
-   },
-   'print_time':0,
-}
-opti.solver("ipopt",opts) # set numerical backend
-
-
-def compute_control():
-   for k in range(N):
-      t_predict = (mpciter+k)*dT
-      xref,yref,psiref,deltaref = trajectory.get_next_wp(t_predict)
-      psiref=np.clip(psiref, -pi,pi)
-      u_ref= trajectory.get_fd_wp(t_predict)
+   def compute_control(self, p_x_ref, p_u_ref):
       opti.set_value(P_x[:,k+1],[xref,yref,psiref,deltaref])
       opti.set_value(P_u[:,k],u_ref)
-   # ---- solve NLP              ------
-   sol = opti.solve()   # actual solve
-   return sol
+      # ---- solve NLP              ------
+      sol = opti.solve()   # actual solve
+      return sol
+   # def compute_control(self):
+   #    for k in range(self.N):
+   #       t_predict = (mpciter+k)*dT
+   #       xref,yref,psiref,deltaref = trajectory.get_next_wp(t_predict)
+   #       psiref=np.clip(psiref, -pi,pi)
+   #       u_ref= trajectory.get_fd_wp(t_predict)
+   #       opti.set_value(P_x[:,k+1],[xref,yref,psiref,deltaref])
+   #       opti.set_value(P_u[:,k],u_ref)
+   #    # ---- solve NLP              ------
+   #    sol = opti.solve()   # actual solve
+   #    return sol
+
+   def run_step(self,x0,u_opt,noise_level=0):
+      ### shifting the solution
+      x_next = self.F(x0,u_opt[:,0])
+      # if mpciter % 10 == 0:
+      #    x_next = x_next + noise_level*np.random.random_sample((4,))
+      self.opti.set_value(self.P_x[:,0],x_next)
+      self.opti.set_value(self.P_u[:,:-1],u_opt[:,1:])
+
+
+
 
 class History:
    def __init__(self, N) -> None:
@@ -290,14 +203,6 @@ class History:
       np.save('data/u_'+str(time()), self.u)
       np.save('data/p_'+str(time()), self.p)
 
-
-def run_step(x0,u_opt,noise_level=0):
-   ### shifting the solution
-   x_next = F(x0,u_opt[:,0])
-   if mpciter % 10 == 0:
-      x_next = x_next + noise_level*np.random.random_sample((4,))
-   opti.set_value(P_x[:,0],x_next)
-   opti.set_value(P_u[:,:-1],u_opt[:,1:])
 
 
 history = History(N)

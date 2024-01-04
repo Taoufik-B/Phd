@@ -44,7 +44,12 @@ class ReferenceTrajectory:
             return self.cs(self.size-1)
         else:
             return self.cs(step)
-    def get_tracking_wps(self, step, N):
+    def get_tracking_wps(self, step, N, dT):
+        p_x_ref = np.
+        p_u_ref = 0
+        for k in range(N):
+            t_predict = (step+k)*dT
+            cs = self.get_next_wp(t_predict)
         if step+N >= self.size:
             cs= self.cs(self.size-1)
         else:

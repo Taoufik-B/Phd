@@ -207,8 +207,7 @@ t0 = 0
 try:
    while (True):
       # get ref trajectory
-      p_x_ref = 0
-      p_u_ref = 0
+      p_x_ref,p_u_ref = path.get_tracking_wps(mpciter, NMPC_internals.N, NMPC_internals.dT)
       # compute mpc controls
       sol = nmpc.compute_control(p_u_ref, p_u_ref)
       # extract the solution

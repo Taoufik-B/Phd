@@ -30,6 +30,8 @@ class Model:
       self.L = model['L']
       self.Lr = model['Lr']
       self.type = model['model_type']
+      self.x_bounds = model['x_bounds']
+      self.u_bounds = model['u_bounds']
       pass
 
    def _f(self, st, con):
@@ -60,17 +62,19 @@ class Model:
    def F(self,st,con):
          # Runge-Kutta 4 integration
       k1 = self._f(st         ,con)
-      k2 = f(st+dT/2*k1 ,con)
-      k3 = f(st+dT/2*k2 ,con)
-      k4 = f(st+dT*k3   ,con)
+      k2 = self._f(st+dT/2*k1 ,con)
+      k3 = self._f(st+dT/2*k2 ,con)
+      k4 = self._f(st+dT*k3   ,con)
       return st+ dT/6*(k1+2*k2+2*k3+k4)
 
 
 class NMPC:
-   def __init__(self) -> None:
+   def __init__(self, dae, Q, R) -> None:
       self.opti = Opti()
       self.x0 = None
       self.N = None
+      self.Q, self.R = Q,R
+      self.F= dae.F
       self._setup()
       pass
 
@@ -116,7 +120,7 @@ class NMPC:
          # objective to minimize
          st = self.X[:,k]-self.P_x[:,k]
          con = self.U[:,k]-self.P_u[:,k]
-         obj += st.T@Q@st + con.T@R@con
+         obj += st.T@self.Q@st + con.T@self.R@con
 
       self.opti.minimize(obj) 
 

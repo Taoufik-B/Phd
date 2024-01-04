@@ -93,7 +93,30 @@ class NMPC:
       pass
 
    def _set_constraints(self):
+      x_x     = self.X[0,:]
+      x_y     = self.X[1,:]
+      x_psi   = self.X[2,:]
+      x_delta = self.X[3,:]
 
+      u_v     = self.U[0,:]
+      u_phi   = self.U[1,:]
+      # ---- boundary conditions -----------
+      #states
+      self.opti.subject_to(self.opti.bounded(-inf,x_x,inf)) # state is limited
+      self.opti.subject_to(self.opti.bounded(-inf,x_y,inf)) # state is limited
+      self.opti.subject_to(self.opti.bounded(-pi,x_psi,pi)) # state is limited
+      self.opti.subject_to(self.opti.bounded(-pi/2.5,x_delta,pi/2.5)) # state is limited
+      #controls
+      self.opti.subject_to(self.opti.bounded(0,u_v,25)) # control is limited
+      self.opti.subject_to(self.opti.bounded(-pi/4,u_phi,pi/4)) # control is limited
+      #dynamics
+      # subject to dynamics xk+1 = F(xk,uk)
+      for k in range(self.N):
+         st_next = self.F(self.X[:,k], self.U[:,k])
+         self.opti.subject_to(self.X[:,k+1]==st_next) # close the gaps
+      pass
+
+   def _set_initial_values(self):
       pass
 
    def compute_control(self):

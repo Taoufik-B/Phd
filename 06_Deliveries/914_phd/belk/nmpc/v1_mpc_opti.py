@@ -207,20 +207,21 @@ class History:
 
 class Config:
    def __init__(self, path) -> None:
-      return self._load_yaml_config(path)
+      self.path = path
+      self.data = self._load_yaml_config()
 
-   def _load_yaml_config(self,path):
-    with open(path) as f:
+   def _load_yaml_config(self):
+    with open(self.path) as f:
         return yaml.load(f, Loader=yaml.FullLoader)
 
 
-config = load_yaml_config('./configs/basic.yaml')
-NMPC_internals = config['NMPC.internals']
-NMPC_externals = config['NMPC.externals']
+config = Config('./configs/basic.yaml')
+NMPC_internals = config.data['NMPC.internals']
+NMPC_externals = config.data['NMPC.externals']
 
-history = History(N)
-dae = KinematicBicycleModel()
-nmpc = NMPC()
+history  = History(N)
+dae      = KinematicBicycleModel()
+nmpc     = NMPC()
 try:
    while (True):
       # compute mpc controls

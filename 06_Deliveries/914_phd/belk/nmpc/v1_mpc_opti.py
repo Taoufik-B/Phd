@@ -25,7 +25,7 @@ L=3
 Lr=1.382
 model = 'fac'
 
-class Model:
+class KinematicBicycleModel:
    def __init__(self, model) -> None:
       self.L = model['L']
       self.Lr = model['Lr']

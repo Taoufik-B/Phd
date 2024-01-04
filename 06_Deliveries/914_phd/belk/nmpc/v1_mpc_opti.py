@@ -8,7 +8,7 @@ from utils.visualization import simulate
 
 ## prepare the environement
 config = load_yaml_config('./configs/basic.yaml')
-print(config)
+NMPC_internals = config['NMPC.internals']
 trajectory = ReferenceTrajectory(**config['NMPC.environment']['trajectory'])
 ## run the environement
 t=[]
@@ -34,7 +34,7 @@ class KinematicBicycleModel:
       self.u_bounds = model['u_bounds']
       pass
 
-   def _f(self, st, con):
+   def f(self, st, con):
       psi,delta   =  st[2],st[3]
       v,phi       =  con[0],con[1]
       if model == 'cog':
@@ -59,13 +59,6 @@ class KinematicBicycleModel:
                      , phi
                      )
 
-   def F(self,st,con):
-         # Runge-Kutta 4 integration
-      k1 = self._f(st         ,con)
-      k2 = self._f(st+dT/2*k1 ,con)
-      k3 = self._f(st+dT/2*k2 ,con)
-      k4 = self._f(st+dT*k3   ,con)
-      return st+ dT/6*(k1+2*k2+2*k3+k4)
 
 
 class NMPC:
@@ -74,7 +67,7 @@ class NMPC:
       self.x0 = None
       self.N = None
       self.Q, self.R = Q,R
-      self.F= dae.F
+      self._f= dae.f
       self._setup()
       pass
 
@@ -136,7 +129,7 @@ class NMPC:
       # ---- dynamics conditions -----------
       # subject to dynamics xk+1 = F(xk,uk)
       for k in range(self.N):
-         st_next = self.F(self.X[:,k], self.U[:,k])
+         st_next = self._F(self.X[:,k], self.U[:,k])
          self.opti.subject_to(self.X[:,k+1]==st_next) # close the gaps
       # ---- boundary conditions -----------
       #states
@@ -153,6 +146,14 @@ class NMPC:
       self.opti.set_value(self.P_u,repmat([0,0],1,self.N))
       self.opti.set_value(self.P_x,repmat(self.x0,1,self.N+1))
       pass
+
+   def _F(self,st,con):
+         # Runge-Kutta 4 integration
+      k1 = self._f(st         ,con)
+      k2 = self._f(st+self.dT/2*k1 ,con)
+      k3 = self._f(st+self.dT/2*k2 ,con)
+      k4 = self._f(st+self.dT*k3   ,con)
+      return st+ self.dT/6*(k1+2*k2+2*k3+k4)
 
    def compute_control(self, p_x_ref, p_u_ref):
       self.opti.set_value(self.P_x[:,1:],p_x_ref)
@@ -174,7 +175,7 @@ class NMPC:
 
    def run_step(self,x0,u_opt,noise_level=0):
       ### shifting the solution
-      x_next = self.F(x0,u_opt[:,0])
+      x_next = self._F(x0,u_opt[:,0])
       # if mpciter % 10 == 0:
       #    x_next = x_next + noise_level*np.random.random_sample((4,))
       self.opti.set_value(self.P_x[:,0],x_next)

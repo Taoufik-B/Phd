@@ -1,11 +1,13 @@
 from dash import Dash, dcc, html, Input, Output
 import plotly.express as px
+import numpy as np
 
 df = px.data.gapminder()
-print(type(df))
 app = Dash(__name__)
 
-px.line()
+x_history = np.load('data/x_1704396094.8685088.npy')
+print(x_history)
+
 
 app.layout = html.Div(
     [
@@ -13,7 +15,7 @@ app.layout = html.Div(
         html.P("Select an animation:"),
         dcc.RadioItems(
             id="selection",
-            options=["GDP - Scatter", "Population - Bar"],
+            options=["GDP - Scatter", "Population - Bar", "My Data"],
             value="GDP - Scatter",
         ),
         dcc.Loading(dcc.Graph(id="graph"), type="cube"),
@@ -26,6 +28,20 @@ app.layout = html.Div(
 )
 def display_animated_graph(selection):
     animations = {
+        "My Data": px.line(
+            None,
+            x=x_history[0,0,:],
+            y=x_history[1,0,:],
+            animation_frame="year",
+            animation_group="country",
+            size="pop",
+            color="continent",
+            hover_name="country",
+            log_x=True,
+            size_max=55,
+            range_x=[100, 100000],
+            range_y=[25, 90],
+        ),
         "GDP - Scatter": px.scatter(
             df,
             x="gdpPercap",

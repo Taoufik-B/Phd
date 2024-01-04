@@ -68,8 +68,9 @@ class Model:
 
 class NMPC:
    def __init__(self) -> None:
-      opti = Opti()
+      self.opti = Opti()
       self.x0 = None
+      self.N = None
       self._setup()
       pass
 
@@ -79,21 +80,36 @@ class NMPC:
       # ---- decision variables ---------
       #states
       self.X = self.opti.variable(n_states,N+1) # state trajectory
-      x_x     = X[0,:]
-      x_y     = X[1,:]
-      x_psi   = X[2,:]
-      x_delta = X[3,:]
       #controls
       self.U = self.opti.variable(n_controls,N)   # control trajectory (throttle)
-      u_v     = U[0,:]
-      u_phi   = U[1,:]
-      # T = opti.variable()      # final time
+      #parameters
+      self.P_x = self.opti.parameter(n_states,N+1)     
+      self.P_u = self.opti.parameter(n_controls,N)
 
-      self.P_x = self.opti.parameter(4,N+1)     
-      self.P_u = self.opti.parameter(2,N)    
+      # Objective
+
+      # Constraints
+
+      # Initials
+
+
+      ## Options
+      opts = {
+            'ipopt': # interior point optimizer
+            {
+                  'max_iter':100,
+                  'print_level':0,
+                  'acceptable_tol':1e-8,
+                  'acceptable_obj_change_tol':1e-6
+            },
+            'print_time':0,
+         }
+      ## set the solver
+      opti.solver("ipopt",opts) # set numerical backend    
       pass
 
    def _set_objective(self):
+      obj=0
       for k in range(self.N): # loop over control intervals
          # objective to minimize
          st = self.X[:,k]-self.P_x[:,k]
@@ -103,13 +119,19 @@ class NMPC:
       self.opti.minimize(obj) 
 
    def _set_constraints(self):
+      #states
       x_x     = self.X[0,:]
       x_y     = self.X[1,:]
       x_psi   = self.X[2,:]
       x_delta = self.X[3,:]
-
+      #controls
       u_v     = self.U[0,:]
       u_phi   = self.U[1,:]
+      # ---- dynamics conditions -----------
+      # subject to dynamics xk+1 = F(xk,uk)
+      for k in range(self.N):
+         st_next = self.F(self.X[:,k], self.U[:,k])
+         self.opti.subject_to(self.X[:,k+1]==st_next) # close the gaps
       # ---- boundary conditions -----------
       #states
       self.opti.subject_to(self.opti.bounded(-inf,x_x,inf)) # state is limited
@@ -119,11 +141,6 @@ class NMPC:
       #controls
       self.opti.subject_to(self.opti.bounded(0,u_v,25)) # control is limited
       self.opti.subject_to(self.opti.bounded(-pi/4,u_phi,pi/4)) # control is limited
-      #dynamics
-      # subject to dynamics xk+1 = F(xk,uk)
-      for k in range(self.N):
-         st_next = self.F(self.X[:,k], self.U[:,k])
-         self.opti.subject_to(self.X[:,k+1]==st_next) # close the gaps
       pass
 
    def _set_initial_values(self):

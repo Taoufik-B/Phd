@@ -19,18 +19,21 @@ class KinematicBicycleModel:
    def f(self, st, con):
       psi,delta   =  st[2],st[3]
       v,phi       =  con[0],con[1]
-      if model == 'cog':
+      dx          = None
+      dy          = None
+      dpsi        = None
+      if self.type == 'cog':
          beta  = atan(self.Lr/self.L*tan(delta))
          dx    = cos(psi+beta)
          dy    = sin(psi+beta)
          dpsi  = tan(delta) * cos(beta)
       
-      if model == 'fac':
+      if self.type == 'fac':
          dx    = cos(psi+delta)
          dy    = sin(psi+delta)
          dpsi  = sin(delta)
       
-      if model == 'rac':
+      if self.type == 'rac':
          dx    = cos(psi)
          dy    = sin(psi)
          dpsi  = tan(delta)
@@ -42,13 +45,14 @@ class KinematicBicycleModel:
                      )
 
 class NMPC:
-   def __init__(self, dae, x0, dT, N, Q, R) -> None:
+   def __init__(self, dae, x0, dT, N, Q, R, only_euler) -> None:
       self.opti = Opti()
       self.x0 = x0
       self.N = N
       self.dT = dT
       self.Q, self.R = diag(Q),diag(R)
       self.dae = dae
+      self.euler = only_euler
       self._setup()
 
    def _setup(self):
@@ -123,6 +127,8 @@ class NMPC:
    def _F(self,st,con):
          # Runge-Kutta 4 integration
       k1 = self.dae.f(st         ,con)
+      if self.euler:
+         return st+self.dT*k1
       k2 = self.dae.f(st+self.dT/2*k1 ,con)
       k3 = self.dae.f(st+self.dT/2*k2 ,con)
       k4 = self.dae.f(st+self.dT*k3   ,con)

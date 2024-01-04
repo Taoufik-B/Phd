@@ -19,28 +19,28 @@ class KinematicBicycleModel:
    def f(self, st, con):
       psi,delta   =  st[2],st[3]
       v,phi       =  con[0],con[1]
-      dx          = None
-      dy          = None
-      dpsi        = None
+      self.dx     = None
+      self.dy     = None
+      self.dpsi   = None
       if self.type == 'cog':
          beta  = atan(self.Lr/self.L*tan(delta))
-         dx    = cos(psi+beta)
-         dy    = sin(psi+beta)
-         dpsi  = tan(delta) * cos(beta)
+         self.dx    = cos(psi+beta)
+         self.dy    = sin(psi+beta)
+         self.dpsi  = tan(delta) * cos(beta)
       
       if self.type == 'fac':
-         dx    = cos(psi+delta)
-         dy    = sin(psi+delta)
-         dpsi  = sin(delta)
+         self.dx    = cos(psi+delta)
+         self.dy    = sin(psi+delta)
+         self.dpsi  = sin(delta)
       
       if self.type == 'rac':
-         dx    = cos(psi)
-         dy    = sin(psi)
-         dpsi  = tan(delta)
+         self.dx    = cos(psi)
+         self.dy    = sin(psi)
+         self.dpsi  = tan(delta)
       
-      return vertcat(  v * dx
-                     , v * dy
-                     , v / self.L  * dpsi
+      return vertcat(  v * self.dx
+                     , v * self.dy
+                     , v / self.L  * self.dpsi
                      , phi
                      )
 

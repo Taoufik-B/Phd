@@ -1,4 +1,5 @@
 
+import yaml
 from casadi import *
 from time import time
 from utils.trajectory import ReferenceTrajectory
@@ -59,8 +60,6 @@ class KinematicBicycleModel:
                      , v / self.L  * dpsi
                      , phi
                      )
-
-
 
 class NMPC:
    def __init__(self, dae, x0, dT, N, Q, R) -> None:
@@ -150,10 +149,10 @@ class NMPC:
 
    def _F(self,st,con):
          # Runge-Kutta 4 integration
-      k1 = self._f(st         ,con)
-      k2 = self._f(st+self.dT/2*k1 ,con)
-      k3 = self._f(st+self.dT/2*k2 ,con)
-      k4 = self._f(st+self.dT*k3   ,con)
+      k1 = self.dae.f(st         ,con)
+      k2 = self.dae.f(st+self.dT/2*k1 ,con)
+      k3 = self.dae.f(st+self.dT/2*k2 ,con)
+      k4 = self.dae.f(st+self.dT*k3   ,con)
       return st+ self.dT/6*(k1+2*k2+2*k3+k4)
 
    def compute_control(self, p_x_ref, p_u_ref):
@@ -182,9 +181,6 @@ class NMPC:
       self.opti.set_value(self.P_x[:,0],x_next)
       self.opti.set_value(self.P_u[:,:-1],u_opt[:,1:])
 
-
-
-
 class History:
    def __init__(self, N) -> None:
       ## History controls and states
@@ -209,9 +205,21 @@ class History:
       np.save('data/u_'+str(time()), self.u)
       np.save('data/p_'+str(time()), self.p)
 
+class Config:
+   def __init__(self, path) -> None:
+      return self._load_yaml_config(path)
 
+   def _load_yaml_config(self,path):
+    with open(path) as f:
+        return yaml.load(f, Loader=yaml.FullLoader)
+
+
+config = load_yaml_config('./configs/basic.yaml')
+NMPC_internals = config['NMPC.internals']
+NMPC_externals = config['NMPC.externals']
 
 history = History(N)
+dae = KinematicBicycleModel()
 nmpc = NMPC()
 try:
    while (True):

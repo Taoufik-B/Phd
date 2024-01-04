@@ -206,8 +206,11 @@ mpciter=0
 t0 = 0
 try:
    while (True):
+      # get ref trajectory
+      p_x_ref = 0
+      p_u_ref = 0
       # compute mpc controls
-      sol = nmpc.compute_control()
+      sol = nmpc.compute_control(p_u_ref, p_u_ref)
       # extract the solution
       u_opt = sol.value(nmpc.U)
       X0 = sol.value(nmpc.X)

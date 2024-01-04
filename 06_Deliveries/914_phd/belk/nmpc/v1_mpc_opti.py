@@ -200,8 +200,8 @@ dae      = KinematicBicycleModel(VEHICULE_model)
 nmpc     = NMPC(dae,path.x0,**NMPC_internals)
 
 ## run the environement
-t=[]
 reference = path.get_reference()
+t=[]
 mpciter=0
 t0 = 0
 try:
@@ -220,7 +220,7 @@ try:
       # shift the solution and apply the first control
       nmpc.run_step(X0[:,0],u_opt)
       # stop condition
-      distance_p = np.linalg.norm(trajectory.xs[0:2]-history.p[0:2,0,mpciter])
+      distance_p = np.linalg.norm(path.xs[0:2]-history.p[0:2,0,mpciter])
       if distance_p <0.5:
          break
       mpciter += 1  
@@ -229,7 +229,7 @@ except Exception as e:
    print(e)   
 
 def plot_sim():
-   sim = simulate(trajectory.path, history.p, history.x, history.u, t, dT, N,reference, False)
+   sim = simulate(path.path, history.p, history.x, history.u, t, NMPC_internals.dT, NMPC_internals.N,reference, False)
    sim.to_jshtml(30,True)
 
 

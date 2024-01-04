@@ -3,29 +3,9 @@ import yaml
 from casadi import *
 from time import time
 from utils.trajectory import ReferenceTrajectory
-from utils.config import load_yaml_config
 from utils.visualization import simulate
 
 
-## prepare the environement
-config = load_yaml_config('./configs/basic.yaml')
-NMPC_internals = config['NMPC.internals']
-NMPC_externals = config['NMPC.externals']
-trajectory = ReferenceTrajectory(**config['NMPC.environment']['trajectory'])
-## run the environement
-t=[]
-reference = trajectory.get_reference()
-mpciter=0
-t0 = 0
-
-N = 10 # number of control intervals
-dT = 0.1 # length of a control interval
-Q = diag([10,10,0.5,0])
-R = diag([0.5,0.05])
-
-L=3
-Lr=1.382
-model = 'fac'
 
 class KinematicBicycleModel:
    def __init__(self, model) -> None:
@@ -212,10 +192,18 @@ config = Config('./configs/basic.yaml')
 NMPC_internals = config.data['NMPC.internals']
 NMPC_externals = config.data['NMPC.externals']
 VEHICULE_model = config.data['NMPC.externals']['vehicle']
+PATH_data      = config.data['NMPC.environment']['trajectory']
 
 history  = History(NMPC_internals.N)
+path     = ReferenceTrajectory(**PATH_data)
 dae      = KinematicBicycleModel(VEHICULE_model)
-nmpc     = NMPC()
+nmpc     = NMPC(dae,path.x0,**NMPC_internals)
+
+## run the environement
+t=[]
+reference = path.get_reference()
+mpciter=0
+t0 = 0
 try:
    while (True):
       # compute mpc controls

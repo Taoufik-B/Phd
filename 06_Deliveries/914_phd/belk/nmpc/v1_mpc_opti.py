@@ -25,12 +25,21 @@ L=3
 Lr=1.382
 model = 'fac'
 
+class Model:
+   def __init__(self, model) -> None:
+      self.dae = model
+      pass
+
 class NMPC:
    def __init__(self) -> None:
       opti = Opti()
       pass
 
    def _setup(self):
+      pass
+
+   def _set_constraints(self):
+
       pass
 
    def compute_control(self):

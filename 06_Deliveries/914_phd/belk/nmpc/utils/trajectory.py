@@ -45,15 +45,16 @@ class ReferenceTrajectory:
         else:
             return self.cs(step)
     def get_tracking_wps(self, step, N, dT):
-        p_x_ref = np.
-        p_u_ref = 0
+        p_x_ref = np.ndarray((4,0))
+        p_u_ref = np.ndarray((2,0))
         for k in range(N):
             t_predict = (step+k)*dT
-            cs = self.get_next_wp(t_predict)
-        if step+N >= self.size:
-            cs= self.cs(self.size-1)
-        else:
-            cs= self.cs(step)
+            cx = self.get_next_wp(t_predict)
+            cx[2] = np.clip(cx[2], -np.pi, np.pi)
+            cu = self.get_fd_wp(t_predict)
+            p_x_ref = ca.vertcat(p_x_ref, cx)
+            p_u_ref = ca.vertcat(p_u_ref, cu)
+        
         
         
     def get_fd_wp(self, step):

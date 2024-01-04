@@ -52,8 +52,8 @@ class ReferenceTrajectory:
             cx = self.get_next_wp(t_predict)
             cx[2] = np.clip(cx[2], -np.pi, np.pi)
             cu = self.get_fd_wp(t_predict)
-            p_x_ref = ca.vertcat(p_x_ref, cx)
-            p_u_ref = ca.vertcat(p_u_ref, cu)
+            p_x_ref = ca.horzcat(p_x_ref, cx)
+            p_u_ref = ca.horzcat(p_u_ref, cu)
         return p_x_ref, p_u_ref
         
         

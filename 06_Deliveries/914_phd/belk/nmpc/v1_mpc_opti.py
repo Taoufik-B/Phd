@@ -135,7 +135,8 @@ class NMPC:
       return st+ self.dT/6*(k1+2*k2+2*k3+k4)
 
    def compute_control(self, p_x_ref, p_u_ref):
-      print("compute control", p_x_ref)
+      print("compute control x", p_x_ref)
+      print("compute control u", p_u_ref)
       self.opti.set_value(self.P_x[:,1:],p_x_ref)
       self.opti.set_value(self.P_u,p_u_ref)
       # ---- solve NLP              ------
@@ -231,7 +232,7 @@ except Exception as e:
 
 def plot_sim():
    sim = simulate(path.path, history.p, history.x, history.u, t, dT, N,reference, False)
-   sim.to_jshtml(30,True)
+   # sim.to_jshtml(30,True)
 
 
 # ---- post-processing        ------

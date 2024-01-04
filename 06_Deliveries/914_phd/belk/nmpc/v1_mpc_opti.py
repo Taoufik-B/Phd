@@ -12,8 +12,8 @@ class KinematicBicycleModel:
       self.L = model['L']
       self.Lr = model['Lr']
       self.type = model['model_type']
-      self.x_bounds = model['x_bounds']
-      self.u_bounds = model['u_bounds']
+      self.x_bounds = model['bounds']['x']
+      self.u_bounds = model['bounds']['u']
       pass
 
    def f(self, st, con):
@@ -134,17 +134,6 @@ class NMPC:
       # ---- solve NLP              ------
       sol = self.opti.solve()   # actual solve
       return sol
-   # def compute_control(self):
-   #    for k in range(self.N):
-   #       t_predict = (mpciter+k)*dT
-   #       xref,yref,psiref,deltaref = trajectory.get_next_wp(t_predict)
-   #       psiref=np.clip(psiref, -pi,pi)
-   #       u_ref= trajectory.get_fd_wp(t_predict)
-   #       opti.set_value(P_x[:,k+1],[xref,yref,psiref,deltaref])
-   #       opti.set_value(P_u[:,k],u_ref)
-   #    # ---- solve NLP              ------
-   #    sol = opti.solve()   # actual solve
-   #    return sol
 
    def run_step(self,x0,u_opt,noise_level=0):
       ### shifting the solution
@@ -194,7 +183,10 @@ NMPC_externals = config.data['NMPC.externals']
 VEHICULE_model = config.data['NMPC.externals']['vehicle']
 PATH_data      = config.data['NMPC.environment']['trajectory']
 
-history  = History(NMPC_internals.N)
+N = NMPC_internals['N']
+dT = NMPC_internals['dT']
+
+history  = History(N)
 path     = ReferenceTrajectory(**PATH_data)
 dae      = KinematicBicycleModel(VEHICULE_model)
 nmpc     = NMPC(dae,path.x0,**NMPC_internals)
@@ -207,7 +199,7 @@ t0 = 0
 try:
    while (True):
       # get ref trajectory
-      p_x_ref,p_u_ref = path.get_tracking_wps(mpciter, NMPC_internals.N, NMPC_internals.dT)
+      p_x_ref,p_u_ref = path.get_tracking_wps(mpciter, N, dT)
       # compute mpc controls
       sol = nmpc.compute_control(p_u_ref, p_u_ref)
       # extract the solution
@@ -231,7 +223,7 @@ except Exception as e:
    print(e)   
 
 def plot_sim():
-   sim = simulate(path.path, history.p, history.x, history.u, t, NMPC_internals.dT, NMPC_internals.N,reference, False)
+   sim = simulate(path.path, history.p, history.x, history.u, t, dT, N,reference, False)
    sim.to_jshtml(30,True)
 
 

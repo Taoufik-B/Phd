@@ -54,7 +54,7 @@ class ReferenceTrajectory:
             cu = self.get_fd_wp(t_predict)
             p_x_ref = ca.vertcat(p_x_ref, cx)
             p_u_ref = ca.vertcat(p_u_ref, cu)
-        
+        return p_x_ref, p_u_ref
         
         
     def get_fd_wp(self, step):

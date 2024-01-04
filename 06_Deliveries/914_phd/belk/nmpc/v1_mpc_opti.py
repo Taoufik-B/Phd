@@ -27,8 +27,44 @@ model = 'fac'
 
 class Model:
    def __init__(self, model) -> None:
-      self.dae = model
+      self.L = model['L']
+      self.Lr = model['Lr']
+      self.type = model['model_type']
       pass
+
+   def _f(self, st, con):
+      psi,delta   =  st[2],st[3]
+      v,phi       =  con[0],con[1]
+      if model == 'cog':
+         beta  = atan(Lr/L*tan(delta))
+         dx    = cos(psi+beta)
+         dy    = sin(psi+beta)
+         dpsi  = tan(delta) * cos(beta)
+      
+      if model == 'fac':
+         dx    = cos(psi+delta)
+         dy    = sin(psi+delta)
+         dpsi  = sin(delta)
+      
+      if model == 'rac':
+         dx    = cos(psi)
+         dy    = sin(psi)
+         dpsi  = tan(delta)
+      
+      return vertcat(  v * dx
+                     , v * dy
+                     , v / L  * dpsi
+                     , phi
+                     )
+
+   def F(self,st,u):
+         # Runge-Kutta 4 integration
+      k1 = f(st         ,con)
+      k2 = f(st+dT/2*k1 ,con)
+      k3 = f(st+dT/2*k2 ,con)
+      k4 = f(st+dT*k3   ,con)
+      return st+ dT/6*(k1+2*k2+2*k3+k4)
+
 
 class NMPC:
    def __init__(self) -> None:

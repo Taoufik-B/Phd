@@ -59,7 +59,7 @@ class Model:
 
    def F(self,st,con):
          # Runge-Kutta 4 integration
-      k1 = f(st         ,con)
+      k1 = self._f(st         ,con)
       k2 = f(st+dT/2*k1 ,con)
       k3 = f(st+dT/2*k2 ,con)
       k4 = f(st+dT*k3   ,con)
@@ -107,7 +107,7 @@ class NMPC:
             'print_time':0,
          }
       ## set the solver
-      opti.solver("ipopt",opts) # set numerical backend    
+      self.opti.solver("ipopt",opts) # set numerical backend    
       pass
 
    def _set_objective(self):
@@ -151,10 +151,10 @@ class NMPC:
       pass
 
    def compute_control(self, p_x_ref, p_u_ref):
-      opti.set_value(P_x[:,k+1],[xref,yref,psiref,deltaref])
-      opti.set_value(P_u[:,k],u_ref)
+      self.opti.set_value(self.P_x[:,1:],p_x_ref)
+      self.opti.set_value(self.P_u,p_u_ref)
       # ---- solve NLP              ------
-      sol = opti.solve()   # actual solve
+      sol = self.opti.solve()   # actual solve
       return sol
    # def compute_control(self):
    #    for k in range(self.N):
@@ -206,21 +206,22 @@ class History:
 
 
 history = History(N)
+nmpc = NMPC()
 try:
    while (True):
       # compute mpc controls
-      sol = compute_control()
+      sol = nmpc.compute_control()
       # extract the solution
-      u_opt = sol.value(U)
-      X0 = sol.value(X)
+      u_opt = sol.value(nmpc.U)
+      X0 = sol.value(nmpc.X)
       # extract parameters
-      p_x=sol.value(P_x[:,1:])
-      p_u=sol.value(P_u)
+      p_x=sol.value(nmpc.P_x[:,1:])
+      p_u=sol.value(nmpc.P_u)
       p = vertcat(p_x,p_u)
       # keep the history
       history.add(X0,u_opt,p)
       # shift the solution and apply the first control
-      run_step(X0[:,0],u_opt)
+      nmpc.run_step(X0[:,0],u_opt)
       # stop condition
       distance_p = np.linalg.norm(trajectory.xs[0:2]-history.p[0:2,0,mpciter])
       if distance_p <0.5:

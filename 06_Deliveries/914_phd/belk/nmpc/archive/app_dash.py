@@ -7,7 +7,7 @@ df = px.data.gapminder()
 app = Dash(__name__)
 
 x_history = np.load('data/x_1704396094.8685088.npy')
-mydf = pd.DataFrame(x_history, )
+mydf = pd.DataFrame(x_history[:,0,:].reshape((-1,4)) , columns)
 
 
 app.layout = html.Div(

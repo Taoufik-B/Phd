@@ -2,10 +2,15 @@ import sys, glob, os
 
 # try:
 print(sys.version_info.major,
-    sys.version_info.minor)
-sys.path.append(glob.glob('dist/carla-*%d.%d-%s.egg' % (
-    sys.version_info.major,
     sys.version_info.minor,
+    os.name)
+
+print('dist/carla-*%d.%d-%s.egg' % (
+    sys.version_info.major,
+    7,
+    'win-amd64' if os.name == 'nt' else 'linux-x86_64'))
+sys.path.append(glob.glob('simu/dist/carla-*%d.7-%s.egg' % (
+    sys.version_info.major,
     'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
 print("Try Carla import", sys.path)
 # except IndexError:

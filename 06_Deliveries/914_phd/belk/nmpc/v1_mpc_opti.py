@@ -4,6 +4,7 @@ from casadi import *
 from time import time
 from utils.trajectory import ReferenceTrajectory
 from utils.visualization import simulate
+from simu.carla_simu import *
 
 
 
@@ -199,6 +200,13 @@ path     = ReferenceTrajectory(**PATH_data)
 dae      = KinematicBicycleModel(VEHICULE_model)
 nmpc     = NMPC(dae,path.x0,**NMPC_internals)
 
+### carla simulation
+carla_simu = Simulation()
+
+carla_simu.setup(nmpc,path)
+
+CARLA_simu = True
+
 ## run the environement
 reference = path.get_reference()
 t=[]
@@ -220,7 +228,10 @@ try:
       # keep the history
       history.add(X0,u_opt,p)
       # shift the solution and apply the first control
-      nmpc.run_step(X0[:,0],u_opt)
+      if CARLA_simu:
+         carla_simu.run_step()
+      else:
+         nmpc.run_step(X0[:,0],u_opt)
       # stop condition
       distance_p = np.linalg.norm(path.xs[0:2]-history.p[0:2,0,mpciter])
       if distance_p <0.5:
@@ -229,6 +240,8 @@ try:
       t.append(t0)
 except Exception as e:
    print(e)   
+finally:
+   carla_simu.teardown()   
 
 def plot_sim():
    sim = simulate(path.path, history.p, history.x, history.u, t, dT, N,reference, False)

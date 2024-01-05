@@ -207,7 +207,7 @@ nmpc     = NMPC(dae,path.x0,**NMPC_internals)
 ### carla simulation
 carla_simu = Simulation()
 
-carla_simu.setup(nmpc,path)
+carla_simu.setup(nmpc,path.x0)
 
 CARLA_simu = True
 

@@ -90,7 +90,7 @@ class Simulation:
         # apply control/ 
         # x is the state vector [x,y,psi,delta]
         # u is the control vector u[:,0]
-        teleport(self.ego_vehicle, X0[:,0]) 
+        teleport(self.ego_vehicle, X0[:]) 
         # get state
         current_state = get_vehicle_state(self.ego_vehicle)
 

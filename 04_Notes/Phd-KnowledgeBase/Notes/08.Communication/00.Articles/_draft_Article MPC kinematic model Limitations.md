@@ -1,4 +1,4 @@
-
+#article/mpc #00_draft/mpc
 
 1. **Abstract**
 
@@ -38,8 +38,17 @@
 
 - List all the sources cited in your paper.
 
-[]
+> [!link]
+> - https://www.sciencedirect.com/science/article/pii/S2405896319304185
+> 
 
+| Article Name                                                                                                    | Author(s)       | Summary                                                                                                                                                                                                                                                                                                                                                        | Link/DOI                                                                                                                                                               |
+| --------------------------------------------------------------------------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Experimental Validation of a Kinematic Bicycle Model Predictive Control with Lateral Acceleration Consideration | [Not Specified] | This article discusses the use of a kinematic bicycle model in an MPC formulation, emphasizing the impact of adaptive speed weight in the Optimal Control Problem (OCP) formulation for accurate trajectory tracking. Future research aims to address observed oscillations and their causes                                                                   | [Link](https://www.sciencedirect.com/science/article/pii/S2405896319304185)                                                                                            |
+| The kinematic bicycle model: A consistent model for planning feasible trajectories for autonomous vehicles?     | [Not Specified] | This study compares the kinematic bicycle model with a more complex realistic vehicle model for trajectory planning. It highlights the importance of limiting lateral acceleration for the consistency and feasibility of the kinematic bicycle model in motion planning. The study suggests further validation using MPC based on the kinematic bicycle model | Link​[](https://www.researchgate.net/publication/318810853_The_kinematic_bicycle_model_A_consistent_model_for_planning_feasible_trajectories_for_autonomous_vehicles)​ |
+| A New Trajectory Tracking Algorithm for Autonomous Vehicles Based on MPC                                        | [Not Specified] | The paper proposes a new trajectory tracking algorithm based on MPC, using the backward Euler integration method for the predictive model. It compares a 3-DOF kinematic bicycle model with a 9-DOF model                                                                                                                                                      | [Link](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8587769)                                                                                                           |
+| The kinematic bicycle model: A consistent model for planning feasible trajectories for autonomous vehicles?     | [Not Specified] | This article studies the kinematic bicycle model, often used for trajectory planning, and compares its results to a 9 degrees of freedom model. It discusses modeling errors and limitations of the kinematic bicycle model                                                                                                                                    | [Link](https://ieeexplore.ieee.org/document/7995816)                                                                                                                   |
+| Dynamic Vehicle Drifting With Nonlinear MPC and a Fused Kinematic-Dynamic Bicycle Model                         | [Not Specified] | The research presents a trajectory optimization framework that uses a fused kinematic-dynamic bicycle model for dynamic vehicle drifting maneuvers                                                                                                                                                                                                             | [Link](https://ieeexplore.ieee.org/document/9183161)                                                                                                                   |
 
 ----
 

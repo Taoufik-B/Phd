@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
+                "file": "Notes/02.Literature Analysis/System Architecture Review.md",
                 "mode": "source",
                 "source": false
               }
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
+                "file": "Notes/02.Literature Analysis/System Architecture Review.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
+                "file": "Notes/02.Literature Analysis/System Architecture Review.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/08.Communication/04.Logs/01.Daily/30122023.md"
+                "file": "Notes/02.Literature Analysis/System Architecture Review.md"
               }
             }
           },
@@ -178,8 +178,17 @@
   },
   "active": "8f29479fd7cc3391",
   "lastOpenFiles": [
-    "Notes/09.Wiki/Links.md",
+    "Notes/02.Literature Analysis/Other Relevant Topics.md",
+    "Notes/02.Literature Analysis/Master approach.md",
+    "Notes/02.Literature Analysis/Gap Identification.md",
+    "Notes/02.Literature Analysis/Core Concepts.md",
+    "Notes/02.Literature Analysis/Comparative Analysis.md",
+    "Notes/02.Literature Analysis/2. Literature review.md",
+    "Notes/02.Literature Analysis/00.Analysis/Topic Relevance.md",
+    "Notes/02.Literature Analysis/00.Analysis/Narrow the Research.md",
+    "Notes/02.Literature Analysis/00.Analysis/Analysis approach.md",
     "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
+    "Notes/09.Wiki/Links.md",
     "Notes/08.Communication/04.Logs/02.Weekly/Weekly Reflexion.md",
     "Notes/08.Communication/04.Logs/02.Weekly/23CW49.md",
     "Notes/08.Communication/04.Logs/01.Daily/231023.md",
@@ -187,7 +196,6 @@
     "Notes/07.Resources and Bibliography/02.Papers and Articles/Trajectory based lateral control A Reinforcement Learning case study.md",
     "Notes/07.Resources and Bibliography/02.Papers and Articles/Multi-Tree Guided Efficient Robot Motion Planning.md",
     "Notes/07.Resources and Bibliography/02.Papers and Articles/Learning Model Predictive Controllers with Real-Time Attention for Real-World Navigation.md",
-    "Notes/02.Literature Analysis/2. Literature review.md",
     "Notes/08.Communication/01.Events/Intelligence Artificielle Multimodale, Apprentissage Automatique et Applicationsles 6-7 décembre 2023.md",
     "Notes/09.Wiki/01.Definitions/Framework Synthesis.md",
     "Notes/00.Archive/Test note.md",
@@ -196,15 +204,7 @@
     "Notes/08.Communication/02.Reports/03.Posters and Workshops/Chatgpt_example.md",
     "Notes/08.Communication/02.Reports/02.Yearly/Yearly Report.md",
     "Notes/07.Resources and Bibliography/Bibliography.md",
-    "Notes/05.Experimental Results/Observations.md",
-    "Notes/08.Communication/05.MoM/Supervisor Meetings.md",
-    "Notes/09.Wiki/01.Definitions/Dynamic Job Shop Scheduling Problems (DJSSPs).md",
-    "Notes/09.Wiki/01.Definitions/IPOPT.md",
-    "Notes/08.Communication/_Home.md",
     "Untitled.canvas",
-    "Notes/08.Communication/01.Events/2nd International Conference on Frontiers in Academic Research ICFAR 2023.md",
-    "Notes/01.Project Overview/_02.Status/Timeline & Milestones.md",
-    "Notes/01.Project Overview/_02.Status/_Overall status.md",
     "_attachments/_screenshots/Pasted image 20231221092728.png",
     "_attachments/03_Learning/tsfs12/Lecture_notes/lecture_07_model_predictive_control_for_autonomous_vehicles.pdf",
     "_attachments/03_Learning/mpc-rl/mpcrl23-bib.pdf",

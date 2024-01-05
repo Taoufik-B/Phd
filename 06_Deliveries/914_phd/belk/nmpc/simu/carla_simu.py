@@ -96,6 +96,11 @@ class Simulation:
 
     def run_step(self, ref_trajectory):
         self._update_camera_bird_view()
+        # apply control
+
+        # get state
+
+        # update p0 and shift controls
         current_state = get_vehicle_state(self.ego_vehicle)
         # if current_state[0] == 0:
         #     current_state=ref_trajectory.x0
@@ -131,6 +136,43 @@ class Simulation:
         self.world.tick()
 
         return self.done
+    # def run_step(self, ref_trajectory):
+    #     self._update_camera_bird_view()
+    #     current_state = get_vehicle_state(self.ego_vehicle)
+    #     # if current_state[0] == 0:
+    #     #     current_state=ref_trajectory.x0
+        
+
+    #     target_state  = ref_trajectory.get_ref_points(self.iteration, self.N)
+
+    #     # print(current_state, target_state)
+    #     current_speed=get_speed(self.ego_vehicle)
+    #     self.controller.current_speed=current_speed
+    #     control, u = self.controller.compute_control(current_state, target_state, self.iteration)
+    #     # apply_control_to_vehicle(self.ego_vehicle, control)
+    #     # apply_target_speed(self.ego_vehicle)
+    #     # control = carla.VehicleAckermannControl(steer=control['steer'], steer_speed=control['steer_rate'], speed=control['speed'], acceleration=0.0, jerk=0.0)
+    #     # self.ego_vehicle.apply_ackermann_control(control)
+
+    #     ### TEST Teleport
+    #     # print(self.controller.X0[:,0])
+    #     teleport(self.ego_vehicle, self.controller.X0[:,1])
+
+    #     self.controller.run_step(u)
+
+    #     self.controls = np.vstack((self.controls, [control['speed'], control['steer']]))
+
+    #     self.vehicle_position=np.vstack((self.vehicle_position,current_state))
+
+    #     # print(self.ego_vehicle.get_physics_control())
+    #     # if np.linalg.norm(current_state[0:2]-target_state[0:2]) <= 5.0:
+    #     # if np.linalg.norm(current_state[0:1]-target_state[0,0:1]) <= 5.0:
+    #     if current_state[0]-target_state[0,0] <= 5.0 and current_state[1]-target_state[0,1] <= 5.0 :
+    #         self.iteration += 1
+    #         self.done = self.iteration == len(ref_trajectory.path)-self.N
+    #     self.world.tick()
+
+    #     return self.done
 
     def teardown(self):
         if self.settings:

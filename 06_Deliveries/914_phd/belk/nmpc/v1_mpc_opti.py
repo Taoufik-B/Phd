@@ -229,7 +229,7 @@ try:
       history.add(X0,u_opt,p)
       # shift the solution and apply the first control
       if CARLA_simu:
-         carla_simu.run_step()
+         carla_simu.run_step(X0[:,0],u_opt)
       else:
          nmpc.run_step(X0[:,0],u_opt)
       # stop condition

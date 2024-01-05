@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/04.Experimental Design/Initial config.md",
+                "file": "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
                 "mode": "source",
                 "source": false
               }
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/04.Experimental Design/Initial config.md",
+                "file": "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/04.Experimental Design/Initial config.md",
+                "file": "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/04.Experimental Design/Initial config.md"
+                "file": "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md"
               }
             }
           },
@@ -178,6 +178,26 @@
   },
   "active": "8f29479fd7cc3391",
   "lastOpenFiles": [
+    "Notes/06.Discussion and Conclusion/Recommendations.md",
+    "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
+    "Notes/08.Communication/00.Articles",
+    "Notes/06.Discussion and Conclusion/Key Insights.md",
+    "Notes/06.Discussion and Conclusion/Interpretation.md",
+    "Notes/06.Discussion and Conclusion/Implications & Relevance.md",
+    "Notes/06.Discussion and Conclusion/Future Directions.md",
+    "Notes/07.Resources and Bibliography/02.Papers and Articles/Learning Model Predictive Controllers with Real-Time Attention for Real-World Navigation.md",
+    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Phd_summary_Submission_Example_Workshop.md",
+    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Navigating AI.md",
+    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Chatgpt_example.md",
+    "Notes/02.Literature Analysis/2. Literature review.md",
+    "Notes/02.Literature Analysis/00.Analysis/Analysis approach.md",
+    "Notes/01.Project Overview/Accounts.md",
+    "Notes/01.Project Overview/_Home.md",
+    "Notes/01.Project Overview/_02.Status/Timeline & Milestones.md",
+    "Notes/04.Experimental Design/Use Case and Implementation Steps.md",
+    "Notes/04.Experimental Design/System Architecture.md",
+    "Notes/04.Experimental Design/Setup & Configuration.md",
+    "Notes/04.Experimental Design/Initial config.md",
     "Notes/04.Experimental Design/Hypothesis & Prediction.md",
     "Notes/04.Experimental Design/Data Management.md",
     "Notes/07.Resources and Bibliography/01.Resources/Miscellaneous Resources.md",
@@ -185,25 +205,6 @@
     "Notes/07.Resources and Bibliography/02.Papers and Articles/Trajectory based lateral control A Reinforcement Learning case study 1.md",
     "Notes/07.Resources and Bibliography/Bibliography.md",
     "Notes/07.Resources and Bibliography/02.Papers and Articles/Papers and Artciles.md",
-    "Notes/07.Resources and Bibliography/02.Papers and Articles/Multi-Tree Guided Efficient Robot Motion Planning.md",
-    "Notes/07.Resources and Bibliography/02.Papers and Articles/Learning Model Predictive Controllers with Real-Time Attention for Real-World Navigation 1.md",
-    "Notes/07.Resources and Bibliography/02.Papers and Articles/Learning Model Predictive Controllers with Real-Time Attention for Real-World Navigation.md",
-    "Notes/02.Literature Analysis/System Architecture Review.md",
-    "Notes/02.Literature Analysis/Other Relevant Topics.md",
-    "Notes/02.Literature Analysis/Master approach.md",
-    "Notes/02.Literature Analysis/Gap Identification.md",
-    "Notes/02.Literature Analysis/Core Concepts.md",
-    "Notes/02.Literature Analysis/Comparative Analysis.md",
-    "Notes/02.Literature Analysis/2. Literature review.md",
-    "Notes/02.Literature Analysis/00.Analysis/Topic Relevance.md",
-    "Notes/02.Literature Analysis/00.Analysis/Narrow the Research.md",
-    "Notes/02.Literature Analysis/00.Analysis/Analysis approach.md",
-    "Notes/08.Communication/04.Logs/01.Daily/30122023.md",
-    "Notes/09.Wiki/Links.md",
-    "Notes/08.Communication/04.Logs/02.Weekly/Weekly Reflexion.md",
-    "Notes/08.Communication/04.Logs/02.Weekly/23CW49.md",
-    "Notes/08.Communication/04.Logs/01.Daily/231023.md",
-    "Notes/01.Project Overview/_Home.md",
     "Untitled.canvas",
     "_attachments/_screenshots/Pasted image 20231221092728.png",
     "_attachments/03_Learning/tsfs12/Lecture_notes/lecture_07_model_predictive_control_for_autonomous_vehicles.pdf",
@@ -215,7 +216,6 @@
     "Notes/00.Archive",
     "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/python/RL_Highway/models/pre-trained/stats.json",
     "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/python/RL_Highway/models/pre-trained/last_model.tar",
-    "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/python/RL_Highway/models/pre-trained",
     "_attachments/03_Learning/tsfs12/Handin_Exercises/HI5-Learning/python/RL_Highway/figs/q_nn.png",
     "_attachments/03_Learning/tsfs12/Handin_Exercises/HI1-Discrete_path_planning/Maps/linkoping.png",
     "_attachments/03_Learning/MPC-and-MHE-implementation-in-MATLAB-using-Casadi/workshop_github/Python_Implementation/animation1701422953.6506076.gif",

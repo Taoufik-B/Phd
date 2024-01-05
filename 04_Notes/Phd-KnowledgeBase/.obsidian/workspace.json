@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/02.Literature Analysis/System Architecture Review.md",
+                "file": "Notes/04.Experimental Design/Initial config.md",
                 "mode": "source",
                 "source": false
               }
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/02.Literature Analysis/System Architecture Review.md",
+                "file": "Notes/04.Experimental Design/Initial config.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/02.Literature Analysis/System Architecture Review.md",
+                "file": "Notes/04.Experimental Design/Initial config.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/02.Literature Analysis/System Architecture Review.md"
+                "file": "Notes/04.Experimental Design/Initial config.md"
               }
             }
           },
@@ -178,6 +178,17 @@
   },
   "active": "8f29479fd7cc3391",
   "lastOpenFiles": [
+    "Notes/04.Experimental Design/Hypothesis & Prediction.md",
+    "Notes/04.Experimental Design/Data Management.md",
+    "Notes/07.Resources and Bibliography/01.Resources/Miscellaneous Resources.md",
+    "Notes/07.Resources and Bibliography/01.Resources/Resources.md",
+    "Notes/07.Resources and Bibliography/02.Papers and Articles/Trajectory based lateral control A Reinforcement Learning case study 1.md",
+    "Notes/07.Resources and Bibliography/Bibliography.md",
+    "Notes/07.Resources and Bibliography/02.Papers and Articles/Papers and Artciles.md",
+    "Notes/07.Resources and Bibliography/02.Papers and Articles/Multi-Tree Guided Efficient Robot Motion Planning.md",
+    "Notes/07.Resources and Bibliography/02.Papers and Articles/Learning Model Predictive Controllers with Real-Time Attention for Real-World Navigation 1.md",
+    "Notes/07.Resources and Bibliography/02.Papers and Articles/Learning Model Predictive Controllers with Real-Time Attention for Real-World Navigation.md",
+    "Notes/02.Literature Analysis/System Architecture Review.md",
     "Notes/02.Literature Analysis/Other Relevant Topics.md",
     "Notes/02.Literature Analysis/Master approach.md",
     "Notes/02.Literature Analysis/Gap Identification.md",
@@ -193,17 +204,6 @@
     "Notes/08.Communication/04.Logs/02.Weekly/23CW49.md",
     "Notes/08.Communication/04.Logs/01.Daily/231023.md",
     "Notes/01.Project Overview/_Home.md",
-    "Notes/07.Resources and Bibliography/02.Papers and Articles/Trajectory based lateral control A Reinforcement Learning case study.md",
-    "Notes/07.Resources and Bibliography/02.Papers and Articles/Multi-Tree Guided Efficient Robot Motion Planning.md",
-    "Notes/07.Resources and Bibliography/02.Papers and Articles/Learning Model Predictive Controllers with Real-Time Attention for Real-World Navigation.md",
-    "Notes/08.Communication/01.Events/Intelligence Artificielle Multimodale, Apprentissage Automatique et Applicationsles 6-7 décembre 2023.md",
-    "Notes/09.Wiki/01.Definitions/Framework Synthesis.md",
-    "Notes/00.Archive/Test note.md",
-    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Phd_summary_Submission_Example_Workshop.md",
-    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Navigating AI.md",
-    "Notes/08.Communication/02.Reports/03.Posters and Workshops/Chatgpt_example.md",
-    "Notes/08.Communication/02.Reports/02.Yearly/Yearly Report.md",
-    "Notes/07.Resources and Bibliography/Bibliography.md",
     "Untitled.canvas",
     "_attachments/_screenshots/Pasted image 20231221092728.png",
     "_attachments/03_Learning/tsfs12/Lecture_notes/lecture_07_model_predictive_control_for_autonomous_vehicles.pdf",

@@ -1,7 +1,7 @@
 import sys, glob, os
 
 try:
-    sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
+    sys.path.append(glob.glob('simu/dist/carla-*%d.%d-%s.egg' % (
         sys.version_info.major,
         sys.version_info.minor,
         'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
@@ -11,6 +11,10 @@ except IndexError:
 
 import carla
 import numpy as np
+from carla_utils import *
+
+
+CARLA_SERVER_IP = 'localhost'
 
 
 class Simulation:
@@ -135,5 +139,5 @@ class Simulation:
             self.settings = None
         for actor in self.actor_list:
             actor.destroy()
-        np.save('vp.npy', self.vehicle_position)
-        np.save('controls.npy', self.controls)
+        np.save('data/vp.npy', self.vehicle_position)
+        np.save('data/controls.npy', self.controls)

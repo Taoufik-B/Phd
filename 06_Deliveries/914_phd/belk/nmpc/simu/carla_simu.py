@@ -1,18 +1,20 @@
 import sys, glob, os
 
-try:
-    sys.path.append(glob.glob('dist/carla-*%d.%d-%s.egg' % (
-        sys.version_info.major,
-        sys.version_info.minor,
-        'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
-    print("Try Carla import", sys.path)
-except IndexError:
-    pass
+# try:
+print(sys.version_info.major,
+    sys.version_info.minor)
+sys.path.append(glob.glob('dist/carla-*%d.%d-%s.egg' % (
+    sys.version_info.major,
+    sys.version_info.minor,
+    'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
+print("Try Carla import", sys.path)
+# except IndexError:
+#     pass
 
 
 import carla
 import numpy as np
-from carla_utils import *
+from carla_utils import *   
 
 
 CARLA_SERVER_IP = 'localhost'

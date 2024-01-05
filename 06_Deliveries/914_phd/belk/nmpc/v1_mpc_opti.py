@@ -4,7 +4,7 @@ from casadi import *
 from time import time
 from utils.trajectory import ReferenceTrajectory
 from utils.visualization import simulate
-from simu.carla_simu import *
+from simu.carla_simu import Simulation
 
 
 

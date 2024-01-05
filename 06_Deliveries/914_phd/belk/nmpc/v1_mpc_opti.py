@@ -251,7 +251,7 @@ def plot_sim():
    sim = simulate(path.path, history.p, history.x, history.u, t, dT, N,reference, False)
    # sim.to_jshtml(30,True)
 
-plot_sim()
+# plot_sim()
 
 # ---- post-processing        ------
 # from pylab import plot, step, figure, legend, show, spy, grid

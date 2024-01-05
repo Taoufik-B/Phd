@@ -143,14 +143,18 @@ class NMPC:
       # ---- solve NLP              ------
       sol = self.opti.solve()   # actual solve
       return sol
+   
+   def update_mpc(self, x_next, u_opt):
+      self.opti.set_value(self.P_x[:,0],x_next)
+      self.opti.set_value(self.P_u[:,:-1],u_opt[:,1:])
 
    def run_step(self,x0,u_opt,noise_level=0):
       ### shifting the solution
       x_next = self._F(x0,u_opt[:,0])
       # if mpciter % 10 == 0:
       #    x_next = x_next + noise_level*np.random.random_sample((4,))
-      self.opti.set_value(self.P_x[:,0],x_next)
-      self.opti.set_value(self.P_u[:,:-1],u_opt[:,1:])
+      self.update_mpc(x_next, u_opt)
+
 
 class History:
    def __init__(self, N) -> None:

@@ -94,10 +94,12 @@ class Simulation:
 
         pass
 
-    def run_step(self, ref_trajectory):
+    def run_step(self, X0,u):
         self._update_camera_bird_view()
-        # apply control
-
+        # apply control/ 
+        # x is the state vector [x,y,psi,delta]
+        # u is the control vector u[:,0]
+        teleport(self.ego_vehicle, X0[]) 
         # get state
 
         # update p0 and shift controls

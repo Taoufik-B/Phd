@@ -90,7 +90,14 @@ class Simulation:
         # apply control/ 
         # x is the state vector [x,y,psi,delta]
         # u is the control vector u[:,0]
-        teleport(self.ego_vehicle, X0) 
+        #TEST Teleport
+        # teleport(self.ego_vehicle, X0)
+        #TEST Ackermann
+        v=u[0,0]
+        phi=u[1,0]
+        delta=X0[3]
+        control = carla.VehicleAckermannControl(steer=delta, steer_speed=control['steer_rate'], speed=control['speed'], acceleration=0.0, jerk=0.0)
+        self.ego_vehicle.apply_ackermann_control(control)
         # get state
         current_state = get_vehicle_state(self.ego_vehicle)
 

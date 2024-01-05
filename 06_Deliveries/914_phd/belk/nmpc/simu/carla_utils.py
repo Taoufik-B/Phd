@@ -100,7 +100,7 @@ def teleport(vehicle, to_state):
     vehicle_t = vehicle.get_transform()
     vehicle_t.location.x = float(to_state[0])
     vehicle_t.location.y = float(to_state[1])
-    # vehicle_t.rotation.yaw = np.rad2deg(float(to_state[2]))
+    vehicle_t.rotation.yaw = np.rad2deg(float(to_state[2]))
     print(' Teleporting to : ', vehicle_t)
     vehicle.set_transform(vehicle_t)
 

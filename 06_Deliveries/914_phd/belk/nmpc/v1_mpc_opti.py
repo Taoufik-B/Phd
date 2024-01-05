@@ -247,8 +247,8 @@ except Exception as e:
 finally:
    carla_simu.teardown()   
 
-def plot_sim():
-   sim = simulate(path.path, history.p, history.x, history.u, t, dT, N,reference, False)
+def plot_sim(save=False):
+   sim = simulate(path.path, history.p, history.x, history.u, t, dT, N,reference, save)
    # sim.to_jshtml(30,True)
 
 # plot_sim()

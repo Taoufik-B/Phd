@@ -1,25 +1,8 @@
 import sys, glob, os
 
-# try:
-print(sys.version_info.major,
-    sys.version_info.minor,
-    os.name)
-
-print('dist/carla-*%d.%d-%s.egg' % (
-    sys.version_info.major,
-    7,
-    'win-amd64' if os.name == 'nt' else 'linux-x86_64'))
-sys.path.append(glob.glob('simu/dist/carla-*%d.7-%s.egg' % (
-    sys.version_info.major,
-    'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
-print("Try Carla import", sys.path)
-# except IndexError:
-#     pass
-
-
 import carla
 import numpy as np
-from carla_utils import *   
+from .carla_utils import *   
 
 
 CARLA_SERVER_IP = 'localhost'
@@ -46,8 +29,8 @@ class Simulation:
         client = carla.Client(CARLA_SERVER_IP, 2000)
         client.set_timeout(10.0)
         # print(client.get_available_maps())
-        self.world = client.get_world()
-        # self.world = client.load_world(self.map_name)
+        # self.world = client.get_world()
+        self.world = client.load_world(self.map_name)
 
         if sync:
             self.settings = self.world.get_settings()

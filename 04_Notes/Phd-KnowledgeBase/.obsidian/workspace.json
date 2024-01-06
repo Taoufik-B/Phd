@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
+                "file": "Notes/04.Experimental Design/MPC Scenarios.md",
                 "mode": "source",
                 "source": false
               }
@@ -66,8 +66,7 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -87,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
+                "file": "Notes/04.Experimental Design/MPC Scenarios.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
+                "file": "Notes/04.Experimental Design/MPC Scenarios.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -127,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md"
+                "file": "Notes/04.Experimental Design/MPC Scenarios.md"
               }
             }
           },
@@ -177,11 +176,15 @@
       "obsidian-importer:Open Importer": false
     }
   },
-  "active": "8a7c4148f0d0635d",
+  "active": "8f29479fd7cc3391",
   "lastOpenFiles": [
+    "Notes/10.Courses/02.Control_Dynamics/Learn MPC.md",
+    "Notes/10.Courses/02.Control_Dynamics/Learn MPC.Methods.md",
+    "Notes/04.Experimental Design/MPC Scenarios.md",
+    "Notes/04.Experimental Design/Use Case and Implementation Steps.md",
+    "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
     "Notes/00.Archive/Tasks Plugin - Review and check your Statuses 2023-12-02 22-57-35.md",
     "Notes/00.Archive/Test note.md",
-    "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
     "Notes/06.Discussion and Conclusion/Recommendations.md",
     "Notes/08.Communication/00.Articles",
     "Notes/06.Discussion and Conclusion/Key Insights.md",
@@ -197,15 +200,11 @@
     "Notes/01.Project Overview/Accounts.md",
     "Notes/01.Project Overview/_Home.md",
     "Notes/01.Project Overview/_02.Status/Timeline & Milestones.md",
-    "Notes/04.Experimental Design/Use Case and Implementation Steps.md",
     "Notes/04.Experimental Design/System Architecture.md",
     "Notes/04.Experimental Design/Setup & Configuration.md",
     "Notes/04.Experimental Design/Initial config.md",
     "Notes/04.Experimental Design/Hypothesis & Prediction.md",
     "Notes/04.Experimental Design/Data Management.md",
-    "Notes/07.Resources and Bibliography/01.Resources/Miscellaneous Resources.md",
-    "Notes/07.Resources and Bibliography/01.Resources/Resources.md",
-    "Notes/07.Resources and Bibliography/02.Papers and Articles/Trajectory based lateral control A Reinforcement Learning case study 1.md",
     "Untitled.canvas",
     "_attachments/_screenshots/Pasted image 20231221092728.png",
     "_attachments/03_Learning/tsfs12/Lecture_notes/lecture_07_model_predictive_control_for_autonomous_vehicles.pdf",

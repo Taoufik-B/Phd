@@ -18,8 +18,17 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "ee20edfeab99b129",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {}
+            }
           }
         ],
+        "currentTab": 1,
         "stacked": true
       }
     ],
@@ -86,7 +95,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/04.Experimental Design/MPC Scenarios.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +111,6 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/04.Experimental Design/MPC Scenarios.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,9 +132,7 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "Notes/04.Experimental Design/MPC Scenarios.md"
-              }
+              "state": {}
             }
           },
           {
@@ -155,7 +160,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -176,11 +181,11 @@
       "obsidian-importer:Open Importer": false
     }
   },
-  "active": "8f29479fd7cc3391",
+  "active": "ee20edfeab99b129",
   "lastOpenFiles": [
+    "Notes/04.Experimental Design/MPC Scenarios.md",
     "Notes/10.Courses/02.Control_Dynamics/Learn MPC.md",
     "Notes/10.Courses/02.Control_Dynamics/Learn MPC.Methods.md",
-    "Notes/04.Experimental Design/MPC Scenarios.md",
     "Notes/04.Experimental Design/Use Case and Implementation Steps.md",
     "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
     "Notes/00.Archive/Tasks Plugin - Review and check your Statuses 2023-12-02 22-57-35.md",

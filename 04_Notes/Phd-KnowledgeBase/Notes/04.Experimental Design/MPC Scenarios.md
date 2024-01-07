@@ -48,4 +48,4 @@ Configuration example
 
 - [ ] Finalize the visualization
 	- [ ] What are the elements that needs to be plotted
-	- [ ] 
+- [ ] https://github.com/MRHan-426/MPC-BicycleModel/tree/master

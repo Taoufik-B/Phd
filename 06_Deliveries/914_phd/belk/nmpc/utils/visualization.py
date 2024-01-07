@@ -190,8 +190,8 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         repeat=True
     )
 
-    plt.title(scenario)
-    plt.legend()
+    plt.title(scenario, loc="upper center")
+    # plt.legend()
 
 
     if save == True:
@@ -221,7 +221,7 @@ if __name__ == '__main__':
             ,step_horizon=dT
             ,N=N
             ,reference=trajectory.get_reference()
-            ,scenario=scenario
+            ,scenario='Test Scenario'
             ,save=False
             )
     pass

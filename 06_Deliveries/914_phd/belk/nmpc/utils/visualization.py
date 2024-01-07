@@ -9,7 +9,7 @@ import logging
 log_level = logging.NOTSET
 
 def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, reference, scenario, save=False):
-    def create_triangle(state=[0,0,0], h=0.5, w=0.25, update=False):
+    def create_triangle(state=[0,0,0], h=3, w=1.25, update=False):
         x, y, th = state
         triangle = np.array([
             [h, 0   ],
@@ -78,9 +78,9 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
             phi_p.set_data(np.array([]), np.array([]))
 
 
-        x_new = np.hstack((path_p.get_xdata(), x))
-        y_new = np.hstack((path_p.get_ydata(), y))
-        path_p.set_data(x_new, y_new)
+        # x_new = np.hstack((path_p.get_xdata(), x))
+        # y_new = np.hstack((path_p.get_ydata(), y))
+        # path_p.set_data(x_new, y_new)
 
         # update horizon
         x_new = cat_states[0, :, i]
@@ -147,7 +147,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     path_p, = axs["path"].plot([], [], 'k', linewidth=2)
     #   horizon
     horizon_p, = axs["path"].plot([], [], '-gs', alpha=0.4)
-    # params
+    # params tracking trajectory
     params_p, = axs["path"].plot([], [], '-rs', alpha=0.2)
 
     #controls

@@ -164,8 +164,10 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     #controls
     velocity_p, = axs["speed"].step([], [], '--b', alpha=0.8)
     vref_p, = axs["speed"].step([], [], '--r', alpha=0.4)
-    delta_p, = axs["delta"].plot([], [], 'b', alpha=0.8)
-    phi_p, = axs["delta"].step([], [], '--k', alpha=0.4)
+
+    delta_p, = axs["delta"].plot([], [], 'b', alpha=0.8, label="Vehicle Steering Angle (rad)")
+    phi_p, = axs["delta"].step([], [], '--k', alpha=0.4, label="Vehicle Steering rate (rad/s)")
+    axs["delta"].legend(loc="upper right")
 
     yaw_v_p, = axs["yaw"].plot([], [], 'b', alpha=0.8, label="Vehicle Heading Angle")
     yaw_ref_p, = axs["yaw"].plot([], [], '--k', alpha=0.4, label="Reference Heading Angle")

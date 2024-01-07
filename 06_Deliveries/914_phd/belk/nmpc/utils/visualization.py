@@ -164,11 +164,11 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         axs[ax].spines['top'].set_visible(False)
     
     
-    path_p, = axs["path"].plot([], [], 'k', linewidth=2)
+    path_p, = axs["path"].plot([], [], 'k', linewidth=2, label="Reference path")
     #   horizon
-    horizon_p, = axs["path"].plot([], [], 'x-g', alpha=0.4)
+    horizon_p, = axs["path"].plot([], [], 'x-g', alpha=0.4, label="MPC horizon")
     # params tracking trajectory
-    params_p, = axs["path"].plot([], [], 'x-',color='orange', alpha=0.6)
+    params_p, = axs["path"].plot([], [], 'x-',color='orange', alpha=0.6, label='Parametrized trajectory')
 
     #controls
     velocity_p, = axs["speed"].step([], [], '--b', alpha=0.8, label="Vehicle Velocity")
@@ -197,12 +197,13 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     trajectory_plot, = axs["path"].plot(trajectory[:,0], trajectory[:,1], 'ob', alpha=0.3)
     #   current_state
     current_triangle = create_triangle(reference[:3])
-    current_state = axs["path"].fill(current_triangle[:, 0], current_triangle[:, 1], color='m')
+    current_state = axs["path"].fill(current_triangle[:, 0], current_triangle[:, 1], color='m', label='Vehicle position')
     current_state = current_state[0]
     #   target_state
     target_triangle = create_triangle(reference[4:-1])
-    target_state = axs["path"].fill(target_triangle[:, 0], target_triangle[:, 1], color='b')
+    target_state = axs["path"].fill(target_triangle[:, 0], target_triangle[:, 1], color='b', label='Target vehicle position')
     target_state = target_state[0]
+    axs["path"].legend(loc="upper right")
 
     sim = animation.FuncAnimation(
         fig=fig,

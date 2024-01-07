@@ -162,7 +162,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     #   horizon
     horizon_p, = axs["path"].plot([], [], 'x-g', alpha=0.4)
     # params tracking trajectory
-    params_p, = axs["path"].plot([], [], 'x-',color='orange', alpha=0.2)
+    params_p, = axs["path"].plot([], [], 'x-',color='orange', alpha=0.6)
 
     #controls
     velocity_p, = axs["speed"].step([], [], '--b', alpha=0.8, label="Vehicle Velocity")
@@ -178,7 +178,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     axs["yaw"].legend(loc="upper right")
 
     velocity_p.axes.set_xlim(xmin=0, xmax=len(t))
-    velocity_p.axes.set_ylim(ymin=15, ymax=25)
+    velocity_p.axes.set_ylim(ymin=0, ymax=25)
     velocity_p.axes.set_autoscaley_on(True)
     axs["delta"].axes.set_xlim(xmin=0, xmax=len(t))
     axs["delta"].axes.set_ylim(ymin=-1,ymax=1)

@@ -145,10 +145,14 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     axs["path"].set_title("Path")
     axs["path"].set_xlabel("x position (m)")
     axs["path"].set_ylabel("y position (m)")
-    #   path
+    #   Heading angle
     axs["yaw"].set_title("Heading angle")
     axs["yaw"].set_xlabel("frames")
     axs["yaw"].set_ylabel("psi angle (rad)")
+    #   Heading angle
+    axs["delta"].set_title("Steering angle")
+    axs["delta"].set_xlabel("frames")
+    axs["delta"].set_ylabel("delta angle (rad)")
     
     
     path_p, = axs["path"].plot([], [], 'k', linewidth=2)
@@ -163,8 +167,9 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     delta_p, = axs["delta"].plot([], [], 'b', alpha=0.8)
     phi_p, = axs["delta"].step([], [], '--k', alpha=0.4)
 
-    yaw_v_p, = axs["yaw"].plot([], [], 'b', alpha=0.8)
-    yaw_ref_p, = axs["yaw"].plot([], [], '--r', alpha=0.4)
+    yaw_v_p, = axs["yaw"].plot([], [], 'b', alpha=0.8, label="Vehicle Heading Angle")
+    yaw_ref_p, = axs["yaw"].plot([], [], '--k', alpha=0.4, label="Reference Heading Angle")
+    axs["yaw"].legend(loc="upper right")
 
     velocity_p.axes.set_xlim(xmin=0, xmax=len(t))
     velocity_p.axes.set_ylim(ymin=15, ymax=25)

@@ -145,6 +145,10 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     axs["path"].set_title("Path")
     axs["path"].set_xlabel("x position (m)")
     axs["path"].set_ylabel("y position (m)")
+    #   path
+    axs["yaw"].set_title("Heading angle")
+    axs["yaw"].set_xlabel("frames")
+    axs["yaw"].set_ylabel("psi angle (rad)")
     
     
     path_p, = axs["path"].plot([], [], 'k', linewidth=2)

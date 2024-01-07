@@ -56,7 +56,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         yawp = params[2, 0, i]
 
 
-        if i == t:
+        if i == len(t):
             v = cat_controls[0,0,i-1]
             phi = cat_controls[1,0,i-1]
         else:
@@ -160,13 +160,13 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     yaw_v_p, = axs["yaw"].plot([], [], 'b', alpha=0.8)
     yaw_ref_p, = axs["yaw"].plot([], [], '--r', alpha=0.4)
 
-    velocity_p.axes.set_xlim(xmin=0, xmax=t)
+    velocity_p.axes.set_xlim(xmin=0, xmax=len(t))
     velocity_p.axes.set_ylim(ymin=15, ymax=25)
-    axs["delta"].axes.set_xlim(xmin=0, xmax=t)
+    axs["delta"].axes.set_xlim(xmin=0, xmax=len(t))
     axs["delta"].axes.set_ylim(ymin=-1,ymax=1)
-    yaw_ref_p.axes.set_xlim(xmin=0, xmax=t)
+    yaw_ref_p.axes.set_xlim(xmin=0, xmax=len(t))
     yaw_ref_p.axes.set_ylim(ymin=-4, ymax=4)
-    yaw_v_p.axes.set_xlim(xmin=0, xmax=t)
+    yaw_v_p.axes.set_xlim(xmin=0, xmax=len(t))
     yaw_v_p.axes.set_ylim(ymin=-4, ymax=4)
 
 
@@ -184,7 +184,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         fig=fig,
         func=animate,
         init_func=init,
-        frames=t,
+        frames=len(t),
         interval=step_horizon,
         blit=True,
         repeat=True
@@ -217,7 +217,7 @@ if __name__ == '__main__':
             ,params=p
             ,cat_states=x
             ,cat_controls=u
-            ,t=77
+            ,t=p[0,0,:]
             ,step_horizon=dT
             ,N=N
             ,reference=trajectory.get_reference()

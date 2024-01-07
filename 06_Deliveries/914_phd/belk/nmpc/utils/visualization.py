@@ -160,7 +160,6 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     # for direction in ["left", "right", "bottom", "top"]:
     # hides borders
     for ax in axs:
-        print(ax)
         axs[ax].spines['right'].set_visible(False)
         axs[ax].spines['top'].set_visible(False)
     

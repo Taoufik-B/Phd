@@ -136,7 +136,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     fig = plt.figure(figsize=(6,6), layout='constrained')
     axs = fig.subplot_mosaic([["speed", "path"],
                               ["delta", "path"],
-                              ["yaw", "path"]])
+                              ["yaw", ""]])
 
     
     #   path
@@ -162,6 +162,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
 
     velocity_p.axes.set_xlim(xmin=0, xmax=len(t))
     velocity_p.axes.set_ylim(ymin=15, ymax=25)
+    velocity_p.axes.set_autoscaley_on(True)
     axs["delta"].axes.set_xlim(xmin=0, xmax=len(t))
     axs["delta"].axes.set_ylim(ymin=-1,ymax=1)
     yaw_ref_p.axes.set_xlim(xmin=0, xmax=len(t))

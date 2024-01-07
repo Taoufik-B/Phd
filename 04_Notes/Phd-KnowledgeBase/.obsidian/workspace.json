@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/04.Experimental Design/MPC Scenarios.md",
+                "file": "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
                 "mode": "source",
                 "source": false
               }
@@ -86,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/04.Experimental Design/MPC Scenarios.md",
+                "file": "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/04.Experimental Design/MPC Scenarios.md",
+                "file": "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/04.Experimental Design/MPC Scenarios.md"
+                "file": "Notes/08.Communication/00.Articles/_draft_Article MPC kinematic model Limitations.md"
               }
             }
           },

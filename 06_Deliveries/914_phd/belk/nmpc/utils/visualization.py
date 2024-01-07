@@ -200,9 +200,10 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     plt.savefig(f'./figures/fig_{scenario}.png')
 
 if __name__ == '__main__':
-    scenario = '00#003'
+    scenario = 'sc_00#003.npy'
+    path = 'data'
     # plot title
-    x = np.load('data/x_'+scenario)
-    u = np.load('data/u_'+scenario)
-    p = np.load('data/p_'+scenario)
+    x = np.load(f'{path}/x_{scenario}')
+    u = np.load(f'{path}/u_{scenario}')
+    p = np.load(f'{path}/p_{scenario}')
     pass

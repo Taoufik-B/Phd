@@ -45,7 +45,7 @@ Configuration example
 	wps_file: ./maps/carla_town05_02012024.wps #wps file name env_mapname_date.wps (npy form)
 	wps_factor: 4 # reduce the total number of waypoints by a facotr of 4
 	run_environment: Simulation # or Carla simulation```
-	
 
-
-``
+- [ ] Finalize the visualization
+	- [ ] What are the elements that needs to be plotted
+	- [ ] 

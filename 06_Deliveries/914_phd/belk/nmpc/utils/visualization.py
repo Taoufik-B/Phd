@@ -190,9 +190,14 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         repeat=True
     )
 
+    plt.title(scenario)
+
 
     if save == True:
         print("Saving Annimation for Scenario %s" % scenario)
         sim.save(f'./figures/fig_{scenario}.gif', writer='ffmpeg', fps=30)
     plt.savefig(f'./figures/fig_{scenario}.png')
 
+if __name__ == '__main__':
+    # plot title
+    pass

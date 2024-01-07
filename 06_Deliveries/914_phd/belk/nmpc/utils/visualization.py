@@ -134,9 +134,11 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
 
     # create figure and axes
     fig = plt.figure(figsize=(6,6), layout='constrained')
-    axs = fig.subplot_mosaic([["speed", "path"],
-                              ["delta", "path"],
-                              ["yaw", ""]])
+    axs = fig.subplot_mosaic([
+                            ["yaw", "path"],
+                            ["delta", "path"],
+                            ["speed", ""]
+                            ])
 
     
     #   path
@@ -186,7 +188,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         func=animate,
         init_func=init,
         frames=len(t),
-        interval=step_horizon*100,
+        interval=100,
         blit=True,
         repeat=True
     )

@@ -56,7 +56,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         yawp = params[2, 0, i]
 
 
-        if i == len(t):
+        if i == t:
             v = cat_controls[0,0,i-1]
             phi = cat_controls[1,0,i-1]
         else:
@@ -160,13 +160,13 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     yaw_v_p, = axs["yaw"].plot([], [], 'b', alpha=0.8)
     yaw_ref_p, = axs["yaw"].plot([], [], '--r', alpha=0.4)
 
-    velocity_p.axes.set_xlim(xmin=0, xmax=len(t))
+    velocity_p.axes.set_xlim(xmin=0, xmax=t)
     velocity_p.axes.set_ylim(ymin=15, ymax=25)
-    axs["delta"].axes.set_xlim(xmin=0, xmax=len(t))
+    axs["delta"].axes.set_xlim(xmin=0, xmax=t)
     axs["delta"].axes.set_ylim(ymin=-1,ymax=1)
-    yaw_ref_p.axes.set_xlim(xmin=0, xmax=len(t))
+    yaw_ref_p.axes.set_xlim(xmin=0, xmax=t)
     yaw_ref_p.axes.set_ylim(ymin=-4, ymax=4)
-    yaw_v_p.axes.set_xlim(xmin=0, xmax=len(t))
+    yaw_v_p.axes.set_xlim(xmin=0, xmax=t)
     yaw_v_p.axes.set_ylim(ymin=-4, ymax=4)
 
 
@@ -184,7 +184,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         fig=fig,
         func=animate,
         init_func=init,
-        frames=len(t),
+        frames=t,
         interval=step_horizon,
         blit=True,
         repeat=True
@@ -198,27 +198,30 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         print("Saving Annimation for Scenario %s" % scenario)
         sim.save(f'./figures/fig_{scenario}.gif', writer='ffmpeg', fps=30)
         plt.savefig(f'./figures/fig_{scenario}.png')
+    else:
+        plt.show()
 
 if __name__ == '__main__':
     from trajectory import ReferenceTrajectory
-    scenario = 'sc_00#003.npy'
+    scenario = 'sc_00#003'
     path = 'data'
     # plot title
-    x = np.load(f'{path}/x_{scenario}')
-    u = np.load(f'{path}/u_{scenario}')
-    p = np.load(f'{path}/p_{scenario}')
+    x = np.load(f'{path}/x_{scenario}.npy')
+    u = np.load(f'{path}/u_{scenario}.npy')
+    p = np.load(f'{path}/p_{scenario}.npy')
     trajectory = ReferenceTrajectory(f'maps/carla_town05_02012024.wps', 4)
     N = 5
     dT = 0.5
+    print((p.shape))
     simulate( trajectory=trajectory.path
             ,params=p
             ,cat_states=x
             ,cat_controls=u
-            ,t=t
+            ,t=77
             ,step_horizon=dT
             ,N=N
-            ,reference=reference
-            ,scenario=SCENARIO_id
-            ,save=True
+            ,reference=trajectory.get_reference()
+            ,scenario=scenario
+            ,save=False
             )
     pass

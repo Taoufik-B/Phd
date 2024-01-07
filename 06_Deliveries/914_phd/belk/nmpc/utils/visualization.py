@@ -203,7 +203,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     target_triangle = create_triangle(reference[4:-1])
     target_state = axs["path"].fill(target_triangle[:, 0], target_triangle[:, 1], color='b', label='Target vehicle position')
     target_state = target_state[0]
-    axs["path"].legend(loc="upper right")
+    axs["path"].legend(loc="center right")
 
     sim = animation.FuncAnimation(
         fig=fig,

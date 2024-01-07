@@ -1,5 +1,7 @@
 
 import yaml
+import argparse
+import logging
 from casadi import *
 from time import time
 from utils.trajectory import ReferenceTrajectory
@@ -61,12 +63,12 @@ class NMPC:
       n_controls=2
       # ---- decision variables ---------
       #states
-      self.X = self.opti.variable(n_states,N+1) # state trajectory
+      self.X = self.opti.variable(n_states,self.N+1) # state trajectory
       #controls
-      self.U = self.opti.variable(n_controls,N)   # control trajectory (throttle)
+      self.U = self.opti.variable(n_controls,self.N)   # control trajectory (throttle)
       #parameters
-      self.P_x = self.opti.parameter(n_states,N+1)     
-      self.P_u = self.opti.parameter(n_controls,N)
+      self.P_x = self.opti.parameter(n_states,self.N+1)     
+      self.P_u = self.opti.parameter(n_controls,self.N)
 
       # Objective
       self._set_objective()
@@ -155,7 +157,6 @@ class NMPC:
       #    x_next = x_next + noise_level*np.random.random_sample((4,))
       self.update_mpc(x_next, u_opt)
 
-
 class History:
    def __init__(self, N) -> None:
       ## History controls and states
@@ -170,15 +171,15 @@ class History:
       self.p = np.dstack((self.p,p))
 
    # TODO: find a way to load the history and save the history from a folder
-   def load(self):
-      self.x = np.load('data/x_'+str(time()))
-      self.u = np.load('data/u_'+str(time()))
-      self.p = np.load('data/p_'+str(time()))
+   def load(self, scenario):
+      self.x = np.load('data/x_'+scenario)
+      self.u = np.load('data/u_'+scenario)
+      self.p = np.load('data/p_'+scenario)
 
-   def save(self):
-      np.save('data/x_'+str(time()), self.x)
-      np.save('data/u_'+str(time()), self.u)
-      np.save('data/p_'+str(time()), self.p)
+   def save(self,scenario):
+      np.save('data/x_'+scenario, self.x)
+      np.save('data/u_'+scenario, self.u)
+      np.save('data/p_'+scenario, self.p)
 
 class Config:
    def __init__(self, path) -> None:
@@ -189,68 +190,158 @@ class Config:
     with open(self.path) as f:
         return yaml.load(f, Loader=yaml.FullLoader)
 
+def run(config):
+   SCENARIO_id    = config.data['id']
+   SCENARIO_OBJ   = config.data['objective']
+   NMPC_internals = config.data['NMPC.internals']
+   NMPC_externals = config.data['NMPC.externals']
+   VEHICULE_model = config.data['NMPC.externals']['vehicle']
+   PATH_data      = config.data['NMPC.environment']['trajectory']
+   CARLA_simu     = config.data['NMPC.environment']['carla_simu']
 
-config = Config('./configs/basic.yaml')
-NMPC_internals = config.data['NMPC.internals']
-NMPC_externals = config.data['NMPC.externals']
-VEHICULE_model = config.data['NMPC.externals']['vehicle']
-PATH_data      = config.data['NMPC.environment']['trajectory']
 
-N = NMPC_internals['N']
-dT = NMPC_internals['dT']
+   N        = NMPC_internals['N']
+   dT       = NMPC_internals['dT']
 
-history  = History(N)
-path     = ReferenceTrajectory(**PATH_data)
-dae      = KinematicBicycleModel(VEHICULE_model)
-nmpc     = NMPC(dae,path.x0,**NMPC_internals)
+   history  = History(N)
+   path     = ReferenceTrajectory(**PATH_data)
+   dae      = KinematicBicycleModel(VEHICULE_model)
+   nmpc     = NMPC(dae,path.x0,**NMPC_internals)
 
-### carla simulation
-carla_simu = Simulation()
+   ### carla simulation
+   if CARLA_simu:
+      carla_simu = Simulation()
+      carla_simu.setup(nmpc,path.x0)
+      simu_run_step = carla_simu.run_step
+   else:
+      simu_run_step = nmpc.run_step
 
-carla_simu.setup(nmpc,path.x0)
 
-CARLA_simu = True
-
-## run the environement
-reference = path.get_reference()
-t=[]
-mpciter=0
-t0 = 0
-try:
-   while (True):
-      # get ref trajectory
-      p_x_ref,p_u_ref = path.get_tracking_wps(mpciter, N, dT)
-      # compute mpc controls
-      sol = nmpc.compute_control(p_x_ref, p_u_ref)
-      # extract the solution
-      u_opt = sol.value(nmpc.U)
-      X0 = sol.value(nmpc.X)
-      # extract parameters
-      p_x=sol.value(nmpc.P_x[:,1:])
-      p_u=sol.value(nmpc.P_u)
-      p = vertcat(p_x,p_u)
-      # keep the history
-      history.add(X0,u_opt,p)
-      # shift the solution and apply the first control
+   ## run the environement
+   reference = path.get_reference()
+   t=[]
+   mpciter=0
+   t0 = 0
+   try:
+      while (True):
+         # get ref trajectory
+         p_x_ref,p_u_ref = path.get_tracking_wps(mpciter, N, dT)
+         # compute mpc controls
+         sol = nmpc.compute_control(p_x_ref, p_u_ref)
+         # extract the solution
+         u_opt = sol.value(nmpc.U)
+         X0 = sol.value(nmpc.X)
+         # extract parameters
+         p_x=sol.value(nmpc.P_x[:,1:])
+         p_u=sol.value(nmpc.P_u)
+         p = vertcat(p_x,p_u)
+         # keep the history
+         history.add(X0,u_opt,p)
+         # shift the solution and apply the first control
+         simu_run_step(X0[:,0],u_opt)
+         # stop condition
+         distance_p = np.linalg.norm(path.xs[0:2]-history.p[0:2,0,mpciter])
+         if distance_p <0.5:
+            break
+         mpciter += 1  
+         t.append(t0)
+   except Exception as e:
+      print(e)   
+   finally:
       if CARLA_simu:
-         carla_simu.run_step(X0[:,0],u_opt)
-      else:
-         nmpc.run_step(X0[:,0],u_opt)
-      # stop condition
-      distance_p = np.linalg.norm(path.xs[0:2]-history.p[0:2,0,mpciter])
-      if distance_p <0.5:
-         break
-      mpciter += 1  
-      t.append(t0)
-except Exception as e:
-   print(e)   
-finally:
-   carla_simu.teardown()   
+         carla_simu.teardown()
+      if history:
+         history.save(SCENARIO_id)
+         simulate( trajectory=path.path
+                  ,params=history.p
+                  ,cat_states=history.x
+                  ,cat_controls=history.u
+                  ,t=t
+                  ,step_horizon=dT
+                  ,N=N
+                  ,reference=reference
+                  ,scenario=SCENARIO_id
+                  ,save=True
+                  )
 
-def plot_sim(save=False):
-   sim = simulate(path.path, history.p, history.x, history.u, t, dT, N,reference, save)
+   # def plot_sim(save=False):
    # sim.to_jshtml(30,True)
 
+
+def main():
+   """
+   ================================
+   Recognizing hand-written digits
+   ================================
+
+   An example showing how the scikit-learn can be used to recognize images of
+   hand-written digits.
+
+   This example is commented in the
+   :ref:`tutorial section of the user manual <introduction>`.
+
+   """
+   argparser = argparse.ArgumentParser(
+      description='NMPC Simulation')
+   argparser.add_argument(
+      '-v', '--verbose',
+      action='store_true',
+      dest='debug',
+      help='print debug information')
+   argparser.add_argument(
+      '-c','--config',
+      metavar='cfg',
+      default='./configs/basic.yaml',
+      help='configuration file in yaml form under ./configs')
+
+
+   args = argparser.parse_args()
+
+   log_level = logging.DEBUG if args.debug else logging.INFO
+
+   # Create a logger
+   logger = logging.getLogger(args.config)
+   logger.setLevel(log_level)
+
+
+   # Create a file handler which logs even debug messages
+   fh = logging.FileHandler(f'logs/{args.config}.log')
+   fh.setLevel(logging.DEBUG)
+   # Create a formatter and set the formatter for the handler
+   formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)-8s: %(message)s',datefmt='%Y-%m-%d %H:%M:%S')
+   fh.setFormatter(formatter)
+
+   # Add the handler to the logger
+   logger.addHandler(fh)
+
+
+   print(__doc__)
+
+
+   ## Debug
+   print(args)
+
+   ## Mocking
+   # - from arg config, specify the config folder to ŕun the simulation
+   # function to list the files in the folder. config variable of the args.config
+   # specify the scenario to run in the scenario config 
+   # config option should enable to either save png or gif simulation data
+   # config option shall enable loading and execution annimation or plotting image
+   print(args.config)
+   cp_config = Config(f"configs/{args.config}")
+   compaign= cp_config.data
+   print(compaign)
+   for sc in compaign['scenarios']:
+      sc_config_path = f"configs/{compaign['id']}/{sc}.yaml"
+      print(sc_config_path)
+      # logger.info(Config(sc_config_path).data)
+      sc_config = Config(sc_config_path)
+      # run the step simulation
+      # - in run run simulation the log must be configured to capture all the necessary data and save the figure 
+      run(sc_config)   
+
+if __name__ == '__main__':
+   main()
 # plot_sim()
 
 # ---- post-processing        ------

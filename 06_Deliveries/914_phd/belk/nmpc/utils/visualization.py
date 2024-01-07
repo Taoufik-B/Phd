@@ -8,7 +8,7 @@ import logging
 
 log_level = logging.NOTSET
 
-def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, reference, save=False):
+def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, reference, scenario, save=False):
     def create_triangle(state=[0,0,0], h=0.5, w=0.25, update=False):
         x, y, th = state
         triangle = np.array([
@@ -185,14 +185,14 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         func=animate,
         init_func=init,
         frames=len(t),
-        interval=N,
+        interval=step_horizon,
         blit=True,
         repeat=True
     )
-    plt.show()
+
 
     if save == True:
-        sim.save('./figures/fig' + str(time()) +'.gif', writer='ffmpeg', fps=30)
-
-    return sim
+        print("Saving Annimation for Scenario %s" % scenario)
+        sim.save(f'./figures/fig_{scenario}.gif', writer='ffmpeg', fps=30)
+    plt.savefig(f'./figures/fig_{scenario}.png')
 

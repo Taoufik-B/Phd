@@ -1,0 +1,7 @@
+id: sc_00#
+objective: "The main goal of the compain is to evaluate ..."
+scenarios:
+  - sc_00#000
+  - sc_00#001
+  - sc_00#002
+  - sc_00#003

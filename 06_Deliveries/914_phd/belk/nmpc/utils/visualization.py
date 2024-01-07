@@ -138,7 +138,6 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
                               ["yaw", "path"]])
 
     
-    # create lines:
     #   path
     axs["path"].set_title("Path")
     axs["path"].set_xlabel("x position (m)")
@@ -190,7 +189,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         repeat=True
     )
 
-    plt.title(scenario, loc="upper center")
+    fig.suptitle(scenario, fontsize=16)
     # plt.legend()
 
 
@@ -221,7 +220,7 @@ if __name__ == '__main__':
             ,step_horizon=dT
             ,N=N
             ,reference=trajectory.get_reference()
-            ,scenario='Test Scenario'
+            ,scenario=scenario
             ,save=False
             )
     pass

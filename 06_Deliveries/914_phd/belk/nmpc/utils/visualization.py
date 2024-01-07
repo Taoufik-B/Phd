@@ -68,7 +68,6 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
 
         # update path
         if i == 0:
-            print("Reset the plot")
             path_p.set_data(np.array([]), np.array([]))
             params_p.set_data(np.array([]), np.array([]))
             velocity_p.set_data(np.array([]), np.array([]))
@@ -153,17 +152,22 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     axs["delta"].set_title("Steering angle")
     axs["delta"].set_xlabel("frames")
     axs["delta"].set_ylabel("delta angle (rad)")
+    #   velocity
+    axs["speed"].set_title("Velocity")
+    axs["speed"].set_xlabel("frames")
+    axs["speed"].set_ylabel("velocity (m/s)")
     
     
     path_p, = axs["path"].plot([], [], 'k', linewidth=2)
     #   horizon
-    horizon_p, = axs["path"].plot([], [], '-gs', alpha=0.4)
+    horizon_p, = axs["path"].plot([], [], 'x-g', alpha=0.4)
     # params tracking trajectory
-    params_p, = axs["path"].plot([], [], '-rs', alpha=0.2)
+    params_p, = axs["path"].plot([], [], 'x-',color='orange', alpha=0.2)
 
     #controls
-    velocity_p, = axs["speed"].step([], [], '--b', alpha=0.8)
-    vref_p, = axs["speed"].step([], [], '--r', alpha=0.4)
+    velocity_p, = axs["speed"].step([], [], '--b', alpha=0.8, label="Vehicle Velocity")
+    vref_p, = axs["speed"].step([], [], '--k', alpha=0.4, label="Reference Velocity")
+    axs["speed"].legend(loc="upper right")
 
     delta_p, = axs["delta"].plot([], [], 'b', alpha=0.8, label="Vehicle Steering Angle (rad)")
     phi_p, = axs["delta"].step([], [], '--k', alpha=0.4, label="Vehicle Steering rate (rad/s)")

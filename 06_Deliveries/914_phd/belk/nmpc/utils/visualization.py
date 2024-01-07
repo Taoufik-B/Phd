@@ -208,7 +208,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         repeat=True
     )
 
-    fig.suptitle(scenario, fontsize=16)
+    fig.suptitle(scenario, fontsize=24)
     plt.show()
     # plt.legend()
 

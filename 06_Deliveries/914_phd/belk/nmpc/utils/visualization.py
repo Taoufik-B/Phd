@@ -68,6 +68,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
 
         # update path
         if i == 0:
+            print("Reset the plot")
             path_p.set_data(np.array([]), np.array([]))
             params_p.set_data(np.array([]), np.array([]))
             velocity_p.set_data(np.array([]), np.array([]))
@@ -78,9 +79,9 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
             phi_p.set_data(np.array([]), np.array([]))
 
 
-        # x_new = np.hstack((path_p.get_xdata(), x))
-        # y_new = np.hstack((path_p.get_ydata(), y))
-        # path_p.set_data(x_new, y_new)
+        x_new = np.hstack((path_p.get_xdata(), x))
+        y_new = np.hstack((path_p.get_ydata(), y))
+        path_p.set_data(x_new, y_new)
 
         # update horizon
         x_new = cat_states[0, :, i]
@@ -184,12 +185,13 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         func=animate,
         init_func=init,
         frames=len(t),
-        interval=step_horizon,
+        interval=step_horizon*100,
         blit=True,
         repeat=True
     )
 
     fig.suptitle(scenario, fontsize=16)
+    plt.show()
     # plt.legend()
 
 
@@ -197,8 +199,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         print("Saving Annimation for Scenario %s" % scenario)
         sim.save(f'./figures/fig_{scenario}.gif', writer='ffmpeg', fps=30)
         plt.savefig(f'./figures/fig_{scenario}.png')
-    else:
-        plt.show()
+ 
 
 if __name__ == '__main__':
     from trajectory import ReferenceTrajectory
@@ -216,7 +217,7 @@ if __name__ == '__main__':
             ,params=p
             ,cat_states=x
             ,cat_controls=u
-            ,t=p[0,0,:]
+            ,t=x[0,0,:]
             ,step_horizon=dT
             ,N=N
             ,reference=trajectory.get_reference()

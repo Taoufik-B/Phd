@@ -197,13 +197,28 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     if save == True:
         print("Saving Annimation for Scenario %s" % scenario)
         sim.save(f'./figures/fig_{scenario}.gif', writer='ffmpeg', fps=30)
-    plt.savefig(f'./figures/fig_{scenario}.png')
+        plt.savefig(f'./figures/fig_{scenario}.png')
 
 if __name__ == '__main__':
+    from trajectory import ReferenceTrajectory
     scenario = 'sc_00#003.npy'
     path = 'data'
     # plot title
     x = np.load(f'{path}/x_{scenario}')
     u = np.load(f'{path}/u_{scenario}')
     p = np.load(f'{path}/p_{scenario}')
+    trajectory = ReferenceTrajectory(f'maps/carla_town05_02012024.wps', 4)
+    N = 5
+    dT = 0.5
+    simulate( trajectory=trajectory.path
+            ,params=p
+            ,cat_states=x
+            ,cat_controls=u
+            ,t=t
+            ,step_horizon=dT
+            ,N=N
+            ,reference=reference
+            ,scenario=SCENARIO_id
+            ,save=True
+            )
     pass

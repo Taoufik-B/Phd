@@ -156,6 +156,10 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     axs["speed"].set_title("Velocity")
     axs["speed"].set_xlabel("frames")
     axs["speed"].set_ylabel("velocity (m/s)")
+
+    # for direction in ["left", "right", "bottom", "top"]:
+    # hides borders
+    axs["speed"]
     
     
     path_p, = axs["path"].plot([], [], 'k', linewidth=2)

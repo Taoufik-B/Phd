@@ -191,6 +191,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     )
 
     plt.title(scenario)
+    plt.legend()
 
 
     if save == True:
@@ -199,5 +200,9 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     plt.savefig(f'./figures/fig_{scenario}.png')
 
 if __name__ == '__main__':
+    scenario = '00#003'
     # plot title
+    x = np.load('data/x_'+scenario)
+    u = np.load('data/u_'+scenario)
+    p = np.load('data/p_'+scenario)
     pass

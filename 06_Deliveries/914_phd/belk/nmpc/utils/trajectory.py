@@ -54,7 +54,7 @@ class ReferenceTrajectory:
             cx[2] = np.clip(cx[2], -np.pi, np.pi)
             np.nan_to_num(cx,False, self.xs)
             cu = self.get_fd_wp(t_predict)
-            print(f"us :: {self.us}")
+            # print(f"us :: {self.us}")
             np.nan_to_num(cu,False)
             p_x_ref = ca.horzcat(p_x_ref, cx)
             p_u_ref = ca.horzcat(p_u_ref, cu)

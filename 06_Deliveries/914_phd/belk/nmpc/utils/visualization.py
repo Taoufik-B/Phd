@@ -184,7 +184,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     axs["yaw"].legend(loc="upper right")
 
     ## to do computation
-    rmse_X = np.linalg.norm(cat_states[:3,:-1,:]-params[:3,:,:], axis=1)
+    rmse_X = np.linalg.norm(cat_states[:3,1:,:]-params[:3,:,:], axis=1)
     rmse_X = rmse_X/N
     # rmse_X = cat_states[:3,:-1,:]-params[:3,:,:]
     # print(rmse_X, rmse_X.shape, len(rmse_X[0,:]), rmse_X.size)

@@ -103,8 +103,8 @@ class NMPC:
          con = self.U[:,k]-self.P_u[:,k]
          obj += st.T@self.Q@st + con.T@self.R@con
       st = self.X[0:3,self.N]-self.P_x[0:3,self.N]
-      Q = np.diag([1,1,10])
-      obj += st.T@Q@st
+      # Q = np.diag([1,1,10])
+      # obj += st.T@Q@st
 
       self.opti.minimize(obj) 
 

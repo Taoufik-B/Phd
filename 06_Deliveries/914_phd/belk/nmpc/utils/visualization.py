@@ -182,6 +182,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     yaw_v_p, = axs["yaw"].plot([], [], 'b', alpha=0.8, label="Vehicle Heading Angle")
     yaw_ref_p, = axs["yaw"].plot([], [], '--k', alpha=0.4, label="Reference Heading Angle")
     axs["yaw"].legend(loc="upper right")
+    axs["yaw"].legend(loc="upper right")
 
     ## to do computation
     rmse_X = np.linalg.norm(cat_states[:3,:1,:]-params[:3,:1,:], axis=1)
@@ -254,7 +255,7 @@ if __name__ == '__main__':
             ,params=p
             ,cat_states=x
             ,cat_controls=u
-            ,t=np.linspace(0, len())
+            ,t=np.arange(0, len(x[0,0,:]))
             ,step_horizon=dT
             ,N=N
             ,reference=trajectory.get_reference()

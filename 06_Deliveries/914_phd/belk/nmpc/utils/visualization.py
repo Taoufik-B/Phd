@@ -187,7 +187,8 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     rmse_X = np.linalg.norm(cat_states[:3,:1,:]-params[:3,:1,:], axis=1)
     rmse_X = rmse_X/len(rmse_X[0,:])
     # rmse_X = cat_states[:3,:-1,:]-params[:3,:,:]
-    print(rmse_X, rmse_X.shape, len(rmse_X[0,:]), rmse_X.size)
+    # print(rmse_X, rmse_X.shape, len(rmse_X[0,:]), rmse_X.size)
+    print(t)
     rmse_x, = axs["rmse"].plot(t, rmse_X[0,:], alpha=0.8, label="RMSE x")
     rmse_y, = axs["rmse"].plot(t, rmse_X[1,:], alpha=0.8, label="RMSE y")
     rmse_psi, = axs["rmse"].plot(t, rmse_X[2,:], alpha=0.8, label="RMSE psi")
@@ -253,7 +254,7 @@ if __name__ == '__main__':
             ,params=p
             ,cat_states=x
             ,cat_controls=u
-            ,t=x[0,0,:]
+            ,t=np.linspace(0, len())
             ,step_horizon=dT
             ,N=N
             ,reference=trajectory.get_reference()

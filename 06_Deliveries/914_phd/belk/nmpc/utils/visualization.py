@@ -193,7 +193,8 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     rmse_x, = axs["rmse"].plot(t, rmse_X[0,:], 'b', alpha=0.8, label="RMSE x")
     rmse_y, = axs["rmse"].plot(t, rmse_X[1,:], 'g',alpha=0.8, label="RMSE y")
     rmse_psi, = axs["rmse"].plot(t, rmse_X[2,:], alpha=0.8, color = 'orange', label="RMSE psi")
-    axs["rmse"].ax
+    axs["rmse"].axline((0,0.5), (1,0.5), color='red', linestyle='dashed')
+    axs["rmse"].axline((0,-0.5), (1,-0.5), color='red', linestyle='dashed')
     axs["rmse"].set_ylim(-2,2)
     axs["rmse"].legend(loc="upper right")
 

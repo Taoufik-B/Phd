@@ -226,11 +226,13 @@ def run(config):
 
    ## run the environement
    reference = path.get_reference()
-   t=[0,]
+   t=[]
    mpciter=0
-   t0 = 0
+   t0 = dT
    try:
       while (True):
+         t.append(t0)
+         mpciter += 1  
          # get ref trajectory
          p_x_ref,p_u_ref = path.get_tracking_wps(mpciter, N, dT)
          # compute mpc controls
@@ -250,10 +252,8 @@ def run(config):
          distance_p = np.linalg.norm(path.xs[0:2]-X0[0:2,0])
          # distance_p = np.linalg.norm(path.xs[0:2]-history.p[0:2,0,mpciter])
          print(f"Distance :: {distance_p}")
-         if distance_p <0.05:
+         if distance_p <1e-3:
             break
-         mpciter += 1  
-         t.append(t0)
    except Exception as e:
       print(f"Exception occured at iteration :: {mpciter}, with {e}")   
    finally:

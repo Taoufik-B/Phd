@@ -64,7 +64,7 @@ class ReferenceTrajectory:
     def get_fd_wp(self, step):
         v_vect = self.cs.derivative(1)(step)[0:2]
         phi_ref = self.cs.derivative(1)(step)[2]
-        return [float(ca.norm_2(v_vect)), float(phi_ref)]
+        return np.array([float(ca.norm_2(v_vect)), float(phi_ref)])
 
 
 def main():

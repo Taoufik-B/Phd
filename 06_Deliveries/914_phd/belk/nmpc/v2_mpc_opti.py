@@ -92,6 +92,7 @@ class NMPC:
          }
       ## set the solver
       self.opti.solver("ipopt",opts) # set numerical backend    
+      # self.opti.solver("qpOASES",opts) # set numerical backend    
       pass
 
    def _set_objective(self):

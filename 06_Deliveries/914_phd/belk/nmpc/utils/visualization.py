@@ -78,9 +78,9 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
             phi_p.set_data(np.array([]), np.array([]))
 
 
-        x_new = np.hstack((path_p.get_xdata(), x))
-        y_new = np.hstack((path_p.get_ydata(), y))
-        path_p.set_data(x_new, y_new)
+        # x_new = np.hstack((path_p.get_xdata(), x))
+        # y_new = np.hstack((path_p.get_ydata(), y))
+        # path_p.set_data(x_new, y_new)
 
         # update horizon
         x_new = cat_states[0, :, i]

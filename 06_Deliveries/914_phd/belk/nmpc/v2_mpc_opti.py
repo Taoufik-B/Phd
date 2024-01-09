@@ -84,7 +84,7 @@ class NMPC:
             'ipopt': # interior point optimizer
             {
                   'max_iter':100,
-                  'print_level':0,
+                  # 'print_level':0,
                   'acceptable_tol':1e-8,
                   'acceptable_obj_change_tol':1e-6
             },

@@ -192,7 +192,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     # print(t)
     rmse_x, = axs["rmse"].plot(t, rmse_X[0,:], alpha=0.8, label="RMSE x")
     rmse_y, = axs["rmse"].plot(t, rmse_X[1,:], alpha=0.8, label="RMSE y")
-    rmse_psi, = axs["rmse"].plot(t, rmse_X[2,:], alpha=0.8, label="RMSE psi")
+    rmse_psi, = axs["rmse"].plot(t, rmse_X[2,:]%np.pi, alpha=0.8, label="RMSE psi")
     axs["rmse"].legend(loc="upper right")
 
 

@@ -252,7 +252,7 @@ def run(config):
          mpciter += 1  
          t.append(t0)
    except Exception as e:
-      print(f"Exception occured at iteration :: {}")   
+      print(f"Exception occured at iteration :: {mpciter}, with {e}")   
    finally:
       if CARLA_simu:
          carla_simu.teardown()

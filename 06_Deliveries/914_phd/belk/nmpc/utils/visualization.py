@@ -183,6 +183,13 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     yaw_ref_p, = axs["yaw"].plot([], [], '--k', alpha=0.4, label="Reference Heading Angle")
     axs["yaw"].legend(loc="upper right")
 
+    ## to do computation
+    rmse_X = cat_states[:,0,:]-params[:4,0,:]
+    print(rmse_X)
+    rmse_x, = axs["rmse"].plot([], [], 'b', alpha=0.8, label="RMSE x")
+
+
+
     velocity_p.axes.set_xlim(xmin=0, xmax=len(t))
     velocity_p.axes.set_ylim(ymin=0, ymax=25)
     velocity_p.axes.set_autoscaley_on(True)

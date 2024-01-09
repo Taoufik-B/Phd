@@ -227,7 +227,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
         func=animate,
         init_func=init,
         frames=len(t),
-        interval=100,
+        interval=100*dT,
         blit=True,
         repeat=True
     )

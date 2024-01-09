@@ -145,6 +145,8 @@ class NMPC:
       return st+ self.dT/6*(k1+2*k2+2*k3+k4)
 
    def compute_control(self, p_x_ref, p_u_ref):
+      print(f"p_x_ref :: {p_x_ref}")
+      print(f"p_u_ref :: {p_u_ref}")
       self.opti.set_value(self.P_x[:,1:],p_x_ref)
       self.opti.set_value(self.P_u,p_u_ref)
       # ---- solve NLP              ------

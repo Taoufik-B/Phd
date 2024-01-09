@@ -136,7 +136,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     axs = fig.subplot_mosaic([
                             ["yaw", "path"],
                             ["delta", "path"],
-                            ["speed", ""]
+                            ["speed", "rmse"]
                             ])
 
     

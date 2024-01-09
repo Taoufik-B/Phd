@@ -261,7 +261,7 @@ def run(config):
                   ,N=N
                   ,reference=reference
                   ,scenario=SCENARIO_id
-                  ,save=True
+                  ,save=False
                   )
 
    # def plot_sim(save=False):

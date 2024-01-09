@@ -144,8 +144,6 @@ class NMPC:
       return st+ self.dT/6*(k1+2*k2+2*k3+k4)
 
    def compute_control(self, p_x_ref, p_u_ref):
-      print("compute control x", p_x_ref)
-      print("compute control u", p_u_ref)
       self.opti.set_value(self.P_x[:,1:],p_x_ref)
       self.opti.set_value(self.P_u,p_u_ref)
       # ---- solve NLP              ------
@@ -247,13 +245,14 @@ def run(config):
          simu_run_step(X0[:,0],u_opt)
          # stop condition
          distance_p = np.linalg.norm(path.xs[0:2]-X0[0:2,0])
+         print(f"Distance :: {distance_p}")
          # distance_p = np.linalg.norm(path.xs[0:2]-history.p[0:2,0,mpciter])
          if distance_p <0.05:
             break
          mpciter += 1  
          t.append(t0)
    except Exception as e:
-      print(e)   
+      print(f"Exception occured at iteration :: {}")   
    finally:
       if CARLA_simu:
          carla_simu.teardown()
@@ -326,7 +325,6 @@ def main():
 
 
    ## Debug
-   print(args)
 
    ## Mocking
    # - from arg config, specify the config folder to ŕun the simulation
@@ -334,13 +332,10 @@ def main():
    # specify the scenario to run in the scenario config 
    # config option should enable to either save png or gif simulation data
    # config option shall enable loading and execution annimation or plotting image
-   print(args.config)
    cp_config = Config(f"configs/{args.config}")
    compaign= cp_config.data
-   print(compaign)
    for sc in compaign['scenarios']:
       sc_config_path = f"configs/{compaign['id']}/{sc}.yaml"
-      print(sc_config_path)
       # logger.info(Config(sc_config_path).data)
       sc_config = Config(sc_config_path)
       # run the step simulation

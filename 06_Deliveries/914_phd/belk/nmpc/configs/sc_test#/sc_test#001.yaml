@@ -2,7 +2,7 @@ id: sc_test#001
 objective: "Main goal of the test config"
 NMPC.internals:
   dT: 0.01 # This is a comment
-  N: 25 # Horizon
+  N: 50 # Horizon
   Q: # Stage cost
     - 10 # x
     - 10 # y

@@ -51,6 +51,7 @@ class ReferenceTrajectory:
             t_predict = (step+k)*dT
             cx = self.get_next_wp(t_predict)
             cx[2] = np.clip(cx[2], -np.pi, np.pi)
+            np.nan_to_num(cx,False, self.xs)
             cu = self.get_fd_wp(t_predict)
             p_x_ref = ca.horzcat(p_x_ref, cx)
             p_u_ref = ca.horzcat(p_u_ref, cu)

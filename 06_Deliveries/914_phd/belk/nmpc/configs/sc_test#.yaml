@@ -1,4 +1,4 @@
-id: sc_00#
+id: sc_test#
 objective: "The main goal of the compain is to evaluate ..."
 scenarios:
-  - sc_00#test
+  - sc_test#001

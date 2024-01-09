@@ -101,8 +101,9 @@ class NMPC:
          st = self.X[:,k]-self.P_x[:,k]
          con = self.U[:,k]-self.P_u[:,k]
          obj += st.T@self.Q@st + con.T@self.R@con
-      # st = self.X[:,self.N]-self.P_x[:,self.N]
-      # obj += st.T@self.Q@st
+      st = self.X[0:3,self.N]-self.P_x[0:3,self.N]
+      Q = np.diag([5,5,10])
+      obj += st.T@Q@st
 
       self.opti.minimize(obj) 
 
@@ -113,8 +114,8 @@ class NMPC:
          st_next = self._F(self.X[:,k], self.U[:,k])
          self.opti.subject_to(self.X[:,k+1]==st_next) # close the gaps
       # path constraints
-      self.opti.subject_to(self.X[0:2,0]==self.P_x[0:2,0]) # close the gaps
-      self.opti.subject_to(self.X[0:2,self.N]==self.P_x[0:2,self.N]) # close the gaps
+      # self.opti.subject_to(self.X[0:2,0]==self.P_x[0:2,0]) # close the gaps
+      # self.opti.subject_to(self.X[0:2,self.N]==self.P_x[0:2,self.N]) # close the gaps
       # ---- boundary conditions -----------
       ## Bounds
       lb_x = self.dae.x_bounds[0]

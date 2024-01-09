@@ -13,6 +13,7 @@ class ReferenceTrajectory:
         self._generate_spline()
         self.x0 = self.cs(0)
         self.xs = self.cs(len(self.x)-1)
+        self.us = [0,0]
         self.size = len(self.x)
 
 
@@ -53,6 +54,8 @@ class ReferenceTrajectory:
             cx[2] = np.clip(cx[2], -np.pi, np.pi)
             np.nan_to_num(cx,False, self.xs)
             cu = self.get_fd_wp(t_predict)
+            print(f"us :: {self.us}")
+            np.nan_to_num(cu,False)
             p_x_ref = ca.horzcat(p_x_ref, cx)
             p_u_ref = ca.horzcat(p_u_ref, cu)
         return p_x_ref, p_u_ref

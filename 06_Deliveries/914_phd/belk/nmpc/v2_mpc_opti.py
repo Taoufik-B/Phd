@@ -245,9 +245,9 @@ def run(config):
          # shift the solution and apply the first control
          simu_run_step(X0[:,0],u_opt)
          # stop condition
-         distance_p = np.linalg.norm(path.xs[0:2]-X0[0:2,0])
+         # distance_p = np.linalg.norm(path.xs[0:2]-X0[0:2,0])
+         distance_p = np.linalg.norm(path.xs[0:2]-history.p[0:2,0,mpciter])
          print(f"Distance :: {distance_p}")
-         # distance_p = np.linalg.norm(path.xs[0:2]-history.p[0:2,0,mpciter])
          if distance_p <0.05:
             break
          mpciter += 1  

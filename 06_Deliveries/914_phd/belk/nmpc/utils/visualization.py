@@ -179,7 +179,7 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     phi_p, = axs["delta"].step([], [], '--k', alpha=0.4, label="Vehicle Steering rate (rad/s)")
     axs["delta"].legend(loc="upper right")
 
-    yaw_v_p, = axs["yaw"].plot([], [], 'b', alpha=0.8, label="Vehicle Heading Angle")
+    yaw_v_p, = axs["yaw"].plot([], [], color='orange', alpha=0.8, label="Vehicle Heading Angle")
     yaw_ref_p, = axs["yaw"].plot([], [], '--k', alpha=0.4, label="Reference Heading Angle")
     axs["yaw"].legend(loc="upper right")
 
@@ -190,9 +190,11 @@ def simulate(trajectory, params, cat_states, cat_controls, t, step_horizon, N, r
     # rmse_X = cat_states[:3,:-1,:]-params[:3,:,:]
     # print(rmse_X, rmse_X.shape, len(rmse_X[0,:]), rmse_X.size)
     # print(t)
-    rmse_x, = axs["rmse"].plot(t, rmse_X[0,:], alpha=0.8, label="RMSE x")
-    rmse_y, = axs["rmse"].plot(t, rmse_X[1,:], alpha=0.8, label="RMSE y")
+    rmse_x, = axs["rmse"].plot(t, rmse_X[0,:], 'b', alpha=0.8, label="RMSE x")
+    rmse_y, = axs["rmse"].plot(t, rmse_X[1,:], 'g',alpha=0.8, label="RMSE y")
     rmse_psi, = axs["rmse"].plot(t, rmse_X[2,:], alpha=0.8, color = 'orange', label="RMSE psi")
+    axs["rmse"].ax
+    axs["rmse"].set_ylim(-2,2)
     axs["rmse"].legend(loc="upper right")
 
 

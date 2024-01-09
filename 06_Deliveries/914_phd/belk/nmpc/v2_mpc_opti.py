@@ -101,7 +101,7 @@ class NMPC:
          st = self.X[:,k]-self.P_x[:,k]
          con = self.U[:,k]-self.P_u[:,k]
          obj += st.T@self.Q@st + con.T@self.R@con
-      st = self.X[:,k]-self.P_x[:,k]
+      st = self.X[:,self.N]-self.P_x[:,self.N]
       obj += st.T@self.Q@st
 
       self.opti.minimize(obj) 

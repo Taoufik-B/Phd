@@ -101,8 +101,8 @@ class NMPC:
          st = self.X[:,k]-self.P_x[:,k]
          con = self.U[:,k]-self.P_u[:,k]
          obj += st.T@self.Q@st + con.T@self.R@con
-      st = self.X[:,self.N]-self.P_x[:,self.N]
-      obj += st.T@self.Q@st
+      # st = self.X[:,self.N]-self.P_x[:,self.N]
+      # obj += st.T@self.Q@st
 
       self.opti.minimize(obj) 
 
@@ -112,6 +112,8 @@ class NMPC:
       for k in range(self.N):
          st_next = self._F(self.X[:,k], self.U[:,k])
          self.opti.subject_to(self.X[:,k+1]==st_next) # close the gaps
+      # path constraints
+      self.opti.subject_to(self.X[:,self.N]==self.P_x[:,N]) # close the gaps
       # ---- boundary conditions -----------
       ## Bounds
       lb_x = self.dae.x_bounds[0]
@@ -242,8 +244,9 @@ def run(config):
          # shift the solution and apply the first control
          simu_run_step(X0[:,0],u_opt)
          # stop condition
-         distance_p = np.linalg.norm(path.xs[0:2]-history.p[0:2,0,mpciter])
-         if distance_p <0.5:
+         distance_p = np.linalg.norm(path.xs[0:2]-X0[0:2,0])
+         # distance_p = np.linalg.norm(path.xs[0:2]-history.p[0:2,0,mpciter])
+         if distance_p <0.05:
             break
          mpciter += 1  
          t.append(t0)

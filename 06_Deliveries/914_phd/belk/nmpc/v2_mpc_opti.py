@@ -98,9 +98,11 @@ class NMPC:
       obj=0
       for k in range(self.N): # loop over control intervals
          # objective to minimize
-         st = self.X[:,k]-self.P_x[:,k+1]
+         st = self.X[:,k]-self.P_x[:,k]
          con = self.U[:,k]-self.P_u[:,k]
          obj += st.T@self.Q@st + con.T@self.R@con
+      st = self.X[:,k]-self.P_x[:,k]
+      obj += st.T@self.Q@st
 
       self.opti.minimize(obj) 
 

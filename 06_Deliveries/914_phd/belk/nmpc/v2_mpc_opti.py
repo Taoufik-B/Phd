@@ -113,7 +113,7 @@ class NMPC:
          st_next = self._F(self.X[:,k], self.U[:,k])
          self.opti.subject_to(self.X[:,k+1]==st_next) # close the gaps
       # path constraints
-      self.opti.subject_to(self.X[:,self.N]==self.P_x[:,N]) # close the gaps
+      self.opti.subject_to(self.X[0:2,self.N]==self.P_x[0:2,self.N]) # close the gaps
       # ---- boundary conditions -----------
       ## Bounds
       lb_x = self.dae.x_bounds[0]
